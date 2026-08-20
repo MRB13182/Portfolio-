@@ -127,3 +127,20 @@
 .animate-float {
   animation: subtle-float 6s ease-in-out infinite;
 }
+
+/* Infinite Marquee Animation for Certificates Showcase */
+@keyframes marquee-scroll {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+.animate-marquee {
+  animation: marquee-scroll 35s linear infinite;
+  display: flex;
+  width: max-content;
+}
+

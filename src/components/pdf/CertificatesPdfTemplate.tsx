@@ -1,5 +1,6 @@
 import React from 'react';
 import { portfolioConfig, assets } from '../../config/portfolio';
+import { IssuerLogo } from '../common/IssuerLogo';
 import { 
   ShieldCheck, 
   CheckCircle2, 
@@ -148,24 +149,9 @@ export const CertificatesPdfTemplate: React.FC<CertificatesPdfTemplateProps> = (
                   backgroundColor: '#FFFFFF', 
                   borderColor: borderLight 
                 }}
-                className="w-13 h-13 rounded-xl shrink-0 p-2 flex items-center justify-center border shadow-sm"
+                className="w-12 h-12 rounded-xl shrink-0 p-1.5 flex items-center justify-center border shadow-sm"
               >
-                <img
-                  src={cert.issuerLogo}
-                  alt={cert.issuer}
-                  className="w-full h-full object-contain"
-                  onError={(e) => {
-                    const target = e.currentTarget;
-                    target.style.display = 'none';
-                    if (target.parentElement) {
-                      target.parentElement.innerHTML = `
-                        <div style="font-weight:900;font-size:11px;text-align:center;color:${accentColor}">
-                          ${cert.issuer.slice(0, 4).toUpperCase()}
-                        </div>
-                      `;
-                    }
-                  }}
-                />
+                <IssuerLogo issuer={cert.issuer} className="w-full h-full object-contain" />
               </div>
 
               {/* Certificate Details */}

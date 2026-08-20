@@ -3,6 +3,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { portfolioConfig } from '../../config/portfolio';
 import { Certificate } from '../../types';
 import { SafeImage } from '../common/SafeImage';
+import { IssuerLogo } from '../common/IssuerLogo';
 import { 
   Award, 
   ExternalLink, 
@@ -153,14 +154,7 @@ export const Certificates: React.FC<CertificatesProps> = ({ onOpenCertificatesDo
 
                 {/* Organization Logo Floating in Bottom-Left of Preview */}
                 <div className="absolute bottom-3 left-3 z-10 w-9 h-9 rounded-xl p-1.5 backdrop-blur-md bg-white/90 dark:bg-[#050505]/90 border border-slate-200 dark:border-[rgba(212,175,55,0.3)] shadow-md flex items-center justify-center">
-                  <img
-                    src={cert.issuerLogo}
-                    alt={cert.issuer}
-                    className="w-full h-full object-contain"
-                    onError={(e) => {
-                      e.currentTarget.style.display = 'none';
-                    }}
-                  />
+                  <IssuerLogo issuer={cert.issuer} className="w-full h-full object-contain" />
                 </div>
               </div>
 

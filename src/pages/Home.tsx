@@ -7,6 +7,7 @@ import { About } from '../components/sections/About';
 import { SafeImage } from '../components/common/SafeImage';
 import { SkillModal } from '../components/modals/SkillModal';
 import { ProjectModal } from '../components/modals/ProjectModal';
+import { CertificatesShowcase } from '../components/sections/CertificatesShowcase';
 import { Skill, Project } from '../types';
 import { 
   ArrowRight, 
@@ -371,7 +372,10 @@ export const Home: React.FC<HomeProps> = ({ onOpenContact, onOpenResumeDownload 
         </div>
       </section>
 
-      {/* 6. Get In Touch Bottom CTA Card */}
+      {/* 6. Premium Certificates Showcase Section */}
+      <CertificatesShowcase />
+
+      {/* 7. Get In Touch Bottom CTA Card */}
       <section className="relative py-16">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
