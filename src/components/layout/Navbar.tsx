@@ -65,11 +65,11 @@ export const Navbar: React.FC<NavbarProps> = ({
           className={`pointer-events-auto transition-colors duration-300 ${
             scrolled
               ? isDark
-                ? 'w-[94%] sm:w-[90%] max-w-4xl mt-3 sm:mt-4 py-2 px-3 sm:px-4 rounded-2xl bg-[#050508]/90 backdrop-blur-2xl border border-[rgba(212,175,55,0.3)] shadow-[0_16px_40px_rgba(0,0,0,0.9),0_0_25px_rgba(124,58,237,0.22)] ring-1 ring-white/5'
-                : 'w-[94%] sm:w-[90%] max-w-4xl mt-3 sm:mt-4 py-2 px-3 sm:px-4 rounded-2xl bg-white/92 backdrop-blur-2xl border border-[#00C896]/30 shadow-[0_16px_35px_rgba(0,200,150,0.16)] ring-1 ring-slate-900/5'
+                ? 'w-[94%] sm:w-[90%] max-w-4xl mt-3 sm:mt-4 py-2 px-3 sm:px-4 rounded-2xl bg-[rgba(12,12,16,0.65)] backdrop-blur-2xl border border-[rgba(212,175,55,0.3)] shadow-[0_16px_40px_rgba(0,0,0,0.8),0_0_25px_rgba(124,58,237,0.22)] ring-1 ring-white/5'
+                : 'w-[94%] sm:w-[90%] max-w-4xl mt-3 sm:mt-4 py-2 px-3 sm:px-4 rounded-2xl bg-[rgba(255,255,255,0.65)] backdrop-blur-2xl border border-[#00C896]/30 shadow-[0_16px_35px_rgba(0,200,150,0.16)] ring-1 ring-slate-900/5'
               : isDark
-                ? 'w-full max-w-7xl mt-0 pt-4 sm:pt-6 pb-2 px-4 sm:px-6 lg:px-8 rounded-b-3xl bg-[#050505]/60 backdrop-blur-xl border-b border-[#D4AF37]/15 shadow-[0_10px_35px_rgba(0,0,0,0.7)]'
-                : 'w-full max-w-7xl mt-0 pt-4 sm:pt-6 pb-2 px-4 sm:px-6 lg:px-8 rounded-b-3xl bg-white/70 backdrop-blur-xl border-b border-[#00C896]/15 shadow-[0_10px_30px_rgba(0,200,150,0.06)]'
+                ? 'w-full max-w-7xl mt-0 pt-4 sm:pt-6 pb-2 px-4 sm:px-6 lg:px-8 rounded-b-3xl bg-[rgba(5,5,8,0.35)] backdrop-blur-xl border-b border-[#D4AF37]/15 shadow-[0_10px_35px_rgba(0,0,0,0.5)]'
+                : 'w-full max-w-7xl mt-0 pt-4 sm:pt-6 pb-2 px-4 sm:px-6 lg:px-8 rounded-b-3xl bg-[rgba(255,255,255,0.35)] backdrop-blur-xl border-b border-[#00C896]/15 shadow-[0_10px_30px_rgba(0,200,150,0.06)]'
           }`}
         >
           <div className="flex items-center justify-between gap-2 sm:gap-4">
@@ -340,8 +340,8 @@ const MobileDrawer: React.FC<MobileDrawerProps> = ({
         id="mobile-slide-drawer"
         className={`relative w-4/5 max-w-sm h-full flex flex-col justify-between p-6 overflow-y-auto transition-transform duration-300 shadow-2xl backdrop-blur-2xl ${
           isDark
-            ? 'bg-[#050505]/95 border-l border-[#D4AF37]/25 text-[#F8FAFC] shadow-[0_0_50px_rgba(0,0,0,0.9)]'
-            : 'bg-white border-l border-[#00C896]/20 text-slate-900'
+            ? 'bg-[rgba(12,12,16,0.85)] border-l border-[#D4AF37]/25 text-[#F8FAFC] shadow-[0_0_50px_rgba(0,0,0,0.9)]'
+            : 'bg-white/85 border-l border-[#00C896]/20 text-slate-900'
         }`}
       >
         {/* Top Header */}

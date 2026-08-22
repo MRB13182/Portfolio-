@@ -76,10 +76,10 @@ export const ProjectsPage: React.FC = () => {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             id="projects-search-input"
-            className={`w-full pl-10 pr-10 py-2.5 rounded-2xl text-xs sm:text-sm border transition-all outline-none ${
+            className={`w-full pl-10 pr-10 py-2.5 rounded-2xl text-xs sm:text-sm border transition-all outline-none backdrop-blur-2xl ${
               isDark
-                ? 'bg-[rgba(15,15,20,0.85)] border-[#7C3AED]/40 text-[#F8FAFC] placeholder-white/50 focus:border-[#D4AF37] focus:shadow-[0_0_15px_rgba(212,175,55,0.25)] focus:ring-1 focus:ring-[#D4AF37]'
-                : 'bg-white border-slate-200 text-slate-900 placeholder-slate-400 focus:border-[#00C896] focus:ring-1 focus:ring-[#00C896]'
+                ? 'bg-[rgba(12,12,16,0.45)] border-[#7C3AED]/40 text-[#F8FAFC] placeholder-white/50 focus:border-[#D4AF37] focus:shadow-[0_0_15px_rgba(212,175,55,0.25)] focus:ring-1 focus:ring-[#D4AF37]'
+                : 'bg-[rgba(255,255,255,0.45)] border-slate-200 text-slate-900 placeholder-slate-400 focus:border-[#00C896] focus:ring-1 focus:ring-[#00C896]'
             }`}
           />
           {searchQuery && (
@@ -93,7 +93,7 @@ export const ProjectsPage: React.FC = () => {
         </div>
 
         {/* Category Pills */}
-        <div className="inline-flex items-center gap-1.5 p-1.5 rounded-2xl border backdrop-blur-md overflow-x-auto max-w-full bg-white/60 dark:bg-[rgba(15,15,20,0.85)] border-slate-200/80 dark:border-[rgba(212,175,55,0.25)]">
+        <div className="inline-flex items-center gap-1.5 p-1.5 rounded-2xl border backdrop-blur-2xl overflow-x-auto max-w-full bg-[rgba(255,255,255,0.35)] dark:bg-[rgba(12,12,16,0.45)] border-slate-200/80 dark:border-[rgba(212,175,55,0.25)]">
           {categories.map((cat) => {
             const isActive = selectedCategory === cat;
             return (
@@ -146,10 +146,10 @@ export const ProjectsPage: React.FC = () => {
               whileHover={{ y: -8 }}
               onClick={() => setActiveProjectModal(project)}
               id={`project-card-${project.id}`}
-              className={`group relative rounded-3xl backdrop-blur-xl border overflow-hidden flex flex-col justify-between transition-all duration-500 cursor-pointer shadow-lg ${
+              className={`group relative rounded-3xl backdrop-blur-2xl border overflow-hidden flex flex-col justify-between transition-all duration-500 cursor-pointer shadow-lg ${
                 isDark
-                  ? 'bg-[rgba(15,15,20,0.85)] border-[rgba(212,175,55,0.25)] hover:border-[#D4AF37]/60 hover:shadow-[0_0_30px_rgba(124,58,237,0.25)] text-[#F8FAFC]'
-                  : 'bg-white/90 border-slate-200/80 hover:border-[#00C896]/50 hover:shadow-[0_15px_45px_rgba(0,200,150,0.15)] text-slate-900'
+                  ? 'bg-[rgba(12,12,16,0.45)] border-[rgba(212,175,55,0.22)] hover:border-[#D4AF37]/60 hover:shadow-[0_0_30px_rgba(124,58,237,0.25)] text-[#F8FAFC]'
+                  : 'bg-[rgba(255,255,255,0.45)] border-slate-200/80 hover:border-[#00C896]/50 hover:shadow-[0_8px_25px_rgba(0,200,150,0.15)] text-slate-900'
               }`}
             >
               {/* Project Image Thumbnail */}

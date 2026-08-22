@@ -55,10 +55,10 @@ export const ExperiencePage: React.FC<ExperiencePageProps> = ({ onOpenResumeDown
           <button
             onClick={onOpenResumeDownload}
             id="experience-page-download-resume-btn"
-            className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold transition-all border cursor-pointer ${
+            className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold transition-all border cursor-pointer backdrop-blur-2xl ${
               isDark
-                ? 'bg-[#0B0B0F] text-[#D4AF37] border-[#D4AF37]/40 hover:border-[#D4AF37] hover:bg-[#121218] shadow-[0_0_15px_rgba(212,175,55,0.2)]'
-                : 'bg-white text-[#00A57A] border-[#00C896]/30 hover:border-[#00C896] hover:bg-emerald-50'
+                ? 'bg-[rgba(12,12,16,0.45)] text-[#D4AF37] border-[#D4AF37]/40 hover:border-[#D4AF37] hover:bg-[rgba(20,20,28,0.7)] shadow-[0_0_15px_rgba(212,175,55,0.2)]'
+                : 'bg-[rgba(255,255,255,0.45)] text-[#00A57A] border-[#00C896]/30 hover:border-[#00C896] hover:bg-white/80'
             }`}
           >
             <FileText className="w-4 h-4" />
@@ -106,10 +106,10 @@ export const ExperiencePage: React.FC<ExperiencePageProps> = ({ onOpenResumeDown
                     isEven ? 'sm:mr-auto sm:pr-4' : 'sm:ml-auto sm:pl-4'
                   }`}
                 >
-                  <div className={`p-6 sm:p-7 rounded-3xl backdrop-blur-xl border transition-all duration-300 hover:shadow-xl ${
+                  <div className={`p-6 sm:p-7 rounded-3xl backdrop-blur-2xl border transition-all duration-300 hover:shadow-xl ${
                     isDark
-                      ? 'bg-[rgba(15,15,20,0.85)] border-[rgba(212,175,55,0.25)] hover:border-[#D4AF37]/60 hover:shadow-[0_0_30px_rgba(124,58,237,0.25)] text-[#F8FAFC]'
-                      : 'bg-white/90 border-slate-200/80 hover:border-[#00C896]/40 text-slate-900'
+                      ? 'bg-[rgba(12,12,16,0.45)] border-[rgba(212,175,55,0.22)] hover:border-[#D4AF37]/60 hover:shadow-[0_0_30px_rgba(124,58,237,0.25)] text-[#F8FAFC]'
+                      : 'bg-[rgba(255,255,255,0.45)] border-slate-200/80 hover:border-[#00C896]/40 text-slate-900'
                   }`}>
                     
                     {/* Top Header: Duration & Position Type */}

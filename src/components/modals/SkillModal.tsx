@@ -59,10 +59,10 @@ export const SkillModal: React.FC<SkillModalProps> = ({ skill, onClose, onSelect
           exit={{ opacity: 0, scale: 0.9, y: 20 }}
           transition={{ type: 'spring', damping: 25, stiffness: 300 }}
           id="skill-modal-content"
-          className={`relative w-full max-w-xl rounded-3xl p-6 sm:p-8 backdrop-blur-2xl border shadow-2xl z-10 overflow-hidden ${
+          className={`relative w-full max-w-xl rounded-3xl p-6 sm:p-8 backdrop-blur-3xl border shadow-2xl z-10 overflow-hidden ${
             isDark
-              ? 'bg-[rgba(15,15,20,0.95)] border-[rgba(212,175,55,0.35)] text-[#F8FAFC] shadow-[0_0_60px_rgba(124,58,237,0.3)]'
-              : 'bg-white/95 border-[#00C896]/25 text-slate-900 shadow-[0_20px_60px_rgba(0,200,150,0.18)]'
+              ? 'bg-[rgba(12,12,16,0.78)] border-[rgba(212,175,55,0.35)] text-[#F8FAFC] shadow-[0_0_60px_rgba(124,58,237,0.3)]'
+              : 'bg-[rgba(255,255,255,0.85)] border-[#00C896]/25 text-slate-900 shadow-[0_20px_60px_rgba(0,200,150,0.18)]'
           }`}
         >
           {/* Ambient Glow in Modal */}

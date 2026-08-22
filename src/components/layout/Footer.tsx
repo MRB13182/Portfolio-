@@ -49,10 +49,10 @@ export const Footer: React.FC<FooterProps> = ({
   return (
     <footer
       id="main-footer"
-      className={`relative pt-16 pb-28 md:pb-16 border-t transition-colors ${
+      className={`relative pt-16 pb-28 md:pb-16 border-t backdrop-blur-2xl transition-colors ${
         isDark
-          ? 'bg-[#050505] border-[rgba(212,175,55,0.2)] text-[#F8FAFC]'
-          : 'bg-[#F0FDF4]/50 border-[#00C896]/15 text-slate-600'
+          ? 'bg-[rgba(5,5,8,0.45)] border-[rgba(212,175,55,0.2)] text-[#F8FAFC]'
+          : 'bg-[rgba(240,253,244,0.45)] border-[#00C896]/15 text-slate-600'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">

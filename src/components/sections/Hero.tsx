@@ -48,10 +48,10 @@ export const Hero: React.FC<HeroProps> = ({ onOpenContact, onOpenResumeDownload 
               initial={{ opacity: 0, scale: 0.9 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.2, duration: 0.5 }}
-              className={`inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full text-xs font-semibold mb-6 border transition-all ${
+              className={`inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full text-xs font-semibold mb-6 border transition-all backdrop-blur-2xl ${
                 isDark 
-                  ? 'bg-[rgba(15,15,20,0.85)] text-[#F8FAFC] border-[#D4AF37]/30 shadow-[0_0_20px_rgba(212,175,55,0.15)]' 
-                  : 'bg-white/90 text-slate-800 border-[#00C896]/25 shadow-[0_4px_20px_rgba(0,200,150,0.12)]'
+                  ? 'bg-[rgba(12,12,16,0.45)] text-[#F8FAFC] border-[#D4AF37]/30 shadow-[0_0_20px_rgba(212,175,55,0.15)]' 
+                  : 'bg-[rgba(255,255,255,0.45)] text-slate-800 border-[#00C896]/25 shadow-[0_4px_20px_rgba(0,200,150,0.12)]'
               }`}
             >
               <span className="relative flex h-2.5 w-2.5">
@@ -92,10 +92,10 @@ export const Hero: React.FC<HeroProps> = ({ onOpenContact, onOpenResumeDownload 
                     animate={{ y: 0, opacity: 1 }}
                     exit={{ y: -24, opacity: 0 }}
                     transition={{ duration: 0.35, ease: 'easeOut' }}
-                    className={`text-lg sm:text-2xl font-bold tracking-tight px-3.5 py-1 rounded-xl ${
+                    className={`text-lg sm:text-2xl font-bold tracking-tight px-3.5 py-1 rounded-xl backdrop-blur-2xl ${
                       isDark 
-                        ? 'text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] via-[#FFD700] to-[#A855F7] bg-[rgba(15,15,20,0.85)] border border-[#D4AF37]/35 shadow-[0_0_20px_rgba(124,58,237,0.25)]' 
-                        : 'text-[#00A57A] bg-emerald-500/10 border border-[#00C896]/30'
+                        ? 'text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] via-[#FFD700] to-[#A855F7] bg-[rgba(12,12,16,0.45)] border border-[#D4AF37]/35 shadow-[0_0_20px_rgba(124,58,237,0.25)]' 
+                        : 'text-[#00A57A] bg-[rgba(255,255,255,0.45)] border border-[#00C896]/30'
                     }`}
                   >
                     "{roles[roleIndex]}"
@@ -127,10 +127,10 @@ export const Hero: React.FC<HeroProps> = ({ onOpenContact, onOpenResumeDownload 
               <button
                 onClick={onOpenContact}
                 id="hero-contact-me-btn"
-                className={`w-full sm:w-auto px-6 py-3.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all duration-300 border cursor-pointer active:scale-95 ${
+                className={`w-full sm:w-auto px-6 py-3.5 rounded-xl font-bold text-sm flex items-center justify-center gap-2 transition-all duration-300 border cursor-pointer backdrop-blur-2xl active:scale-95 ${
                   isDark
-                    ? 'bg-[rgba(15,15,20,0.85)] hover:bg-[#181822] text-[#F8FAFC] border-[#D4AF37]/35 hover:border-[#D4AF37]'
-                    : 'bg-white hover:bg-slate-50 text-slate-800 border-[#00C896]/30 hover:border-[#00C896]'
+                    ? 'bg-[rgba(12,12,16,0.45)] hover:bg-[rgba(20,20,28,0.7)] text-[#F8FAFC] border-[#D4AF37]/35 hover:border-[#D4AF37]'
+                    : 'bg-[rgba(255,255,255,0.45)] hover:bg-white/80 text-slate-800 border-[#00C896]/30 hover:border-[#00C896]'
                 }`}
               >
                 <Mail className="w-4 h-4 text-[#00A57A] dark:text-[#D4AF37]" />
@@ -140,10 +140,10 @@ export const Hero: React.FC<HeroProps> = ({ onOpenContact, onOpenResumeDownload 
               <button
                 onClick={onOpenResumeDownload}
                 id="hero-download-cv-btn"
-                className={`w-full sm:w-auto px-5 py-3.5 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 transition-all duration-300 border cursor-pointer ${
+                className={`w-full sm:w-auto px-5 py-3.5 rounded-xl font-semibold text-sm flex items-center justify-center gap-2 transition-all duration-300 border cursor-pointer backdrop-blur-2xl ${
                   isDark
-                    ? 'bg-[rgba(15,15,20,0.85)] text-[#F8FAFC] hover:text-[#FFD700] border-[rgba(212,175,55,0.3)] hover:border-[#D4AF37]'
-                    : 'bg-white/80 text-slate-700 hover:text-slate-900 border-slate-200 hover:border-[#00C896]'
+                    ? 'bg-[rgba(12,12,16,0.45)] text-[#F8FAFC] hover:text-[#FFD700] border-[rgba(212,175,55,0.3)] hover:border-[#D4AF37]'
+                    : 'bg-[rgba(255,255,255,0.45)] text-slate-700 hover:text-slate-900 border-slate-200 hover:border-[#00C896]'
                 }`}
               >
                 <FileText className="w-4 h-4 text-[#00A57A] dark:text-[#D4AF37]" />
@@ -207,10 +207,10 @@ export const Hero: React.FC<HeroProps> = ({ onOpenContact, onOpenResumeDownload 
               <motion.div 
                 whileHover={{ y: -6, scale: 1.02 }}
                 transition={{ duration: 0.4 }}
-                className={`relative z-10 w-[260px] sm:w-[310px] h-[320px] sm:h-[370px] rounded-3xl p-3 backdrop-blur-xl transition-all duration-500 overflow-hidden shadow-2xl ${
+                className={`relative z-10 w-[260px] sm:w-[310px] h-[320px] sm:h-[370px] rounded-3xl p-3 backdrop-blur-2xl transition-all duration-500 overflow-hidden shadow-2xl ${
                   isDark
-                    ? 'bg-[rgba(15,15,20,0.85)] border border-[#D4AF37]/30 shadow-[0_0_50px_rgba(0,0,0,0.9)]'
-                    : 'bg-white/85 border border-[#00C896]/20 shadow-[0_20px_50px_rgba(0,200,150,0.18)]'
+                    ? 'bg-[rgba(12,12,16,0.45)] border border-[#D4AF37]/30 shadow-[0_8px_32px_rgba(0,0,0,0.7)]'
+                    : 'bg-[rgba(255,255,255,0.45)] border border-[#00C896]/20 shadow-[0_20px_50px_rgba(0,200,150,0.18)]'
                 }`}
               >
                 <SafeImage
@@ -231,10 +231,10 @@ export const Hero: React.FC<HeroProps> = ({ onOpenContact, onOpenResumeDownload 
               <motion.div
                 animate={{ y: [-4, 6, -4] }}
                 transition={{ duration: 5, repeat: Infinity, ease: 'easeInOut' }}
-                className={`absolute -top-3 right-0 sm:-right-4 z-20 px-3.5 py-2.5 rounded-2xl backdrop-blur-xl border shadow-xl flex items-center gap-3 ${
+                className={`absolute -top-3 right-0 sm:-right-4 z-20 px-3.5 py-2.5 rounded-2xl backdrop-blur-2xl border shadow-xl flex items-center gap-3 ${
                   isDark
-                    ? 'bg-[rgba(15,15,20,0.95)] border-[#D4AF37]/35 text-[#F8FAFC] shadow-[0_10px_25px_rgba(0,0,0,0.8)]'
-                    : 'bg-white/95 border-[#00C896]/25 text-slate-900 shadow-[0_10px_25px_rgba(0,200,150,0.15)]'
+                    ? 'bg-[rgba(12,12,16,0.5)] border-[#D4AF37]/35 text-[#F8FAFC] shadow-[0_10px_25px_rgba(0,0,0,0.6)]'
+                    : 'bg-[rgba(255,255,255,0.55)] border-[#00C896]/25 text-slate-900 shadow-[0_10px_25px_rgba(0,200,150,0.15)]'
                 }`}
               >
                 <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${
@@ -252,10 +252,10 @@ export const Hero: React.FC<HeroProps> = ({ onOpenContact, onOpenResumeDownload 
               <motion.div
                 animate={{ y: [6, -5, 6] }}
                 transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut', delay: 1 }}
-                className={`absolute -bottom-4 left-0 sm:-left-6 z-20 px-3.5 py-2.5 rounded-2xl backdrop-blur-xl border shadow-xl flex items-center gap-3 ${
+                className={`absolute -bottom-4 left-0 sm:-left-6 z-20 px-3.5 py-2.5 rounded-2xl backdrop-blur-2xl border shadow-xl flex items-center gap-3 ${
                   isDark
-                    ? 'bg-[rgba(15,15,20,0.95)] border-[#D4AF37]/35 text-[#F8FAFC] shadow-[0_10px_25px_rgba(0,0,0,0.8)]'
-                    : 'bg-white/95 border-[#00C896]/25 text-slate-900 shadow-[0_10px_25px_rgba(0,200,150,0.15)]'
+                    ? 'bg-[rgba(12,12,16,0.5)] border-[#D4AF37]/35 text-[#F8FAFC] shadow-[0_10px_25px_rgba(0,0,0,0.6)]'
+                    : 'bg-[rgba(255,255,255,0.55)] border-[#00C896]/25 text-slate-900 shadow-[0_10px_25px_rgba(0,200,150,0.15)]'
                 }`}
               >
                 <div className={`w-9 h-9 rounded-xl flex items-center justify-center ${

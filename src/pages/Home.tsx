@@ -80,10 +80,10 @@ export const Home: React.FC<HomeProps> = ({ onOpenContact, onOpenResumeDownload 
             <Link
               to="/skills"
               id="home-view-all-skills-btn"
-              className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold transition-all duration-300 self-start sm:self-auto border ${
+              className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold transition-all duration-300 self-start sm:self-auto border backdrop-blur-2xl ${
                 isDark
-                  ? 'bg-[#0B0B0F] text-[#D4AF37] border-[rgba(212,175,55,0.3)] hover:border-[#D4AF37] hover:bg-[#121218] shadow-[0_0_15px_rgba(212,175,55,0.15)]'
-                  : 'bg-white text-[#00A57A] border-[#00C896]/30 hover:border-[#00C896] hover:bg-emerald-50 shadow-sm'
+                  ? 'bg-[rgba(12,12,16,0.45)] text-[#D4AF37] border-[rgba(212,175,55,0.3)] hover:border-[#D4AF37] hover:bg-[rgba(20,20,28,0.7)] shadow-[0_0_15px_rgba(212,175,55,0.15)]'
+                  : 'bg-[rgba(255,255,255,0.45)] text-[#00A57A] border-[#00C896]/30 hover:border-[#00C896] hover:bg-white/80 shadow-sm'
               }`}
             >
               <span>View All Skills</span>
@@ -103,10 +103,10 @@ export const Home: React.FC<HomeProps> = ({ onOpenContact, onOpenResumeDownload 
                 whileHover={{ y: -6, scale: 1.02 }}
                 onClick={() => setActiveSkillModal(skill)}
                 id={`home-skill-preview-${skill.id}`}
-                className={`p-6 rounded-3xl backdrop-blur-xl border transition-all duration-300 cursor-pointer overflow-hidden flex flex-col items-center justify-center text-center relative group ${
+                className={`p-6 rounded-3xl backdrop-blur-2xl border transition-all duration-300 cursor-pointer overflow-hidden flex flex-col items-center justify-center text-center relative group ${
                   isDark
-                    ? 'bg-[rgba(15,15,20,0.85)] border-[rgba(212,175,55,0.25)] hover:border-[#D4AF37] hover:shadow-[0_0_30px_rgba(124,58,237,0.25)] text-[#F8FAFC]'
-                    : 'bg-white/90 border-slate-200/80 hover:border-[#00C896]/60 hover:shadow-[0_10px_30px_rgba(0,200,150,0.15)] text-slate-900'
+                    ? 'bg-[rgba(12,12,16,0.45)] border-[rgba(212,175,55,0.22)] hover:border-[#D4AF37] hover:shadow-[0_0_30px_rgba(124,58,237,0.25)] text-[#F8FAFC]'
+                    : 'bg-[rgba(255,255,255,0.45)] border-slate-200/80 hover:border-[#00C896]/60 hover:shadow-[0_8px_30px_rgba(0,200,150,0.15)] text-slate-900'
                 }`}
               >
                 {/* Tech Icon */}
@@ -174,10 +174,10 @@ export const Home: React.FC<HomeProps> = ({ onOpenContact, onOpenResumeDownload 
             <Link
               to="/projects"
               id="home-view-all-projects-btn"
-              className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold transition-all duration-300 self-start sm:self-auto border ${
+              className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold transition-all duration-300 self-start sm:self-auto border backdrop-blur-2xl ${
                 isDark
-                  ? 'bg-[#0B0B0F] text-[#D4AF37] border-[rgba(212,175,55,0.3)] hover:border-[#D4AF37] hover:bg-[#121218] shadow-[0_0_15px_rgba(212,175,55,0.15)]'
-                  : 'bg-white text-[#00A57A] border-[#00C896]/30 hover:border-[#00C896] hover:bg-emerald-50 shadow-sm'
+                  ? 'bg-[rgba(12,12,16,0.45)] text-[#D4AF37] border-[rgba(212,175,55,0.3)] hover:border-[#D4AF37] hover:bg-[rgba(20,20,28,0.7)] shadow-[0_0_15px_rgba(212,175,55,0.15)]'
+                  : 'bg-[rgba(255,255,255,0.45)] text-[#00A57A] border-[#00C896]/30 hover:border-[#00C896] hover:bg-white/80 shadow-sm'
               }`}
             >
               <span>View All Projects</span>
@@ -197,10 +197,10 @@ export const Home: React.FC<HomeProps> = ({ onOpenContact, onOpenResumeDownload 
                 whileHover={{ y: -6 }}
                 onClick={() => setActiveProjectModal(project)}
                 id={`home-project-preview-${project.id}`}
-                className={`group relative rounded-3xl backdrop-blur-xl border overflow-hidden flex flex-col justify-between transition-all duration-300 cursor-pointer shadow-lg ${
+                className={`group relative rounded-3xl backdrop-blur-2xl border overflow-hidden flex flex-col justify-between transition-all duration-300 cursor-pointer shadow-lg ${
                   isDark
-                    ? 'bg-[rgba(15,15,20,0.85)] border-[rgba(212,175,55,0.25)] hover:border-[#D4AF37] hover:shadow-[0_0_30px_rgba(124,58,237,0.25)] text-[#F8FAFC]'
-                    : 'bg-white/90 border-slate-200/80 hover:border-[#00C896]/50 hover:shadow-[0_15px_45px_rgba(0,200,150,0.15)] text-slate-900'
+                    ? 'bg-[rgba(12,12,16,0.45)] border-[rgba(212,175,55,0.22)] hover:border-[#D4AF37] hover:shadow-[0_0_30px_rgba(124,58,237,0.25)] text-[#F8FAFC]'
+                    : 'bg-[rgba(255,255,255,0.45)] border-slate-200/80 hover:border-[#00C896]/50 hover:shadow-[0_15px_45px_rgba(0,200,150,0.15)] text-slate-900'
                 }`}
               >
                 <div className="relative w-full h-48 overflow-hidden bg-slate-100 dark:bg-[#0B0B0F]">
@@ -298,10 +298,10 @@ export const Home: React.FC<HomeProps> = ({ onOpenContact, onOpenResumeDownload 
             <Link
               to="/experience"
               id="home-view-full-experience-btn"
-              className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold transition-all duration-300 self-start sm:self-auto border ${
+              className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold transition-all duration-300 self-start sm:self-auto border backdrop-blur-2xl ${
                 isDark
-                  ? 'bg-[rgba(15,15,20,0.85)] text-[#D4AF37] border-[#D4AF37]/30 hover:border-[#D4AF37] hover:bg-[#121218] shadow-[0_0_15px_rgba(212,175,55,0.15)]'
-                  : 'bg-white text-[#00A57A] border-[#00C896]/30 hover:border-[#00C896] hover:bg-emerald-50 shadow-sm'
+                  ? 'bg-[rgba(12,12,16,0.45)] text-[#D4AF37] border-[#D4AF37]/30 hover:border-[#D4AF37] hover:bg-[rgba(20,20,28,0.7)] shadow-[0_0_15px_rgba(212,175,55,0.15)]'
+                  : 'bg-[rgba(255,255,255,0.45)] text-[#00A57A] border-[#00C896]/30 hover:border-[#00C896] hover:bg-white/80 shadow-sm'
               }`}
             >
               <span>View Full Experience</span>
@@ -318,10 +318,10 @@ export const Home: React.FC<HomeProps> = ({ onOpenContact, onOpenResumeDownload 
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.4, delay: idx * 0.1 }}
-                className={`p-6 rounded-3xl backdrop-blur-xl border transition-all ${
+                className={`p-6 rounded-3xl backdrop-blur-2xl border transition-all ${
                   isDark
-                    ? 'bg-[rgba(15,15,20,0.85)] border-[rgba(212,175,55,0.25)] hover:border-[#D4AF37]/60 hover:shadow-[0_0_25px_rgba(124,58,237,0.2)] text-[#F8FAFC]'
-                    : 'bg-white/80 border-slate-200/80 text-slate-900'
+                    ? 'bg-[rgba(12,12,16,0.45)] border-[rgba(212,175,55,0.22)] hover:border-[#D4AF37]/60 hover:shadow-[0_0_25px_rgba(124,58,237,0.2)] text-[#F8FAFC]'
+                    : 'bg-[rgba(255,255,255,0.45)] border-slate-200/80 text-slate-900'
                 }`}
               >
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
@@ -385,8 +385,8 @@ export const Home: React.FC<HomeProps> = ({ onOpenContact, onOpenResumeDownload 
             transition={{ duration: 0.5 }}
             className={`relative p-8 sm:p-12 rounded-3xl backdrop-blur-2xl border text-center overflow-hidden shadow-2xl ${
               isDark
-                ? 'bg-gradient-to-b from-[#0B0B0F] to-[#050505] border-[#D4AF37]/30 shadow-[0_0_60px_rgba(212,175,55,0.15)]'
-                : 'bg-gradient-to-b from-white to-[#F0FDF4] border-[#00C896]/30 shadow-[0_20px_60px_rgba(0,200,150,0.12)]'
+                ? 'bg-[rgba(12,12,16,0.5)] border-[#D4AF37]/35 shadow-[0_0_60px_rgba(212,175,55,0.15)]'
+                : 'bg-[rgba(255,255,255,0.55)] border-[#00C896]/35 shadow-[0_20px_60px_rgba(0,200,150,0.12)]'
             }`}
           >
             {/* Ambient Background Glow */}

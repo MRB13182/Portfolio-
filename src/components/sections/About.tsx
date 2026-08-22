@@ -71,16 +71,16 @@ export const About: React.FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6 }}
-            className={`lg:col-span-7 p-8 sm:p-10 rounded-3xl backdrop-blur-xl border flex flex-col justify-between ${
+            className={`lg:col-span-7 p-8 sm:p-10 rounded-3xl backdrop-blur-2xl border flex flex-col justify-between ${
               isDark
-                ? 'bg-[rgba(15,15,20,0.85)] border-[rgba(212,175,55,0.25)] shadow-[0_15px_40px_rgba(0,0,0,0.9)]'
-                : 'bg-white/80 border-[#00C896]/20 shadow-[0_15px_40px_rgba(0,200,150,0.08)]'
+                ? 'bg-[rgba(12,12,16,0.45)] border-[rgba(212,175,55,0.22)] shadow-[0_8px_32px_rgba(0,0,0,0.5)]'
+                : 'bg-[rgba(255,255,255,0.45)] border-[#00C896]/20 shadow-[0_8px_32px_rgba(0,200,150,0.08)]'
             }`}
           >
             <div>
               <div className="flex items-center gap-3 mb-6">
                 <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
-                  isDark ? 'bg-[#7C3AED]/20 text-[#D4AF37] border border-[#7C3AED]/30' : 'bg-emerald-100 text-[#00A57A]'
+                  isDark ? 'bg-[#7C3AED]/20 text-[#D4AF37] border border-[#7C3AED]/30' : 'bg-emerald-100/80 text-[#00A57A]'
                 }`}>
                   <Terminal className="w-5 h-5" />
                 </div>
@@ -120,7 +120,7 @@ export const About: React.FC = () => {
                 <span>{portfolioConfig.personal.location}</span>
               </div>
               <span className={`text-xs font-bold font-mono px-3 py-1 rounded-full ${
-                isDark ? 'bg-[#0B0B0F] border border-[#D4AF37]/30 text-[#FFD700]' : 'bg-slate-100 text-[#00A57A]'
+                isDark ? 'bg-[rgba(12,12,16,0.6)] border border-[#D4AF37]/30 text-[#FFD700]' : 'bg-white/80 text-[#00A57A]'
               }`}>
                 READY FOR HIRE
               </span>
@@ -137,10 +137,10 @@ export const About: React.FC = () => {
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: idx * 0.1 }}
                 whileHover={{ y: -4 }}
-                className={`p-6 rounded-3xl backdrop-blur-xl border flex flex-col justify-between transition-all duration-300 ${
+                className={`p-6 rounded-3xl backdrop-blur-2xl border flex flex-col justify-between transition-all duration-300 ${
                   isDark
-                    ? 'bg-[rgba(15,15,20,0.85)] border-[rgba(212,175,55,0.25)] hover:border-[#D4AF37]/60 hover:shadow-[0_0_25px_rgba(124,58,237,0.25)]'
-                    : 'bg-white/80 border-[#00C896]/20 hover:border-[#00C896]/50 shadow-[0_10px_30px_rgba(0,200,150,0.06)]'
+                    ? 'bg-[rgba(12,12,16,0.45)] border-[rgba(212,175,55,0.22)] hover:border-[#D4AF37]/60 hover:shadow-[0_0_25px_rgba(124,58,237,0.25)]'
+                    : 'bg-[rgba(255,255,255,0.45)] border-[#00C896]/20 hover:border-[#00C896]/50 shadow-[0_8px_32px_rgba(0,200,150,0.06)]'
                 }`}
               >
                 <div className="flex items-center justify-between mb-4">
@@ -181,10 +181,10 @@ export const About: React.FC = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: idx * 0.15 }}
-                className={`p-7 rounded-3xl backdrop-blur-xl border transition-all duration-300 hover:shadow-xl ${
+                className={`p-7 rounded-3xl backdrop-blur-2xl border transition-all duration-300 hover:shadow-xl ${
                   isDark
-                    ? 'bg-[rgba(15,15,20,0.85)] border-[rgba(212,175,55,0.25)] hover:border-[#D4AF37]/60 hover:shadow-[0_0_30px_rgba(124,58,237,0.25)] text-[#F8FAFC]'
-                    : 'bg-white/70 border-slate-200/80 hover:border-[#00C896]/40 text-slate-900'
+                    ? 'bg-[rgba(12,12,16,0.45)] border-[rgba(212,175,55,0.22)] hover:border-[#D4AF37]/60 hover:shadow-[0_0_30px_rgba(124,58,237,0.25)] text-[#F8FAFC]'
+                    : 'bg-[rgba(255,255,255,0.45)] border-slate-200/80 hover:border-[#00C896]/40 text-slate-900'
                 }`}
               >
                 <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-5 ${

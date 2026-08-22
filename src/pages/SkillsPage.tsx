@@ -92,10 +92,10 @@ export const SkillsPage: React.FC = () => {
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             id="skills-search-input"
-            className={`w-full pl-10 pr-10 py-2.5 rounded-2xl text-xs sm:text-sm border transition-all outline-none ${
+            className={`w-full pl-10 pr-10 py-2.5 rounded-2xl text-xs sm:text-sm border transition-all outline-none backdrop-blur-2xl ${
               isDark
-                ? 'bg-[rgba(15,15,20,0.85)] border-[#7C3AED]/40 text-[#F8FAFC] placeholder-white/50 focus:border-[#D4AF37] focus:shadow-[0_0_15px_rgba(212,175,55,0.25)] focus:ring-1 focus:ring-[#D4AF37]'
-                : 'bg-white border-slate-200 text-slate-900 placeholder-slate-400 focus:border-[#00C896] focus:ring-1 focus:ring-[#00C896]'
+                ? 'bg-[rgba(12,12,16,0.45)] border-[#7C3AED]/40 text-[#F8FAFC] placeholder-white/50 focus:border-[#D4AF37] focus:shadow-[0_0_15px_rgba(212,175,55,0.25)] focus:ring-1 focus:ring-[#D4AF37]'
+                : 'bg-[rgba(255,255,255,0.45)] border-slate-200 text-slate-900 placeholder-slate-400 focus:border-[#00C896] focus:ring-1 focus:ring-[#00C896]'
             }`}
           />
           {searchQuery && (
@@ -109,7 +109,7 @@ export const SkillsPage: React.FC = () => {
         </div>
 
         {/* Category Pills */}
-        <div className="inline-flex items-center gap-1.5 p-1.5 rounded-2xl border backdrop-blur-md overflow-x-auto max-w-full bg-white/60 dark:bg-[rgba(15,15,20,0.85)] border-slate-200/80 dark:border-[rgba(212,175,55,0.25)]">
+        <div className="inline-flex items-center gap-1.5 p-1.5 rounded-2xl border backdrop-blur-2xl overflow-x-auto max-w-full bg-[rgba(255,255,255,0.35)] dark:bg-[rgba(12,12,16,0.45)] border-slate-200/80 dark:border-[rgba(212,175,55,0.25)]">
           {categories.map((cat) => {
             const isActive = selectedCategory === cat;
             return (
@@ -184,10 +184,10 @@ export const SkillsPage: React.FC = () => {
                         whileTap={{ scale: 0.98 }}
                         onClick={() => setActiveSkillModal(skill)}
                         id={`skill-card-${skill.id}`}
-                        className={`group relative p-4 sm:p-5 rounded-[22px] backdrop-blur-xl border transition-all duration-300 cursor-pointer overflow-hidden flex flex-col items-center justify-center text-center ${
+                        className={`group relative p-4 sm:p-5 rounded-[22px] backdrop-blur-2xl border transition-all duration-300 cursor-pointer overflow-hidden flex flex-col items-center justify-center text-center ${
                           isDark
-                            ? 'bg-[rgba(15,15,20,0.85)] border-[rgba(212,175,55,0.25)] hover:border-[#D4AF37]/60 hover:shadow-[0_0_25px_rgba(124,58,237,0.25)] text-[#F8FAFC]'
-                            : 'bg-white/90 border-slate-200/80 hover:border-[#00C896]/60 hover:shadow-[0_10px_25px_rgba(0,200,150,0.15)] text-slate-900'
+                            ? 'bg-[rgba(12,12,16,0.45)] border-[rgba(212,175,55,0.22)] hover:border-[#D4AF37]/60 hover:shadow-[0_0_25px_rgba(124,58,237,0.25)] text-[#F8FAFC]'
+                            : 'bg-[rgba(255,255,255,0.45)] border-slate-200/80 hover:border-[#00C896]/60 hover:shadow-[0_8px_25px_rgba(0,200,150,0.15)] text-slate-900'
                         }`}
                       >
                         {/* Ambient Glow */}
@@ -241,10 +241,10 @@ export const SkillsPage: React.FC = () => {
                 whileTap={{ scale: 0.98 }}
                 onClick={() => setActiveSkillModal(skill)}
                 id={`skill-card-${skill.id}`}
-                className={`group relative p-4 sm:p-5 rounded-[22px] backdrop-blur-xl border transition-all duration-300 cursor-pointer overflow-hidden flex flex-col items-center justify-center text-center ${
+                className={`group relative p-4 sm:p-5 rounded-[22px] backdrop-blur-2xl border transition-all duration-300 cursor-pointer overflow-hidden flex flex-col items-center justify-center text-center ${
                   isDark
-                    ? 'bg-[rgba(15,15,20,0.85)] border-[rgba(212,175,55,0.25)] hover:border-[#D4AF37]/60 hover:shadow-[0_0_25px_rgba(124,58,237,0.25)] text-[#F8FAFC]'
-                    : 'bg-white/90 border-slate-200/80 hover:border-[#00C896]/60 hover:shadow-[0_10px_25px_rgba(0,200,150,0.15)] text-slate-900'
+                    ? 'bg-[rgba(12,12,16,0.45)] border-[rgba(212,175,55,0.22)] hover:border-[#D4AF37]/60 hover:shadow-[0_0_25px_rgba(124,58,237,0.25)] text-[#F8FAFC]'
+                    : 'bg-[rgba(255,255,255,0.45)] border-slate-200/80 hover:border-[#00C896]/60 hover:shadow-[0_8px_25px_rgba(0,200,150,0.15)] text-slate-900'
                 }`}
               >
                 <div className={`w-11 h-11 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center mb-3 transition-transform group-hover:scale-110 shadow-sm ${

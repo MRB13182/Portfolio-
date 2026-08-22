@@ -129,10 +129,10 @@ export const DownloadCustomizationModal: React.FC<DownloadCustomizationModalProp
           exit={{ opacity: 0, scale: 0.92, y: 20 }}
           transition={{ type: 'spring', damping: 25, stiffness: 300 }}
           id="download-customization-popup"
-          className={`relative w-full max-w-2xl rounded-3xl backdrop-blur-2xl border shadow-2xl z-10 overflow-hidden ${
+          className={`relative w-full max-w-2xl rounded-3xl backdrop-blur-3xl border shadow-2xl z-10 overflow-hidden ${
             isAppDark
-              ? 'bg-[#0D0D0D]/95 border-[#D4AF37]/30 text-[#F8FAFC] shadow-[0_0_80px_rgba(0,0,0,0.95)]'
-              : 'bg-white/95 border-[#00C896]/25 text-slate-900 shadow-[0_25px_70px_rgba(0,200,150,0.2)]'
+              ? 'bg-[rgba(12,12,16,0.8)] border-[#D4AF37]/30 text-[#F8FAFC] shadow-[0_0_80px_rgba(0,0,0,0.95)]'
+              : 'bg-[rgba(255,255,255,0.85)] border-[#00C896]/25 text-slate-900 shadow-[0_25px_70px_rgba(0,200,150,0.2)]'
           }`}
         >
           {/* Ambient Glow */}
