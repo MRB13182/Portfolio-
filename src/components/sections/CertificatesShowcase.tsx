@@ -27,18 +27,18 @@ export const CertificatesShowcase: React.FC = () => {
   return (
     <section 
       id="certificates-showcase" 
-      className="relative py-14 sm:py-20 overflow-hidden select-none border-t border-slate-200/50 dark:border-zinc-800/60"
+      className="relative py-14 sm:py-20 overflow-hidden select-none border-t border-slate-200/50 dark:border-[rgba(212,175,55,0.2)]"
     >
       {/* Ambient background subtle lighting */}
       <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-3/4 h-32 blur-3xl opacity-20 pointer-events-none rounded-full ${
-        isDark ? 'bg-gradient-to-r from-[#6D28D9] via-[#D4AF37] to-[#6D28D9]' : 'bg-gradient-to-r from-[#00C896] via-[#7FFFD4] to-[#00C896]'
+        isDark ? 'bg-gradient-to-r from-[#7C3AED] via-[#D4AF37] to-[#7C3AED]' : 'bg-gradient-to-r from-[#00C896] via-[#7FFFD4] to-[#00C896]'
       }`} />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-8 sm:mb-10 text-center">
         {/* Minimal Luxury Pill Header */}
         <div className={`inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-3 ${
           isDark 
-            ? 'bg-[#6D28D9]/20 text-[#D4AF37] border border-[#D4AF37]/30 shadow-[0_0_15px_rgba(212,175,55,0.15)]' 
+            ? 'bg-[#7C3AED]/20 text-[#D4AF37] border border-[#D4AF37]/30 shadow-[0_0_15px_rgba(212,175,55,0.15)]' 
             : 'bg-emerald-500/10 text-[#00A57A] border border-[#00C896]/25'
         }`}>
           <Award className="w-3.5 h-3.5" />
@@ -55,7 +55,7 @@ export const CertificatesShowcase: React.FC = () => {
             Professional Honors
           </span>
         </h2>
-        <p className="text-xs sm:text-sm text-slate-500 dark:text-[#A1A1AA] max-w-lg mx-auto">
+        <p className="text-xs sm:text-sm text-slate-500 dark:text-[#F8FAFC] max-w-lg mx-auto">
           Verified industry credentials from Google, Meta, IBM, HubSpot, and Semrush.
         </p>
       </div>
@@ -134,7 +134,7 @@ export const CertificatesShowcase: React.FC = () => {
                 <div className="flex items-center justify-between gap-2.5 pt-1">
                   <div className="flex items-center gap-2 min-w-0">
                     <div className={`w-7 h-7 rounded-lg p-1 border shadow-xs shrink-0 flex items-center justify-center ${
-                      isDark ? 'bg-[#121218] border-zinc-800' : 'bg-slate-50 border-slate-200'
+                      isDark ? 'bg-[#0B0B0F] border-[rgba(212,175,55,0.25)]' : 'bg-slate-50 border-slate-200'
                     }`}>
                       <IssuerLogo issuer={cert.issuer} className="w-full h-full object-contain" />
                     </div>
@@ -142,7 +142,7 @@ export const CertificatesShowcase: React.FC = () => {
                       <h4 className="text-xs font-bold tracking-tight truncate group-hover/card:text-[#00A57A] dark:group-hover/card:text-[#FFD700] transition-colors">
                         {cert.title}
                       </h4>
-                      <span className="text-[10px] font-mono text-slate-500 dark:text-[#A1A1AA] truncate block">
+                      <span className="text-[10px] font-mono text-slate-500 dark:text-[#F8FAFC] truncate block">
                         {cert.issuer}
                       </span>
                     </div>

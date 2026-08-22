@@ -71,6 +71,9 @@ export interface Certificate {
   title: string;
   issuer: string;
   issuerLogo: string; // Dynamic path e.g. /certificates/logos/meta.png
+  theme?: string;
+  category?: string;
+  accent?: string;
   issueDate: string;
   expiryDate?: string;
   credentialId: string;

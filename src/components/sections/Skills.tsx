@@ -54,7 +54,7 @@ export const Skills: React.FC = () => {
         <div className="flex flex-col items-center text-center mb-14">
           <div className={`inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-3 ${
             isDark 
-              ? 'bg-[#6D28D9]/20 text-[#D4AF37] border border-[#D4AF37]/30' 
+              ? 'bg-[#7C3AED]/20 text-[#D4AF37] border border-[#D4AF37]/30' 
               : 'bg-emerald-500/10 text-[#00A57A] border border-[#00C896]/20'
           }`}>
             <Sparkles className="w-3.5 h-3.5" />
@@ -71,7 +71,7 @@ export const Skills: React.FC = () => {
               Engineering Capabilities
             </span>
           </h2>
-          <p className="text-slate-600 dark:text-zinc-400 max-w-2xl text-base sm:text-lg">
+          <p className="text-slate-600 dark:text-[#F8FAFC] max-w-2xl text-base sm:text-lg">
             Interactive skill catalog. Click any technology to explore architectural highlights, experience duration, and production projects.
           </p>
         </div>
@@ -91,10 +91,10 @@ export const Skills: React.FC = () => {
                   className={`px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all duration-300 cursor-pointer ${
                     isActive
                       ? isDark
-                        ? 'bg-gradient-to-r from-[#6D28D9] to-[#D4AF37] text-white shadow-[0_0_15px_rgba(212,175,55,0.3)]'
+                        ? 'bg-gradient-to-r from-[#7C3AED] to-[#D4AF37] text-white shadow-[0_0_15px_rgba(212,175,55,0.3)]'
                         : 'bg-[#00C896] text-white shadow-[0_4px_15px_rgba(0,200,150,0.3)]'
                       : isDark
-                        ? 'bg-[rgba(15,15,20,0.85)] text-[#A1A1AA] hover:text-white border border-[rgba(212,175,55,0.25)] hover:border-[#D4AF37]/50'
+                        ? 'bg-[rgba(15,15,20,0.85)] text-[#F8FAFC] hover:text-[#FFD700] border border-[rgba(212,175,55,0.25)] hover:border-[#D4AF37]/50'
                         : 'bg-white text-slate-600 hover:text-slate-900 border border-slate-200 hover:border-slate-300'
                   }`}
                 >
@@ -106,7 +106,7 @@ export const Skills: React.FC = () => {
 
           {/* Search Input Bar */}
           <div className="relative w-full md:w-72">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-[#A1A1AA]" />
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-[#F8FAFC]" />
             <input
               type="text"
               id="skill-search-input"
@@ -115,7 +115,7 @@ export const Skills: React.FC = () => {
               placeholder="Search skill, react, node..."
               className={`w-full pl-10 pr-9 py-2.5 rounded-xl text-xs font-medium border focus:outline-none transition-all ${
                 isDark
-                  ? 'bg-[rgba(15,15,20,0.85)] border-[#6D28D9]/40 text-[#F8FAFC] placeholder-[#A1A1AA] focus:border-[#D4AF37] focus:shadow-[0_0_15px_rgba(212,175,55,0.25)] focus:ring-1 focus:ring-[#D4AF37]'
+                  ? 'bg-[rgba(15,15,20,0.85)] border-[#7C3AED]/40 text-[#F8FAFC] placeholder-white/60 focus:border-[#D4AF37] focus:shadow-[0_0_15px_rgba(212,175,55,0.25)] focus:ring-1 focus:ring-[#D4AF37]'
                   : 'bg-white border-slate-200 text-slate-900 placeholder-slate-400 focus:border-[#00C896] focus:shadow-[0_2px_15px_rgba(0,200,150,0.15)]'
               }`}
             />
@@ -124,7 +124,7 @@ export const Skills: React.FC = () => {
                 onClick={() => setSearchQuery('')}
                 id="skill-search-clear-btn"
                 aria-label="Clear search"
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:text-[#A1A1AA] dark:hover:text-white"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:text-[#F8FAFC] dark:hover:text-[#FFD700]"
               >
                 <X className="w-3.5 h-3.5" />
               </button>
@@ -135,10 +135,10 @@ export const Skills: React.FC = () => {
 
         {/* Skills Grid - Simplified Apple Minimalist Grid */}
         {filteredSkills.length === 0 ? (
-          <div className="text-center py-16 p-8 rounded-3xl border border-dashed border-slate-300 dark:border-zinc-800">
-            <Cpu className="w-12 h-12 mx-auto text-slate-400 dark:text-zinc-600 mb-3" />
+          <div className="text-center py-16 p-8 rounded-3xl border border-dashed border-slate-300 dark:border-[rgba(212,175,55,0.25)]">
+            <Cpu className="w-12 h-12 mx-auto text-slate-400 dark:text-white/60 mb-3" />
             <h4 className="font-bold text-lg mb-1">No technologies match "{searchQuery}"</h4>
-            <p className="text-xs text-slate-500 dark:text-[#A1A1AA] mb-4">Try clearing your search query or selecting a different category.</p>
+            <p className="text-xs text-slate-500 dark:text-[#F8FAFC] mb-4">Try clearing your search query or selecting a different category.</p>
             <button
               onClick={() => { setSearchQuery(''); setSelectedCategory('All'); }}
               className="px-4 py-2 rounded-xl text-xs font-bold bg-[#00C896] dark:bg-[#D4AF37] text-white dark:text-black"
@@ -161,19 +161,19 @@ export const Skills: React.FC = () => {
                 id={`skill-card-${skill.id}`}
                 className={`group relative p-4 sm:p-5 rounded-[24px] backdrop-blur-xl border transition-all duration-300 cursor-pointer overflow-hidden flex flex-col items-center justify-center text-center ${
                   isDark
-                    ? 'bg-[rgba(15,15,20,0.85)] border-[rgba(212,175,55,0.25)] hover:border-[#D4AF37]/60 hover:shadow-[0_0_25px_rgba(109,40,217,0.25)] text-white'
+                    ? 'bg-[rgba(15,15,20,0.85)] border-[rgba(212,175,55,0.25)] hover:border-[#D4AF37]/60 hover:shadow-[0_0_25px_rgba(124,58,237,0.25)] text-[#F8FAFC]'
                     : 'bg-white/90 border-slate-200/80 hover:border-[#00C896]/60 hover:shadow-[0_10px_25px_rgba(0,200,150,0.15)] text-slate-900'
                 }`}
               >
                 {/* Ambient Glow */}
                 <div className={`absolute -right-6 -bottom-6 w-16 h-16 rounded-full blur-xl opacity-0 group-hover:opacity-40 transition-opacity ${
-                  isDark ? 'bg-[#6D28D9]' : 'bg-[#00C896]'
+                  isDark ? 'bg-[#7C3AED]' : 'bg-[#00C896]'
                 }`} />
 
                 {/* Tech Icon Container */}
                 <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center mb-3 transition-transform group-hover:scale-110 shadow-sm ${
                   isDark 
-                    ? 'bg-[#6D28D9]/20 text-[#A855F7] border border-[#6D28D9]/30 group-hover:shadow-[0_0_15px_rgba(109,40,217,0.35)]' 
+                    ? 'bg-[#7C3AED]/20 text-[#D4AF37] border border-[#7C3AED]/30 group-hover:shadow-[0_0_15px_rgba(124,58,237,0.35)]' 
                     : 'bg-emerald-50 text-[#00A57A] border border-emerald-200 group-hover:shadow-[0_0_15px_rgba(0,200,150,0.25)]'
                 }`}>
                   <Cpu className="w-5 h-5 sm:w-6 sm:h-6" />

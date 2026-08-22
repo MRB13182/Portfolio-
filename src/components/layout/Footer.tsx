@@ -51,13 +51,13 @@ export const Footer: React.FC<FooterProps> = ({
       id="main-footer"
       className={`relative pt-16 pb-28 md:pb-16 border-t transition-colors ${
         isDark
-          ? 'bg-[#050505] border-[rgba(212,175,55,0.15)] text-[#A1A1AA]'
+          ? 'bg-[#050505] border-[rgba(212,175,55,0.2)] text-[#F8FAFC]'
           : 'bg-[#F0FDF4]/50 border-[#00C896]/15 text-slate-600'
       }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 pb-12 border-b border-slate-200/60 dark:border-zinc-800/80 items-start">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 pb-12 border-b border-slate-200/60 dark:border-[rgba(212,175,55,0.2)] items-start">
           
           {/* Brand Col */}
           <div className="md:col-span-5 flex flex-col items-start">
@@ -87,7 +87,7 @@ export const Footer: React.FC<FooterProps> = ({
                 </span>
               </div>
               <div>
-                <h3 className="font-extrabold text-base sm:text-lg text-slate-900 dark:text-white leading-tight">
+                <h3 className="font-extrabold text-base sm:text-lg text-slate-900 dark:text-[#F8FAFC] leading-tight">
                   {portfolioConfig.personal.name}
                 </h3>
                 <p className="text-xs text-[#00A57A] dark:text-[#D4AF37] font-semibold">
@@ -96,7 +96,7 @@ export const Footer: React.FC<FooterProps> = ({
               </div>
             </div>
 
-            <p className="text-xs sm:text-sm text-slate-600 dark:text-[#A1A1AA] max-w-sm leading-relaxed mb-6">
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-[#F8FAFC] max-w-sm leading-relaxed mb-6">
               {portfolioConfig.personal.bio}
             </p>
 
@@ -112,7 +112,7 @@ export const Footer: React.FC<FooterProps> = ({
                     aria-label={social.name}
                     className={`w-8 h-8 rounded-lg flex items-center justify-center border transition-all ${
                       isDark
-                        ? 'border-zinc-800 bg-[#0B0B0F] text-[#A1A1AA] hover:text-white hover:border-[#D4AF37]'
+                        ? 'border-[rgba(212,175,55,0.25)] bg-[#0B0B0F] text-[#F8FAFC] hover:text-[#FFD700] hover:border-[#D4AF37]'
                         : 'border-slate-200 bg-white text-slate-600 hover:text-slate-900 hover:border-[#00C896]'
                     }`}
                   >
@@ -125,7 +125,7 @@ export const Footer: React.FC<FooterProps> = ({
 
           {/* Navigation Jump Links & Download Links */}
           <div className="md:col-span-4">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white mb-4">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-[#F8FAFC] mb-4">
               Pages &amp; Resources
             </h4>
             <div className="grid grid-cols-2 gap-2 text-xs font-medium">
@@ -166,10 +166,10 @@ export const Footer: React.FC<FooterProps> = ({
 
           {/* Quick Inquiry CTA */}
           <div className="md:col-span-3 flex flex-col items-start">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white mb-3">
+            <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-[#F8FAFC] mb-3">
               Have a Project in Mind?
             </h4>
-            <p className="text-xs text-slate-500 dark:text-[#A1A1AA] mb-4 leading-relaxed">
+            <p className="text-xs text-slate-500 dark:text-[#F8FAFC] mb-4 leading-relaxed">
               Available for full-time senior roles, strategic consulting, and contract engineering.
             </p>
             <button
@@ -190,12 +190,12 @@ export const Footer: React.FC<FooterProps> = ({
 
         {/* Bottom Bar: Copyright & Back to Top */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
-          <div className="flex items-center gap-1.5 text-slate-500 dark:text-zinc-500">
+          <div className="flex items-center gap-1.5 text-slate-500 dark:text-[#F8FAFC]">
             <span>© {new Date().getFullYear()} {portfolioConfig.personal.name}. All rights reserved.</span>
           </div>
 
           <div className="flex items-center gap-4">
-            <span className="text-slate-400 dark:text-zinc-500 font-mono text-[11px]">
+            <span className="text-slate-400 dark:text-[#F8FAFC] font-mono text-[11px]">
               Apple Emerald &amp; Black Mamba Luxury Edition
             </span>
 
@@ -205,7 +205,7 @@ export const Footer: React.FC<FooterProps> = ({
               aria-label="Back to top"
               className={`p-2 rounded-xl border transition-all cursor-pointer ${
                 isDark
-                  ? 'bg-[#0B0B0F] border-zinc-800 text-zinc-300 hover:border-[#D4AF37] hover:text-white'
+                  ? 'bg-[#0B0B0F] border-[rgba(212,175,55,0.25)] text-[#F8FAFC] hover:border-[#D4AF37] hover:text-[#FFD700]'
                   : 'bg-white border-slate-200 text-slate-600 hover:border-[#00C896] hover:text-slate-900'
               }`}
             >

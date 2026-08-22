@@ -91,7 +91,7 @@ export const DownloadCustomizationModal: React.FC<DownloadCustomizationModalProp
         particleCount: 100,
         spread: 80,
         origin: { y: 0.4 },
-        colors: selectedTheme === 'dark' ? ['#D4AF37', '#6D28D9', '#FFD700'] : ['#00C896', '#7FFFD4', '#00A57A']
+        colors: selectedTheme === 'dark' ? ['#D4AF37', '#7C3AED', '#FFD700'] : ['#00C896', '#7FFFD4', '#00A57A']
       });
 
       setIsGenerating(false);
@@ -131,13 +131,13 @@ export const DownloadCustomizationModal: React.FC<DownloadCustomizationModalProp
           id="download-customization-popup"
           className={`relative w-full max-w-2xl rounded-3xl backdrop-blur-2xl border shadow-2xl z-10 overflow-hidden ${
             isAppDark
-              ? 'bg-[#0D0D0D]/95 border-[#D4AF37]/30 text-white shadow-[0_0_80px_rgba(0,0,0,0.95)]'
+              ? 'bg-[#0D0D0D]/95 border-[#D4AF37]/30 text-[#F8FAFC] shadow-[0_0_80px_rgba(0,0,0,0.95)]'
               : 'bg-white/95 border-[#00C896]/25 text-slate-900 shadow-[0_25px_70px_rgba(0,200,150,0.2)]'
           }`}
         >
           {/* Ambient Glow */}
           <div className={`absolute -top-32 -right-32 w-64 h-64 rounded-full blur-3xl opacity-25 ${
-            isAppDark ? 'bg-[#6D28D9]' : 'bg-[#00C896]'
+            isAppDark ? 'bg-[#7C3AED]' : 'bg-[#00C896]'
           }`} />
 
           {/* Close Button */}
@@ -148,7 +148,7 @@ export const DownloadCustomizationModal: React.FC<DownloadCustomizationModalProp
             aria-label="Close style selection popup"
             className={`absolute top-5 right-5 z-20 p-2 rounded-full border transition-colors cursor-pointer ${
               isAppDark 
-                ? 'border-zinc-800 bg-zinc-900 text-zinc-400 hover:text-white hover:border-[#D4AF37]' 
+                ? 'border-[rgba(212,175,55,0.3)] bg-[#0B0B0F] text-[#F8FAFC] hover:text-[#FFD700] hover:border-[#D4AF37]' 
                 : 'border-slate-200 bg-slate-100 text-slate-600 hover:text-slate-900 hover:border-[#00C896]'
             }`}
           >
@@ -160,7 +160,7 @@ export const DownloadCustomizationModal: React.FC<DownloadCustomizationModalProp
             {/* Header */}
             <div className="mb-6">
               <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider mb-2 ${
-                isAppDark ? 'bg-[#6D28D9]/30 text-[#D4AF37]' : 'bg-emerald-500/10 text-[#00A57A]'
+                isAppDark ? 'bg-[#7C3AED]/30 text-[#D4AF37]' : 'bg-emerald-500/10 text-[#00A57A]'
               }`}>
                 {isResume ? <FileText className="w-3.5 h-3.5" /> : <Award className="w-3.5 h-3.5" />}
                 <span>{modalTitle} • A4 Standard</span>
@@ -169,7 +169,7 @@ export const DownloadCustomizationModal: React.FC<DownloadCustomizationModalProp
               <h2 className="text-2xl sm:text-3xl font-black tracking-tight">
                 Choose Your Download Style
               </h2>
-              <p className="text-xs sm:text-sm text-slate-500 dark:text-zinc-400 mt-1">
+              <p className="text-xs sm:text-sm text-slate-500 dark:text-[#F8FAFC] mt-1">
                 Select your preferred designer aesthetic for the printable 210mm × 297mm A4 document.
               </p>
             </div>
@@ -185,7 +185,7 @@ export const DownloadCustomizationModal: React.FC<DownloadCustomizationModalProp
                   selectedTheme === 'light'
                     ? 'border-[#00C896] bg-emerald-500/10 shadow-[0_0_20px_rgba(0,200,150,0.2)]'
                     : isAppDark
-                      ? 'border-zinc-800 bg-zinc-900/60 hover:border-zinc-700'
+                      ? 'border-[rgba(212,175,55,0.25)] bg-[#0B0B0F] hover:border-[#D4AF37]/50'
                       : 'border-slate-200 bg-slate-50/70 hover:border-slate-300'
                 }`}
               >
@@ -195,7 +195,7 @@ export const DownloadCustomizationModal: React.FC<DownloadCustomizationModalProp
                       <Sun className="w-5 h-5" />
                     </div>
                     <div>
-                      <div className="font-extrabold text-sm text-slate-900 dark:text-white leading-tight">
+                      <div className="font-extrabold text-sm text-slate-900 dark:text-[#F8FAFC] leading-tight">
                         Light {isResume ? 'Resume' : 'Certificates'}
                       </div>
                       <div className="text-xs text-emerald-600 dark:text-emerald-400 font-medium">
@@ -207,7 +207,7 @@ export const DownloadCustomizationModal: React.FC<DownloadCustomizationModalProp
                   <div className={`px-2.5 py-1 rounded-full text-[11px] font-bold flex items-center gap-1 transition-all ${
                     selectedTheme === 'light'
                       ? 'bg-[#00C896] text-white shadow-sm'
-                      : 'text-slate-400 dark:text-zinc-500 bg-slate-200/50 dark:bg-zinc-800'
+                      : 'text-slate-400 dark:text-[#F8FAFC]/60 bg-slate-200/50 dark:bg-[#050505]'
                   }`}>
                     {selectedTheme === 'light' ? (
                       <>
@@ -227,19 +227,19 @@ export const DownloadCustomizationModal: React.FC<DownloadCustomizationModalProp
                 id="style-option-dark"
                 className={`group relative p-4 rounded-2xl border-2 transition-all cursor-pointer flex flex-col justify-between ${
                   selectedTheme === 'dark'
-                    ? 'border-[#D4AF37] bg-[#6D28D9]/15 shadow-[0_0_20px_rgba(212,175,55,0.25)]'
+                    ? 'border-[#D4AF37] bg-[#7C3AED]/15 shadow-[0_0_20px_rgba(212,175,55,0.25)]'
                     : isAppDark
-                      ? 'border-zinc-800 bg-zinc-900/60 hover:border-zinc-700'
+                      ? 'border-[rgba(212,175,55,0.25)] bg-[#0B0B0F] hover:border-[#D4AF37]/50'
                       : 'border-slate-200 bg-slate-50/70 hover:border-slate-300'
                 }`}
               >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-xl bg-[#6D28D9]/30 text-[#D4AF37] flex items-center justify-center shrink-0">
+                    <div className="w-9 h-9 rounded-xl bg-[#7C3AED]/30 text-[#D4AF37] flex items-center justify-center shrink-0">
                       <Moon className="w-5 h-5" />
                     </div>
                     <div>
-                      <div className="font-extrabold text-sm text-slate-900 dark:text-white leading-tight">
+                      <div className="font-extrabold text-sm text-slate-900 dark:text-[#F8FAFC] leading-tight">
                         Dark {isResume ? 'Resume' : 'Certificates'}
                       </div>
                       <div className="text-xs text-[#D4AF37] font-medium">
@@ -251,7 +251,7 @@ export const DownloadCustomizationModal: React.FC<DownloadCustomizationModalProp
                   <div className={`px-2.5 py-1 rounded-full text-[11px] font-bold flex items-center gap-1 transition-all ${
                     selectedTheme === 'dark'
                       ? 'bg-[#D4AF37] text-black shadow-sm'
-                      : 'text-slate-400 dark:text-zinc-500 bg-slate-200/50 dark:bg-zinc-800'
+                      : 'text-slate-400 dark:text-[#F8FAFC]/60 bg-slate-200/50 dark:bg-[#050505]'
                   }`}>
                     {selectedTheme === 'dark' ? (
                       <>
@@ -268,7 +268,7 @@ export const DownloadCustomizationModal: React.FC<DownloadCustomizationModalProp
             </div>
 
             {/* Action Bar */}
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 border-t border-slate-200/60 dark:border-zinc-800">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-3 pt-4 border-t border-slate-200/60 dark:border-[rgba(212,175,55,0.2)]">
               
               {/* Secondary Buttons: Live Preview & Direct Print */}
               <div className="flex items-center gap-2 w-full sm:w-auto">
@@ -278,7 +278,7 @@ export const DownloadCustomizationModal: React.FC<DownloadCustomizationModalProp
                   id="preview-toggle-btn"
                   className={`px-3.5 py-2.5 rounded-xl text-xs font-bold border flex items-center justify-center gap-1.5 transition-all cursor-pointer flex-1 sm:flex-initial ${
                     isAppDark
-                      ? 'bg-zinc-900 border-zinc-700 text-zinc-300 hover:text-white hover:border-[#D4AF37]'
+                      ? 'bg-[#0B0B0F] border-[rgba(212,175,55,0.25)] text-[#F8FAFC] hover:text-[#FFD700] hover:border-[#D4AF37]'
                       : 'bg-slate-100 border-slate-200 text-slate-700 hover:text-slate-900 hover:border-[#00C896]'
                   }`}
                 >
@@ -293,7 +293,7 @@ export const DownloadCustomizationModal: React.FC<DownloadCustomizationModalProp
                   title="Print or Save via Browser Print Dialog"
                   className={`px-3.5 py-2.5 rounded-xl text-xs font-bold border flex items-center justify-center gap-1.5 transition-all cursor-pointer ${
                     isAppDark
-                      ? 'bg-zinc-900 border-zinc-700 text-zinc-300 hover:text-white'
+                      ? 'bg-[#0B0B0F] border-[rgba(212,175,55,0.25)] text-[#F8FAFC] hover:border-[#D4AF37] hover:text-[#FFD700]'
                       : 'bg-slate-100 border-slate-200 text-slate-700 hover:text-slate-900'
                   }`}
                 >
@@ -336,24 +336,24 @@ export const DownloadCustomizationModal: React.FC<DownloadCustomizationModalProp
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: 'auto' }}
                   exit={{ opacity: 0, height: 0 }}
-                  className="mt-6 pt-4 border-t border-slate-200/60 dark:border-zinc-800"
+                  className="mt-6 pt-4 border-t border-slate-200/60 dark:border-[rgba(212,175,55,0.2)]"
                 >
                   <div className="flex items-center justify-between mb-3 text-xs">
-                    <span className="font-bold flex items-center gap-1.5 text-slate-600 dark:text-zinc-300">
+                    <span className="font-bold flex items-center gap-1.5 text-slate-600 dark:text-[#F8FAFC]">
                       <Eye className="w-4 h-4 text-emerald-500 dark:text-[#D4AF37]" />
                       Real-time A4 Pixel-Perfect Preview ({Math.round(previewZoom * 100)}%)
                     </span>
                     <div className="flex items-center gap-1">
                       <button
                         onClick={() => setPreviewZoom(Math.max(0.4, previewZoom - 0.1))}
-                        className="p-1 rounded bg-slate-100 dark:bg-zinc-800 text-slate-600 dark:text-zinc-300 hover:text-black dark:hover:text-white"
+                        className="p-1 rounded bg-slate-100 dark:bg-[#0B0B0F] dark:border dark:border-[rgba(212,175,55,0.25)] text-slate-600 dark:text-[#F8FAFC] hover:text-black dark:hover:text-[#FFD700]"
                         title="Zoom Out"
                       >
                         <ZoomOut className="w-3.5 h-3.5" />
                       </button>
                       <button
                         onClick={() => setPreviewZoom(Math.min(1.0, previewZoom + 0.1))}
-                        className="p-1 rounded bg-slate-100 dark:bg-zinc-800 text-slate-600 dark:text-zinc-300 hover:text-black dark:hover:text-white"
+                        className="p-1 rounded bg-slate-100 dark:bg-[#0B0B0F] dark:border dark:border-[rgba(212,175,55,0.25)] text-slate-600 dark:text-[#F8FAFC] hover:text-black dark:hover:text-[#FFD700]"
                         title="Zoom In"
                       >
                         <ZoomIn className="w-3.5 h-3.5" />
@@ -362,7 +362,7 @@ export const DownloadCustomizationModal: React.FC<DownloadCustomizationModalProp
                   </div>
 
                   {/* Scaled Preview Canvas Viewport */}
-                  <div className="w-full h-96 overflow-auto rounded-2xl border border-slate-300 dark:border-zinc-800 bg-slate-900/10 dark:bg-black/50 p-4 flex justify-center items-start shadow-inner">
+                  <div className="w-full h-96 overflow-auto rounded-2xl border border-slate-300 dark:border-[rgba(212,175,55,0.25)] bg-slate-900/10 dark:bg-[#050505] p-4 flex justify-center items-start shadow-inner">
                     <div 
                       style={{ 
                         transform: `scale(${previewZoom})`, 

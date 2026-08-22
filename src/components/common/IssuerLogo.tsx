@@ -103,7 +103,7 @@ export const IssuerLogo: React.FC<IssuerLogoProps> = ({ issuer, className = 'w-6
 
   // Fallback
   return (
-    <div className={`rounded-full bg-slate-200 dark:bg-zinc-800 flex items-center justify-center font-bold text-xs ${className}`}>
+    <div className={`rounded-full bg-slate-200 dark:bg-[#0B0B0F] dark:border dark:border-[rgba(212,175,55,0.3)] dark:text-[#F8FAFC] flex items-center justify-center font-bold text-xs ${className}`}>
       {issuer.slice(0, 2).toUpperCase()}
     </div>
   );

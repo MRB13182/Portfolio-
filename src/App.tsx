@@ -99,7 +99,7 @@ function PortfolioApp() {
   return (
     <BrowserRouter>
       <ScrollToTop />
-      <div className={`min-h-screen relative font-sans selection:bg-[#00C896]/25 dark:selection:bg-[#6D28D9]/40 flex flex-col justify-between ${
+      <div className={`min-h-screen relative font-sans selection:bg-[#00C896]/25 dark:selection:bg-[#7C3AED]/40 flex flex-col justify-between ${
         isDark ? 'theme-dark bg-[#050505] text-[#F8FAFC]' : 'bg-[#F7FAF9] text-[#0F172A]'
       }`}>
         {/* Ambient Animated Luxury Glows */}

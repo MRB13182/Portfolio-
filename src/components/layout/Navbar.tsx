@@ -9,8 +9,11 @@ import {
   X, 
   Mail, 
   FileText,
-  ArrowRight
+  ArrowRight,
+  Sparkles,
+  Command
 } from 'lucide-react';
+import { motion, AnimatePresence } from 'motion/react';
 
 interface NavbarProps {
   onOpenContact: () => void;
@@ -25,10 +28,12 @@ export const Navbar: React.FC<NavbarProps> = ({
   const location = useLocation();
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [logoImageError, setLogoImageError] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
+      // Smooth trigger threshold for morphing
+      setScrolled(window.scrollY > 40);
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
@@ -45,153 +50,243 @@ export const Navbar: React.FC<NavbarProps> = ({
   return (
     <>
       <header
-        id="main-navbar"
-        className={`fixed top-0 left-0 right-0 z-40 transition-all duration-500 ${
-          scrolled
-            ? isDark
-              ? 'bg-[#050505]/85 backdrop-blur-2xl border-b border-[#D4AF37]/20 shadow-[0_10px_35px_rgba(0,0,0,0.9)] py-3'
-              : 'bg-white/80 backdrop-blur-xl border-b border-[#00C896]/15 shadow-[0_10px_30px_rgba(0,200,150,0.06)] py-3'
-            : 'bg-transparent py-5'
-        }`}
+        id="main-navbar-wrapper"
+        className="fixed top-0 left-0 right-0 z-40 flex justify-center pointer-events-none transition-all duration-300"
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-          {/* Brand Logo & Name */}
-          <Link
-            to="/"
-            id="nav-brand-link"
-            className="group flex items-center gap-3 focus:outline-none"
-          >
-            <div className={`relative w-11 h-11 rounded-xl flex items-center justify-center transition-transform duration-300 group-hover:scale-105 ${
-              isDark
-                ? 'bg-gradient-to-tr from-[#6D28D9] via-[#0D0D0D] to-[#D4AF37] p-[1.5px] shadow-[0_0_20px_rgba(109,40,217,0.35)]'
-                : 'bg-gradient-to-tr from-[#00C896] via-white to-[#7FFFD4] p-[1.5px] shadow-[0_4px_15px_rgba(0,200,150,0.25)]'
-            }`}>
-              <div className="w-full h-full rounded-[10px] bg-white dark:bg-[#0A0A0A] flex items-center justify-center overflow-hidden p-1 relative">
-                <img
-                  src={isDark ? assets.logo.dark : assets.logo.light}
-                  alt={`${portfolioConfig.personal.name} Logo`}
-                  className="w-full h-full object-contain"
-                  onError={(e) => {
-                    // Gracefully fallback to monogram if image is unavailable
-                    e.currentTarget.style.display = 'none';
-                    const fallback = e.currentTarget.nextElementSibling;
-                    if (fallback) (fallback as HTMLElement).style.display = 'flex';
-                  }}
-                />
-                <span 
-                  style={{ display: 'none' }}
-                  className={`font-black text-base tracking-tighter items-center justify-center w-full h-full ${
-                    isDark ? 'text-[#D4AF37]' : 'text-[#00A57A]'
-                  }`}
-                >
-                  MR
-                </span>
+        <motion.div
+          id="morphing-navbar"
+          layout
+          transition={{
+            type: 'spring',
+            stiffness: 340,
+            damping: 32,
+            mass: 0.8
+          }}
+          className={`pointer-events-auto transition-colors duration-300 ${
+            scrolled
+              ? isDark
+                ? 'w-[94%] sm:w-[90%] max-w-4xl mt-3 sm:mt-4 py-2 px-3 sm:px-4 rounded-2xl bg-[#050508]/90 backdrop-blur-2xl border border-[rgba(212,175,55,0.3)] shadow-[0_16px_40px_rgba(0,0,0,0.9),0_0_25px_rgba(124,58,237,0.22)] ring-1 ring-white/5'
+                : 'w-[94%] sm:w-[90%] max-w-4xl mt-3 sm:mt-4 py-2 px-3 sm:px-4 rounded-2xl bg-white/92 backdrop-blur-2xl border border-[#00C896]/30 shadow-[0_16px_35px_rgba(0,200,150,0.16)] ring-1 ring-slate-900/5'
+              : isDark
+                ? 'w-full max-w-7xl mt-0 pt-4 sm:pt-6 pb-2 px-4 sm:px-6 lg:px-8 rounded-b-3xl bg-[#050505]/60 backdrop-blur-xl border-b border-[#D4AF37]/15 shadow-[0_10px_35px_rgba(0,0,0,0.7)]'
+                : 'w-full max-w-7xl mt-0 pt-4 sm:pt-6 pb-2 px-4 sm:px-6 lg:px-8 rounded-b-3xl bg-white/70 backdrop-blur-xl border-b border-[#00C896]/15 shadow-[0_10px_30px_rgba(0,200,150,0.06)]'
+          }`}
+        >
+          <div className="flex items-center justify-between gap-2 sm:gap-4">
+            {/* Left: Morphing Brand Identity (Logo + Name/Monogram + Role) */}
+            <Link
+              to="/"
+              id="nav-brand-link"
+              className="group flex items-center gap-2.5 sm:gap-3.5 focus:outline-none shrink-0"
+            >
+              {/* Morphing Logo Frame */}
+              <motion.div
+                layout
+                className={`relative rounded-xl flex items-center justify-center transition-transform duration-300 group-hover:scale-105 ${
+                  scrolled ? 'w-8 h-8 sm:w-9 sm:h-9' : 'w-10 h-10 sm:w-12 sm:h-12'
+                } ${
+                  isDark
+                    ? 'bg-gradient-to-tr from-[#7C3AED] via-[#0D0D0D] to-[#D4AF37] p-[1.5px] shadow-[0_0_20px_rgba(124,58,237,0.35)]'
+                    : 'bg-gradient-to-tr from-[#00C896] via-white to-[#7FFFD4] p-[1.5px] shadow-[0_4px_15px_rgba(0,200,150,0.25)]'
+                }`}
+              >
+                <div className="w-full h-full rounded-[9px] bg-white dark:bg-[#0A0A0A] flex items-center justify-center overflow-hidden p-1 relative">
+                  {!logoImageError ? (
+                    <img
+                      src={isDark ? assets.logo.dark : assets.logo.light}
+                      alt={`${portfolioConfig.personal.name} Logo`}
+                      className="w-full h-full object-contain"
+                      onLoad={(e) => {
+                        if (e.currentTarget.naturalWidth < 5) {
+                          setLogoImageError(true);
+                        }
+                      }}
+                      onError={() => setLogoImageError(true)}
+                    />
+                  ) : null}
+
+                  {logoImageError && (
+                    <span 
+                      className={`font-black tracking-tighter flex items-center justify-center w-full h-full ${
+                        scrolled ? 'text-xs sm:text-sm' : 'text-sm sm:text-base'
+                      } ${
+                        isDark 
+                          ? 'text-transparent bg-clip-text bg-gradient-to-tr from-[#FFD700] to-[#D4AF37]' 
+                          : 'text-transparent bg-clip-text bg-gradient-to-tr from-[#00A57A] to-[#00C896]'
+                      }`}
+                    >
+                      MR
+                    </span>
+                  )}
+                </div>
+              </motion.div>
+
+              {/* Brand Typography (Full Name/Title vs. Compact MR Monogram) */}
+              <div className="flex flex-col min-w-0">
+                <AnimatePresence mode="wait">
+                  {scrolled ? (
+                    <motion.div
+                      key="scrolled-brand"
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -10 }}
+                      transition={{ duration: 0.2 }}
+                      className="flex items-center gap-1.5"
+                    >
+                      <span className={`font-black text-sm sm:text-base tracking-wider ${
+                        isDark 
+                          ? 'text-transparent bg-clip-text bg-gradient-to-r from-white via-[#FFD700] to-[#D4AF37]' 
+                          : 'text-slate-900'
+                      }`}>
+                        MR
+                      </span>
+                      <span className={`w-1.5 h-1.5 rounded-full animate-pulse ${
+                        isDark ? 'bg-[#FFD700]' : 'bg-[#00C896]'
+                      }`} />
+                    </motion.div>
+                  ) : (
+                    <motion.div
+                      key="full-brand"
+                      initial={{ opacity: 0, x: -10 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      exit={{ opacity: 0, x: -10 }}
+                      transition={{ duration: 0.2 }}
+                      className="flex flex-col"
+                    >
+                      <div className="flex items-center gap-2">
+                        <span className={`font-extrabold text-sm sm:text-base tracking-tight leading-tight truncate ${
+                          isDark ? 'text-[#F8FAFC]' : 'text-slate-900'
+                        }`}>
+                          {portfolioConfig.personal.name}
+                        </span>
+                        <span className={`hidden sm:inline-block w-1.5 h-1.5 rounded-full ${
+                          isDark ? 'bg-[#D4AF37]' : 'bg-[#00C896]'
+                        }`} />
+                      </div>
+                      <span className={`text-[11px] font-mono tracking-wider truncate uppercase ${
+                        isDark ? 'text-[#D4AF37]/90' : 'text-[#00A57A]'
+                      }`}>
+                        {portfolioConfig.personal.titles[0]}
+                      </span>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
               </div>
+            </Link>
+
+            {/* Center: Spatial Luxury Navigation Switchboard (Desktop) */}
+            <nav 
+              id="desktop-nav" 
+              className={`hidden md:flex items-center transition-all duration-300 ${
+                scrolled
+                  ? 'gap-1 p-1 rounded-xl bg-slate-100/70 dark:bg-[#0B0B0F]/90 border border-slate-200/50 dark:border-[rgba(212,175,55,0.25)] shadow-inner'
+                  : 'gap-1.5 lg:gap-2 px-3 py-1.5 rounded-2xl bg-white/40 dark:bg-[rgba(15,15,20,0.85)] border border-slate-200/60 dark:border-[#D4AF37]/20 backdrop-blur-md shadow-sm'
+              }`}
+            >
+              {navLinks.map((link) => {
+                const isActive = location.pathname === link.path;
+                return (
+                  <NavLink
+                    key={link.path}
+                    to={link.path}
+                    id={`nav-link-${link.name.toLowerCase()}`}
+                    className={`relative font-semibold transition-all duration-200 cursor-pointer ${
+                      scrolled 
+                        ? 'px-3 py-1.5 text-xs rounded-lg' 
+                        : 'px-4 py-2 text-xs lg:text-sm rounded-xl'
+                    } ${
+                      isActive
+                        ? isDark
+                          ? 'text-[#F8FAFC]'
+                          : 'text-[#00A57A]'
+                        : isDark
+                          ? 'text-[#F8FAFC]/90 hover:text-[#F8FAFC] hover:bg-white/10'
+                          : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/60'
+                    }`}
+                  >
+                    {isActive && (
+                      <motion.div
+                        layoutId="active-nav-glow"
+                        transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                        className={`absolute inset-0 rounded-lg sm:rounded-xl -z-10 ${
+                          isDark
+                            ? 'bg-[#7C3AED]/40 border border-[#D4AF37]/45 shadow-[0_0_15px_rgba(212,175,55,0.3)]'
+                            : 'bg-emerald-500/10 border border-[#00C896]/35 shadow-[0_2px_10px_rgba(0,200,150,0.18)]'
+                        }`}
+                      />
+                    )}
+                    <span className="relative z-10">{link.name}</span>
+                  </NavLink>
+                );
+              })}
+            </nav>
+
+            {/* Right: Desktop Action Suite */}
+            <div className="hidden md:flex items-center gap-2 sm:gap-2.5 shrink-0">
+              {/* Theme Toggle Button */}
+              <button
+                onClick={toggleTheme}
+                id="theme-toggle-btn"
+                aria-label="Toggle luxury theme"
+                title={isDark ? "Switch to Apple Titanium Emerald Light" : "Switch to Black Mamba Luxury Edition"}
+                className={`transition-all duration-300 cursor-pointer border ${
+                  scrolled ? 'p-2 rounded-lg' : 'p-2.5 rounded-xl'
+                } ${
+                  isDark
+                    ? 'bg-[rgba(15,15,20,0.85)] border-[#D4AF37]/40 text-[#D4AF37] hover:border-[#D4AF37] hover:shadow-[0_0_15px_rgba(212,175,55,0.25)]'
+                    : 'bg-white/80 border-[#00C896]/20 text-[#00A57A] hover:bg-slate-50 hover:border-[#00C896]/40 shadow-sm'
+                }`}
+              >
+                {isDark ? (
+                  <Sun className={`${scrolled ? 'w-3.5 h-3.5' : 'w-4 h-4'} transition-transform duration-500 text-[#FFD700]` } />
+                ) : (
+                  <Moon className={`${scrolled ? 'w-3.5 h-3.5' : 'w-4 h-4'} transition-transform duration-500 text-[#00A57A]`} />
+                )}
+              </button>
+
+              {/* Get In Touch Contact Modal Trigger */}
+              <button
+                onClick={onOpenContact}
+                id="navbar-contact-btn"
+                className={`font-bold transition-all duration-300 flex items-center gap-2 cursor-pointer shadow-md active:scale-95 ${
+                  scrolled ? 'px-3 py-2 text-xs rounded-lg' : 'px-4 py-2.5 text-xs lg:text-sm rounded-xl'
+                } ${
+                  isDark
+                    ? 'bg-gradient-to-r from-[#D4AF37] to-[#FFD700] text-black hover:opacity-95 shadow-[0_0_20px_rgba(212,175,55,0.3)]'
+                    : 'bg-[#00C896] hover:bg-[#00A57A] text-white shadow-[0_4px_15px_rgba(0,200,150,0.35)]'
+                }`}
+              >
+                <Mail className={scrolled ? 'w-3.5 h-3.5' : 'w-4 h-4'} />
+                <span>Get In Touch</span>
+              </button>
             </div>
 
-            <div className="flex flex-col">
-              <span className={`font-bold text-sm sm:text-base tracking-tight leading-tight flex items-center gap-1.5 ${
-                isDark ? 'text-white' : 'text-slate-900'
-              }`}>
-                {portfolioConfig.personal.name}
-                <span className={`w-1.5 h-1.5 rounded-full ${
-                  isDark ? 'bg-[#D4AF37]' : 'bg-[#00C896]'
-                }`} />
-              </span>
-              <span className={`text-[11px] font-medium tracking-wide ${
-                isDark ? 'text-[#D4AF37]/90' : 'text-[#00A57A]'
-              }`}>
-                {portfolioConfig.personal.titles[0]}
-              </span>
+            {/* Mobile Right Controls */}
+            <div className="flex md:hidden items-center gap-1.5">
+              <button
+                onClick={toggleTheme}
+                id="mobile-theme-toggle-btn"
+                aria-label="Toggle theme"
+                className={`p-2 rounded-xl border transition-colors ${
+                  isDark ? 'bg-[rgba(15,15,20,0.85)] border-[#D4AF37]/40 text-[#D4AF37]' : 'bg-white border-slate-200 text-[#00A57A]'
+                }`}
+              >
+                {isDark ? <Sun className="w-4 h-4 text-[#FFD700]" /> : <Moon className="w-4 h-4 text-[#00A57A]" />}
+              </button>
+
+              <button
+                onClick={() => setMobileMenuOpen(true)}
+                id="mobile-menu-open-btn"
+                aria-label="Open navigation drawer"
+                className={`p-2 rounded-xl border transition-colors ${
+                  isDark ? 'bg-[rgba(15,15,20,0.85)] border-[#D4AF37]/30 text-[#F8FAFC]' : 'bg-white border-slate-200 text-slate-800'
+                }`}
+              >
+                <Menu className="w-5 h-5" />
+              </button>
             </div>
-          </Link>
-
-          {/* Desktop Navigation Links: Home, Skills, Projects, Experience */}
-          <nav id="desktop-nav" className="hidden md:flex items-center gap-1 lg:gap-2 px-3 py-1.5 rounded-full border transition-all duration-300 bg-white/40 dark:bg-[rgba(15,15,20,0.85)] border-slate-200/60 dark:border-[#D4AF37]/20 backdrop-blur-md">
-            {navLinks.map((link) => {
-              const isActive = location.pathname === link.path;
-              return (
-                <NavLink
-                  key={link.path}
-                  to={link.path}
-                  id={`nav-link-${link.name.toLowerCase()}`}
-                  className={`relative px-4 py-1.5 text-xs font-semibold rounded-full transition-all duration-200 ${
-                    isActive
-                      ? isDark
-                        ? 'text-white bg-[#6D28D9]/40 border border-[#D4AF37]/40 shadow-[0_0_15px_rgba(212,175,55,0.25)]'
-                        : 'text-[#00A57A] bg-emerald-500/10 border border-[#00C896]/30 shadow-[0_2px_10px_rgba(0,200,150,0.15)]'
-                      : isDark
-                        ? 'text-zinc-400 hover:text-white hover:bg-white/5'
-                        : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100/60'
-                  }`}
-                >
-                  {link.name}
-                </NavLink>
-              );
-            })}
-          </nav>
-
-          {/* Desktop Actions */}
-          <div className="hidden md:flex items-center gap-3">
-            {/* Theme Toggle Button */}
-            <button
-              onClick={toggleTheme}
-              id="theme-toggle-btn"
-              aria-label="Toggle luxury theme"
-              title={isDark ? "Switch to Apple Titanium Emerald Light" : "Switch to Black Mamba Luxury Edition"}
-              className={`p-2.5 rounded-xl border transition-all duration-300 cursor-pointer ${
-                isDark
-                  ? 'bg-[rgba(15,15,20,0.85)] border-[#D4AF37]/40 text-[#D4AF37] hover:border-[#D4AF37] hover:shadow-[0_0_15px_rgba(212,175,55,0.25)]'
-                  : 'bg-white/80 border-[#00C896]/20 text-[#00A57A] hover:bg-slate-50 hover:border-[#00C896]/40 shadow-sm'
-              }`}
-            >
-              {isDark ? (
-                <Sun className="w-4 h-4 transition-transform duration-500 rotate-0 hover:rotate-90 text-[#FFD700]" />
-              ) : (
-                <Moon className="w-4 h-4 transition-transform duration-500 rotate-0 hover:-rotate-45 text-[#00A57A]" />
-              )}
-            </button>
-
-            {/* Get In Touch Contact Modal Trigger */}
-            <button
-              onClick={onOpenContact}
-              id="navbar-contact-btn"
-              className={`px-4 py-2.5 text-xs font-bold rounded-xl transition-all duration-300 flex items-center gap-2 cursor-pointer shadow-md active:scale-95 ${
-                isDark
-                  ? 'bg-gradient-to-r from-[#D4AF37] to-[#FFD700] text-black hover:opacity-95 shadow-[0_0_20px_rgba(212,175,55,0.3)]'
-                  : 'bg-[#00C896] hover:bg-[#00A57A] text-white shadow-[0_4px_15px_rgba(0,200,150,0.35)]'
-              }`}
-            >
-              <Mail className="w-3.5 h-3.5" />
-              <span>Get In Touch</span>
-            </button>
           </div>
-
-          {/* Mobile Right Controls */}
-          <div className="flex md:hidden items-center gap-2">
-            <button
-              onClick={toggleTheme}
-              id="mobile-theme-toggle-btn"
-              aria-label="Toggle theme"
-              className={`p-2 rounded-xl border transition-colors ${
-                isDark ? 'bg-[rgba(15,15,20,0.85)] border-[#D4AF37]/40 text-[#D4AF37]' : 'bg-white border-slate-200 text-[#00A57A]'
-              }`}
-            >
-              {isDark ? <Sun className="w-4 h-4 text-[#FFD700]" /> : <Moon className="w-4 h-4 text-[#00A57A]" />}
-            </button>
-
-            <button
-              onClick={() => setMobileMenuOpen(true)}
-              id="mobile-menu-open-btn"
-              aria-label="Open navigation drawer"
-              className={`p-2 rounded-xl border transition-colors ${
-                isDark ? 'bg-[rgba(15,15,20,0.85)] border-[#D4AF37]/30 text-white' : 'bg-white border-slate-200 text-slate-800'
-              }`}
-            >
-              <Menu className="w-5 h-5" />
-            </button>
-          </div>
-        </div>
+        </motion.div>
       </header>
 
       {/* Mobile Slide Drawer */}
@@ -245,30 +340,19 @@ const MobileDrawer: React.FC<MobileDrawerProps> = ({
         id="mobile-slide-drawer"
         className={`relative w-4/5 max-w-sm h-full flex flex-col justify-between p-6 overflow-y-auto transition-transform duration-300 shadow-2xl backdrop-blur-2xl ${
           isDark
-            ? 'bg-[#050505]/95 border-l border-[#D4AF37]/25 text-white shadow-[0_0_50px_rgba(0,0,0,0.9)]'
+            ? 'bg-[#050505]/95 border-l border-[#D4AF37]/25 text-[#F8FAFC] shadow-[0_0_50px_rgba(0,0,0,0.9)]'
             : 'bg-white border-l border-[#00C896]/20 text-slate-900'
         }`}
       >
         {/* Top Header */}
         <div>
-          <div className="flex items-center justify-between pb-6 border-b border-slate-200/60 dark:border-zinc-800">
+          <div className="flex items-center justify-between pb-6 border-b border-slate-200/60 dark:border-[rgba(212,175,55,0.25)]">
             <div className="flex items-center gap-3">
               <div className={`w-9 h-9 rounded-lg flex items-center justify-center p-1 relative overflow-hidden ${
-                isDark ? 'bg-[#18181b] border border-[#D4AF37]/30' : 'bg-emerald-50 border border-emerald-200'
+                isDark ? 'bg-[#0B0B0F] border border-[#D4AF37]/30' : 'bg-emerald-50 border border-emerald-200'
               }`}>
-                <img
-                  src={isDark ? assets.logo.dark : assets.logo.light}
-                  alt={`${portfolioConfig.personal.name} Logo`}
-                  className="w-full h-full object-contain"
-                  onError={(e) => {
-                    e.currentTarget.style.display = 'none';
-                    const fallback = e.currentTarget.nextElementSibling;
-                    if (fallback) (fallback as HTMLElement).style.display = 'flex';
-                  }}
-                />
                 <span 
-                  style={{ display: 'none' }}
-                  className={`font-black text-xs items-center justify-center w-full h-full ${
+                  className={`font-black text-xs items-center justify-center w-full h-full flex ${
                     isDark ? 'text-[#D4AF37]' : 'text-[#00A57A]'
                   }`}
                 >
@@ -277,7 +361,7 @@ const MobileDrawer: React.FC<MobileDrawerProps> = ({
               </div>
               <div>
                 <h4 className="font-bold text-sm leading-tight">{portfolioConfig.personal.name}</h4>
-                <p className="text-[11px] text-slate-500 dark:text-zinc-400">
+                <p className="text-[11px] font-mono text-slate-500 dark:text-[#F8FAFC]">
                   {portfolioConfig.personal.titles[0]}
                 </p>
               </div>
@@ -286,7 +370,7 @@ const MobileDrawer: React.FC<MobileDrawerProps> = ({
               onClick={onClose}
               id="mobile-drawer-close-btn"
               aria-label="Close menu"
-              className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:text-zinc-400 dark:hover:text-white cursor-pointer"
+              className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:text-[#F8FAFC] dark:hover:text-[#FFD700] cursor-pointer"
             >
               <X className="w-5 h-5" />
             </button>
@@ -305,10 +389,10 @@ const MobileDrawer: React.FC<MobileDrawerProps> = ({
                   className={`flex items-center justify-between px-4 py-3 rounded-xl text-sm font-semibold transition-all ${
                     isActive
                       ? isDark
-                        ? 'bg-[#6D28D9]/30 text-[#D4AF37] border border-[#D4AF37]/30 shadow-[0_0_15px_rgba(212,175,55,0.15)]'
+                        ? 'bg-[#7C3AED]/30 text-[#D4AF37] border border-[#D4AF37]/30 shadow-[0_0_15px_rgba(212,175,55,0.15)]'
                         : 'bg-emerald-500/10 text-[#00A57A] border border-[#00C896]/20'
                       : isDark
-                        ? 'text-zinc-300 hover:bg-zinc-900/80 hover:text-white'
+                        ? 'text-[#F8FAFC] hover:bg-[#7C3AED]/20 hover:text-[#FFD700]'
                         : 'text-slate-700 hover:bg-slate-100'
                   }`}
                 >
@@ -321,13 +405,13 @@ const MobileDrawer: React.FC<MobileDrawerProps> = ({
         </div>
 
         {/* Bottom Drawer Actions: Download Resume + Get In Touch */}
-        <div className="pt-6 border-t border-slate-200/60 dark:border-zinc-800 flex flex-col gap-2.5">
+        <div className="pt-6 border-t border-slate-200/60 dark:border-[rgba(212,175,55,0.25)] flex flex-col gap-2.5">
           <button
             onClick={onOpenResumeDownload}
             id="mobile-drawer-resume-btn"
             className={`w-full py-3 px-4 rounded-xl text-xs font-bold border flex items-center justify-center gap-2 cursor-pointer transition-all ${
               isDark
-                ? 'bg-[rgba(15,15,20,0.85)] border-[#D4AF37]/30 text-white hover:border-[#D4AF37]'
+                ? 'bg-[rgba(15,15,20,0.85)] border-[#D4AF37]/30 text-[#F8FAFC] hover:border-[#D4AF37]'
                 : 'bg-slate-100 border-slate-200 text-slate-800 hover:border-[#00C896]'
             }`}
           >
@@ -352,3 +436,4 @@ const MobileDrawer: React.FC<MobileDrawerProps> = ({
     </div>
   );
 };
+

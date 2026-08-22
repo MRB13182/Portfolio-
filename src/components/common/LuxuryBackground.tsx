@@ -22,7 +22,7 @@ export const LuxuryBackground: React.FC = () => {
               y: [0, -20, 0],
             }}
             transition={{ duration: 14, repeat: Infinity, ease: 'easeInOut' }}
-            className="absolute -top-32 -right-32 w-[650px] h-[650px] rounded-full blur-[140px] bg-[#6D28D9]/40"
+            className="absolute -top-32 -right-32 w-[650px] h-[650px] rounded-full blur-[140px] bg-[#7C3AED]/40"
           />
 
           {/* Luxury Gold Halo - Center Left */}
@@ -44,7 +44,7 @@ export const LuxuryBackground: React.FC = () => {
               opacity: [0.18, 0.28, 0.18],
             }}
             transition={{ duration: 16, repeat: Infinity, ease: 'easeInOut', delay: 4 }}
-            className="absolute -bottom-40 right-1/4 w-[600px] h-[600px] rounded-full blur-[160px] bg-[#4C1D95]/30"
+            className="absolute -bottom-40 right-1/4 w-[600px] h-[600px] rounded-full blur-[160px] bg-[#7C3AED]/25"
           />
 
           {/* Subtle Cyber Grid */}

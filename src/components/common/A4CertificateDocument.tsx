@@ -24,7 +24,10 @@ export const A4CertificateDocument: React.FC<A4CertificateDocumentProps> = ({
   const [currentSrcIndex, setCurrentSrcIndex] = useState<number>(0);
   const [allFailed, setAllFailed] = useState<boolean>(false);
 
-  const candidateUrls = getCertificateCandidateUrls(index);
+  const candidateUrls = Array.from(new Set([
+    certificate.image,
+    ...getCertificateCandidateUrls(index)
+  ]));
 
   useEffect(() => {
     setImageLoaded(false);
@@ -46,7 +49,7 @@ export const A4CertificateDocument: React.FC<A4CertificateDocumentProps> = ({
     <div 
       className={`relative w-full aspect-[297/210] rounded-xl sm:rounded-2xl overflow-hidden shadow-2xl transition-all duration-300 select-none ${
         isDark 
-          ? 'bg-[#08080C] text-white border border-[rgba(212,175,55,0.35)] shadow-[0_0_50px_rgba(109,40,217,0.25)]' 
+          ? 'bg-[#050505] text-white border border-[rgba(212,175,55,0.35)] shadow-[0_0_50px_rgba(109,40,217,0.25)]' 
           : 'bg-[#FCFDFD] text-slate-900 border border-[rgba(0,200,150,0.3)] shadow-[0_20px_50px_rgba(0,200,150,0.12)]'
       } ${className}`}
     >
@@ -93,13 +96,13 @@ export const A4CertificateDocument: React.FC<A4CertificateDocumentProps> = ({
           <div className="flex items-center gap-2.5 sm:gap-3.5">
             <div className={`p-2 sm:p-2.5 rounded-xl border shadow-md backdrop-blur-md ${
               isDark 
-                ? 'bg-[#121218]/90 border-[#D4AF37]/40 shadow-[0_0_15px_rgba(212,175,55,0.15)]' 
+                ? 'bg-[#0B0B0F]/90 border-[#D4AF37]/40 shadow-[0_0_15px_rgba(212,175,55,0.15)]' 
                 : 'bg-white/95 border-[#00C896]/30 shadow-sm'
             }`}>
               <IssuerLogo issuer={certificate.issuer} className="w-5 h-5 sm:w-7 sm:h-7" />
             </div>
             <div>
-              <span className="block text-[8px] sm:text-[10px] uppercase font-mono tracking-widest text-slate-400 dark:text-[#A1A1AA]">
+              <span className="block text-[8px] sm:text-[10px] uppercase font-mono tracking-widest text-slate-400 dark:text-white">
                 Official Accreditation
               </span>
               <span className="font-extrabold text-[11px] sm:text-sm tracking-tight text-[#00A57A] dark:text-[#FFD700]">
@@ -121,7 +124,7 @@ export const A4CertificateDocument: React.FC<A4CertificateDocumentProps> = ({
 
         {/* Certificate Centerpiece: Recipient & Award Title */}
         <div className="relative z-10 text-center my-auto py-1 sm:py-2">
-          <p className="text-[8px] sm:text-[10px] font-bold uppercase tracking-[0.25em] text-slate-400 dark:text-[#A1A1AA] mb-1">
+          <p className="text-[8px] sm:text-[10px] font-bold uppercase tracking-[0.25em] text-slate-400 dark:text-white mb-1">
             This is proudly presented to
           </p>
 
@@ -133,14 +136,14 @@ export const A4CertificateDocument: React.FC<A4CertificateDocumentProps> = ({
             {portfolioConfig.personal.name}
           </h3>
 
-          <p className="text-[8.5px] sm:text-xs text-slate-500 dark:text-[#A1A1AA] max-w-md mx-auto mb-1.5 sm:mb-2.5 line-clamp-1">
+          <p className="text-[8.5px] sm:text-xs text-slate-500 dark:text-white max-w-md mx-auto mb-1.5 sm:mb-2.5 line-clamp-1">
             for successfully meeting the rigorous curriculum &amp; certification criteria for
           </p>
 
           {/* Award Title Box */}
           <div className={`inline-block px-3.5 sm:px-5 py-1 sm:py-2 rounded-xl border backdrop-blur-md ${
             isDark 
-              ? 'bg-[#15151E]/90 border-[#D4AF37]/40 text-white shadow-[0_0_20px_rgba(212,175,55,0.15)]' 
+              ? 'bg-[#0B0B0F]/90 border-[#D4AF37]/40 text-white shadow-[0_0_20px_rgba(212,175,55,0.15)]' 
               : 'bg-white/90 border-[#00C896]/30 text-slate-900 shadow-sm'
           }`}>
             <span className="font-extrabold text-[10px] sm:text-base md:text-lg tracking-tight block">
@@ -150,14 +153,14 @@ export const A4CertificateDocument: React.FC<A4CertificateDocumentProps> = ({
         </div>
 
         {/* Certificate Footer Metadata */}
-        <div className="relative z-10 flex items-end justify-between pt-2 border-t border-slate-200/50 dark:border-zinc-800/80">
+        <div className="relative z-10 flex items-end justify-between pt-2 border-t border-slate-200/50 dark:border-[rgba(212,175,55,0.25)]">
           
           {/* Issue Date & ID */}
           <div className="text-left font-mono">
-            <span className="block text-[7.5px] sm:text-[9.5px] text-slate-400 dark:text-[#A1A1AA]">
-              Issued: <strong className="text-slate-700 dark:text-zinc-200">{certificate.issueDate}</strong>
+            <span className="block text-[7.5px] sm:text-[9.5px] text-slate-400 dark:text-white">
+              Issued: <strong className="text-slate-700 dark:text-[#FFD700]">{certificate.issueDate}</strong>
             </span>
-            <span className="block text-[7px] sm:text-[9px] text-slate-400 dark:text-zinc-500 truncate max-w-[120px] sm:max-w-none">
+            <span className="block text-[7px] sm:text-[9px] text-slate-400 dark:text-white/80 truncate max-w-[120px] sm:max-w-none">
               ID: {certificate.credentialId}
             </span>
           </div>
@@ -173,7 +176,7 @@ export const A4CertificateDocument: React.FC<A4CertificateDocumentProps> = ({
             </div>
             
             {!isPreviewOnly && (
-              <div className="hidden sm:block text-left text-[8px] font-mono leading-tight text-slate-400 dark:text-[#A1A1AA]">
+              <div className="hidden sm:block text-left text-[8px] font-mono leading-tight text-slate-400 dark:text-white">
                 <span className="block font-bold text-[#00A57A] dark:text-[#FFD700]">AUTHENTIC</span>
                 <span>SECURITY ENCRYPTED</span>
               </div>
@@ -185,7 +188,7 @@ export const A4CertificateDocument: React.FC<A4CertificateDocumentProps> = ({
             <span className="font-serif italic text-[9px] sm:text-xs text-[#00A57A] dark:text-[#D4AF37] block">
               {certificate.issuer} Global Authority
             </span>
-            <span className="text-[7.5px] sm:text-[9.5px] uppercase font-mono tracking-wider text-slate-400 dark:text-[#A1A1AA]">
+            <span className="text-[7.5px] sm:text-[9.5px] uppercase font-mono tracking-wider text-slate-400 dark:text-white">
               Authorized Verification
             </span>
           </div>

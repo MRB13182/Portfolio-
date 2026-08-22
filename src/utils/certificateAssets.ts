@@ -3,9 +3,14 @@
 /**
  * Certificate Asset Auto-Detection Engine
  * 
- * Auto-detects all certificate images placed inside `/public/certificate/` or `/public/certificates/`.
- * Supports dynamic filenames (e.g. Cer1.png, cert-1.webp, meta_cert.png, etc.)
- * Strips `/public` prefix for browser serving and supplies intelligent fallbacks.
+ * Maps and auto-detects all certificate images placed inside `/public/certificate/` or `/public/certificates/`.
+ * Exact mapping:
+ * - Cer1.png -> Google AI Professional Certificate
+ * - Cer2.png -> Google UX Design Professional Certificate
+ * - Cer3.png -> IBM Cybersecurity Fundamentals Certificate
+ * - Cer4.png -> Meta Digital Marketing Associate Certificate
+ * - Cer5.png -> HubSpot SEO Certification
+ * - Cer6.png -> Semrush SEO Crash Course with Brian Dean
  */
 
 // Glob all images from /public/certificate/ and /public/certificates/
@@ -19,48 +24,71 @@ const certificateFilesPlural = import.meta.glob<{ default: string } | string>(
   { eager: true }
 );
 
-// Collect all found public paths (e.g. '/certificate/Cer1.png', '/certificates/Cer1.png')
-const allFoundKeys = [
-  ...Object.keys(certificateFilesRoot),
-  ...Object.keys(certificateFilesPlural)
-];
+// Map of canonical file keys (Cer1.png -> '/certificate/Cer1.png')
+const detectedMap: Record<string, string> = {};
 
-// Natural sort so Cer1.png, Cer2.png ... Cer6.png or 1.png, 2.png line up in exact numerical order
-const sortedDetectedPaths = allFoundKeys
-  .map(key => key.replace(/^\/public/, ''))
-  .sort((a, b) => a.localeCompare(b, undefined, { numeric: true, sensitivity: 'base' }));
+// Register found files from root /public/certificate/ first
+Object.keys(certificateFilesRoot).forEach(key => {
+  const filename = key.split('/').pop() || '';
+  const publicPath = key.replace(/^\/public/, '');
+  detectedMap[filename.toLowerCase()] = publicPath;
+  const baseName = filename.split('.')[0].toLowerCase();
+  detectedMap[baseName] = publicPath;
+});
+
+// Also register from /public/certificates/ if not already present
+Object.keys(certificateFilesPlural).forEach(key => {
+  const filename = key.split('/').pop() || '';
+  const publicPath = key.replace(/^\/public/, '');
+  const lowerFile = filename.toLowerCase();
+  const baseName = filename.split('.')[0].toLowerCase();
+  if (!detectedMap[lowerFile]) {
+    detectedMap[lowerFile] = publicPath;
+  }
+  if (!detectedMap[baseName]) {
+    detectedMap[baseName] = publicPath;
+  }
+});
 
 /**
- * Returns detected public paths from /public/certificate/ and /public/certificates/
+ * Resolves certificate image by exact filename or index
+ * e.g. resolveCertificateFile('Cer1.png') -> '/certificate/Cer1.png'
  */
-export function getDetectedCertificatePaths(): string[] {
-  return sortedDetectedPaths;
+export function resolveCertificateFile(filename: string): string {
+  const lower = filename.toLowerCase();
+  const base = filename.split('.')[0].toLowerCase();
+  
+  if (detectedMap[lower]) return detectedMap[lower];
+  if (detectedMap[base]) return detectedMap[base];
+  
+  // Default canonical path inside /public/certificate/
+  return `/certificate/${filename}`;
 }
 
 /**
  * Resolves the certificate image path for a given 0-indexed certificate (0 to 5)
- * If an image was auto-detected at that index, returns it.
- * Otherwise returns the standard canonical candidate path.
+ * Index 0 -> Cer1.png
+ * Index 1 -> Cer2.png
+ * Index 2 -> Cer3.png
+ * Index 3 -> Cer4.png
+ * Index 4 -> Cer5.png
+ * Index 5 -> Cer6.png
  */
 export function resolveCertificateImage(index: number): string {
-  if (sortedDetectedPaths[index]) {
-    return sortedDetectedPaths[index];
-  }
-  // Standard fallback candidate
-  return `/certificates/Cer${index + 1}.png`;
+  const filename = `Cer${index + 1}.png`;
+  return resolveCertificateFile(filename);
 }
 
 /**
- * Returns a prioritized list of candidate URLs for an image so `<img />` or the viewer
+ * Returns a prioritized list of candidate URLs for an image so `<img />` or viewer
  * can try alternatives seamlessly.
  */
 export function getCertificateCandidateUrls(index: number): string[] {
   const num = index + 1;
   const list: string[] = [];
 
-  if (sortedDetectedPaths[index]) {
-    list.push(sortedDetectedPaths[index]);
-  }
+  const primary = resolveCertificateImage(index);
+  list.push(primary);
 
   list.push(
     `/certificate/Cer${num}.png`,
@@ -75,6 +103,7 @@ export function getCertificateCandidateUrls(index: number): string[] {
     `/certificates/${num}.png`
   );
 
-  // Return unique
+  // Return unique list
   return Array.from(new Set(list));
 }
+

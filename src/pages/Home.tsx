@@ -62,7 +62,7 @@ export const Home: React.FC<HomeProps> = ({ onOpenContact, onOpenResumeDownload 
             <div>
               <div className={`inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-3 ${
                 isDark 
-                  ? 'bg-[#6D28D9]/20 text-[#D4AF37] border border-[#D4AF37]/30' 
+                  ? 'bg-[#7C3AED]/20 text-[#D4AF37] border border-[#D4AF37]/30' 
                   : 'bg-emerald-500/10 text-[#00A57A] border border-[#00C896]/20'
               }`}>
                 <Cpu className="w-3.5 h-3.5" />
@@ -82,7 +82,7 @@ export const Home: React.FC<HomeProps> = ({ onOpenContact, onOpenResumeDownload 
               id="home-view-all-skills-btn"
               className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold transition-all duration-300 self-start sm:self-auto border ${
                 isDark
-                  ? 'bg-zinc-900/90 text-[#D4AF37] border-[#D4AF37]/30 hover:border-[#D4AF37] hover:bg-zinc-800 shadow-[0_0_15px_rgba(212,175,55,0.15)]'
+                  ? 'bg-[#0B0B0F] text-[#D4AF37] border-[rgba(212,175,55,0.3)] hover:border-[#D4AF37] hover:bg-[#121218] shadow-[0_0_15px_rgba(212,175,55,0.15)]'
                   : 'bg-white text-[#00A57A] border-[#00C896]/30 hover:border-[#00C896] hover:bg-emerald-50 shadow-sm'
               }`}
             >
@@ -91,7 +91,7 @@ export const Home: React.FC<HomeProps> = ({ onOpenContact, onOpenResumeDownload 
             </Link>
           </div>
 
-          {/* 3 Skill Cards Preview */}
+            {/* 3 Skill Cards Preview */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
             {previewSkills.map((skill, index) => (
               <motion.div
@@ -105,26 +105,26 @@ export const Home: React.FC<HomeProps> = ({ onOpenContact, onOpenResumeDownload 
                 id={`home-skill-preview-${skill.id}`}
                 className={`p-6 rounded-3xl backdrop-blur-xl border transition-all duration-300 cursor-pointer overflow-hidden flex flex-col items-center justify-center text-center relative group ${
                   isDark
-                    ? 'bg-[#0D0D0D]/90 border-zinc-800 hover:border-[#D4AF37]/60 hover:shadow-[0_10px_30px_rgba(212,175,55,0.18)] text-white'
+                    ? 'bg-[rgba(15,15,20,0.85)] border-[rgba(212,175,55,0.25)] hover:border-[#D4AF37] hover:shadow-[0_0_30px_rgba(124,58,237,0.25)] text-[#F8FAFC]'
                     : 'bg-white/90 border-slate-200/80 hover:border-[#00C896]/60 hover:shadow-[0_10px_30px_rgba(0,200,150,0.15)] text-slate-900'
                 }`}
               >
                 {/* Tech Icon */}
-                <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mb-4 transition-transform group-hover:scale-110 shadow-sm ${
+                <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-3 transition-transform group-hover:scale-110 shadow-sm ${
                   isDark 
-                    ? 'bg-[#181226] text-[#D4AF37] border border-[#D4AF37]/30' 
+                    ? 'bg-[#7C3AED]/20 text-[#D4AF37] border border-[#D4AF37]/30' 
                     : 'bg-emerald-50 text-[#00A57A] border border-emerald-200'
                 }`}>
-                  <Cpu className="w-7 h-7" />
+                  <Cpu className="w-6 h-6" />
                 </div>
 
-                <h3 className="font-extrabold text-lg mb-1 group-hover:text-emerald-600 dark:group-hover:text-[#FFD700] transition-colors">
+                <h3 className="font-extrabold text-base mb-1 group-hover:text-emerald-600 dark:group-hover:text-[#FFD700] transition-colors">
                   {skill.name}
                 </h3>
-                <span className="text-xs text-slate-500 dark:text-zinc-400 mb-3">{skill.category}</span>
+                <span className="text-xs text-slate-500 dark:text-[#F8FAFC] mb-3">{skill.category}</span>
 
                 {/* Percentage Badge */}
-                <div className={`inline-flex items-center gap-1 px-4 py-1 rounded-full text-xs font-black font-mono tracking-tight transition-all ${
+                <div className={`inline-flex items-center gap-1 px-3 py-0.5 rounded-full text-xs font-black font-mono tracking-tight transition-all ${
                   isDark
                     ? 'bg-[#D4AF37]/15 text-[#D4AF37] border border-[#D4AF37]/30'
                     : 'bg-emerald-500/10 text-[#00A57A] border border-emerald-500/20'
@@ -149,14 +149,14 @@ export const Home: React.FC<HomeProps> = ({ onOpenContact, onOpenResumeDownload 
       </section>
 
       {/* 4. Projects Preview Section */}
-      <section className="relative py-20 border-t border-slate-200/50 dark:border-zinc-800/60">
+      <section className="relative py-20 border-t border-slate-200/50 dark:border-[rgba(212,175,55,0.2)]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-12">
             <div>
               <div className={`inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-3 ${
                 isDark 
-                  ? 'bg-[#6D28D9]/20 text-[#D4AF37] border border-[#D4AF37]/30' 
+                  ? 'bg-[#7C3AED]/20 text-[#D4AF37] border border-[#D4AF37]/30' 
                   : 'bg-emerald-500/10 text-[#00A57A] border border-[#00C896]/20'
               }`}>
                 <Layers className="w-3.5 h-3.5" />
@@ -176,7 +176,7 @@ export const Home: React.FC<HomeProps> = ({ onOpenContact, onOpenResumeDownload 
               id="home-view-all-projects-btn"
               className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold transition-all duration-300 self-start sm:self-auto border ${
                 isDark
-                  ? 'bg-zinc-900/90 text-[#D4AF37] border-[#D4AF37]/30 hover:border-[#D4AF37] hover:bg-zinc-800 shadow-[0_0_15px_rgba(212,175,55,0.15)]'
+                  ? 'bg-[#0B0B0F] text-[#D4AF37] border-[rgba(212,175,55,0.3)] hover:border-[#D4AF37] hover:bg-[#121218] shadow-[0_0_15px_rgba(212,175,55,0.15)]'
                   : 'bg-white text-[#00A57A] border-[#00C896]/30 hover:border-[#00C896] hover:bg-emerald-50 shadow-sm'
               }`}
             >
@@ -199,11 +199,11 @@ export const Home: React.FC<HomeProps> = ({ onOpenContact, onOpenResumeDownload 
                 id={`home-project-preview-${project.id}`}
                 className={`group relative rounded-3xl backdrop-blur-xl border overflow-hidden flex flex-col justify-between transition-all duration-300 cursor-pointer shadow-lg ${
                   isDark
-                    ? 'bg-[#0D0D0D]/90 border-zinc-800 hover:border-[#D4AF37]/50 hover:shadow-[0_15px_45px_rgba(212,175,55,0.18)] text-white'
+                    ? 'bg-[rgba(15,15,20,0.85)] border-[rgba(212,175,55,0.25)] hover:border-[#D4AF37] hover:shadow-[0_0_30px_rgba(124,58,237,0.25)] text-[#F8FAFC]'
                     : 'bg-white/90 border-slate-200/80 hover:border-[#00C896]/50 hover:shadow-[0_15px_45px_rgba(0,200,150,0.15)] text-slate-900'
                 }`}
               >
-                <div className="relative w-full h-48 overflow-hidden bg-slate-100 dark:bg-zinc-900">
+                <div className="relative w-full h-48 overflow-hidden bg-slate-100 dark:bg-[#0B0B0F]">
                   <SafeImage
                     src={project.image}
                     alt={project.title}
@@ -228,7 +228,7 @@ export const Home: React.FC<HomeProps> = ({ onOpenContact, onOpenResumeDownload 
                     <h3 className="text-lg font-extrabold tracking-tight mb-1 group-hover:text-emerald-600 dark:group-hover:text-[#FFD700] transition-colors line-clamp-1">
                       {project.title}
                     </h3>
-                    <p className="text-xs text-slate-600 dark:text-zinc-400 line-clamp-2 mb-4 leading-relaxed">
+                    <p className="text-xs text-slate-600 dark:text-[#F8FAFC] line-clamp-2 mb-4 leading-relaxed">
                       {project.tagline}
                     </p>
                   </div>
@@ -240,7 +240,7 @@ export const Home: React.FC<HomeProps> = ({ onOpenContact, onOpenResumeDownload 
                           key={idx}
                           className={`text-[9.5px] font-semibold px-2 py-0.5 rounded-md border ${
                             isDark
-                              ? 'bg-zinc-900 border-zinc-800 text-zinc-300'
+                              ? 'bg-[#0B0B0F] border-[rgba(212,175,55,0.2)] text-[#F8FAFC]'
                               : 'bg-slate-50 border-slate-200 text-slate-700'
                           }`}
                         >
@@ -249,7 +249,7 @@ export const Home: React.FC<HomeProps> = ({ onOpenContact, onOpenResumeDownload 
                       ))}
                     </div>
 
-                    <div className="pt-2.5 border-t border-slate-100 dark:border-zinc-800/80 flex items-center justify-between text-xs font-bold text-[#00A57A] dark:text-[#D4AF37]">
+                    <div className="pt-2.5 border-t border-slate-100 dark:border-[rgba(212,175,55,0.2)] flex items-center justify-between text-xs font-bold text-[#00A57A] dark:text-[#D4AF37]">
                       <span>Case Details</span>
                       <ArrowUpRight className="w-3.5 h-3.5" />
                     </div>
@@ -273,14 +273,14 @@ export const Home: React.FC<HomeProps> = ({ onOpenContact, onOpenResumeDownload 
       </section>
 
       {/* 5. Experience Preview Section */}
-      <section className="relative py-20 border-t border-slate-200/50 dark:border-zinc-800/60">
+      <section className="relative py-20 border-t border-slate-200/50 dark:border-[rgba(212,175,55,0.2)]">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-12">
             <div>
               <div className={`inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-3 ${
                 isDark 
-                  ? 'bg-[#6D28D9]/20 text-[#D4AF37] border border-[#D4AF37]/30' 
+                  ? 'bg-[#7C3AED]/20 text-[#D4AF37] border border-[#D4AF37]/30' 
                   : 'bg-emerald-500/10 text-[#00A57A] border border-[#00C896]/20'
               }`}>
                 <Briefcase className="w-3.5 h-3.5" />
@@ -300,7 +300,7 @@ export const Home: React.FC<HomeProps> = ({ onOpenContact, onOpenResumeDownload 
               id="home-view-full-experience-btn"
               className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold transition-all duration-300 self-start sm:self-auto border ${
                 isDark
-                  ? 'bg-zinc-900/90 text-[#D4AF37] border-[#D4AF37]/30 hover:border-[#D4AF37] hover:bg-zinc-800 shadow-[0_0_15px_rgba(212,175,55,0.15)]'
+                  ? 'bg-[rgba(15,15,20,0.85)] text-[#D4AF37] border-[#D4AF37]/30 hover:border-[#D4AF37] hover:bg-[#121218] shadow-[0_0_15px_rgba(212,175,55,0.15)]'
                   : 'bg-white text-[#00A57A] border-[#00C896]/30 hover:border-[#00C896] hover:bg-emerald-50 shadow-sm'
               }`}
             >
@@ -320,7 +320,7 @@ export const Home: React.FC<HomeProps> = ({ onOpenContact, onOpenResumeDownload 
                 transition={{ duration: 0.4, delay: idx * 0.1 }}
                 className={`p-6 rounded-3xl backdrop-blur-xl border transition-all ${
                   isDark
-                    ? 'bg-[#0D0D0D]/80 border-zinc-800 text-white'
+                    ? 'bg-[rgba(15,15,20,0.85)] border-[rgba(212,175,55,0.25)] hover:border-[#D4AF37]/60 hover:shadow-[0_0_25px_rgba(124,58,237,0.2)] text-[#F8FAFC]'
                     : 'bg-white/80 border-slate-200/80 text-slate-900'
                 }`}
               >
@@ -331,13 +331,13 @@ export const Home: React.FC<HomeProps> = ({ onOpenContact, onOpenResumeDownload 
                       {exp.company} • {exp.location}
                     </p>
                   </div>
-                  <div className="flex items-center gap-1.5 text-xs font-mono text-slate-500 dark:text-zinc-400">
+                  <div className="flex items-center gap-1.5 text-xs font-mono text-slate-500 dark:text-[#F8FAFC]">
                     <Calendar className="w-3.5 h-3.5 text-[#00A57A] dark:text-[#D4AF37]" />
                     <span>{exp.duration}</span>
                   </div>
                 </div>
 
-                <p className="text-xs sm:text-sm text-slate-600 dark:text-zinc-300 leading-relaxed mb-3">
+                <p className="text-xs sm:text-sm text-slate-600 dark:text-[#F8FAFC] leading-relaxed mb-3">
                   {exp.description}
                 </p>
 
@@ -347,7 +347,7 @@ export const Home: React.FC<HomeProps> = ({ onOpenContact, onOpenResumeDownload 
                       key={sIdx}
                       className={`text-[9.5px] font-semibold px-2 py-0.5 rounded-md border ${
                         isDark
-                          ? 'bg-zinc-900 border-zinc-800 text-zinc-300'
+                          ? 'bg-[#0B0B0F] border-[rgba(212,175,55,0.2)] text-[#F8FAFC]'
                           : 'bg-slate-50 border-slate-200 text-slate-700'
                       }`}
                     >
@@ -385,19 +385,19 @@ export const Home: React.FC<HomeProps> = ({ onOpenContact, onOpenResumeDownload 
             transition={{ duration: 0.5 }}
             className={`relative p-8 sm:p-12 rounded-3xl backdrop-blur-2xl border text-center overflow-hidden shadow-2xl ${
               isDark
-                ? 'bg-gradient-to-b from-[#121212] to-[#050505] border-[#D4AF37]/30 shadow-[0_0_60px_rgba(212,175,55,0.15)]'
+                ? 'bg-gradient-to-b from-[#0B0B0F] to-[#050505] border-[#D4AF37]/30 shadow-[0_0_60px_rgba(212,175,55,0.15)]'
                 : 'bg-gradient-to-b from-white to-[#F0FDF4] border-[#00C896]/30 shadow-[0_20px_60px_rgba(0,200,150,0.12)]'
             }`}
           >
             {/* Ambient Background Glow */}
             <div className={`absolute top-0 left-1/2 -translate-x-1/2 w-96 h-96 rounded-full blur-3xl opacity-20 pointer-events-none ${
-              isDark ? 'bg-[#6D28D9]' : 'bg-[#00C896]'
+              isDark ? 'bg-[#7C3AED]' : 'bg-[#00C896]'
             }`} />
 
             <div className="relative z-10 max-w-2xl mx-auto">
               <div className={`inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-4 ${
                 isDark 
-                  ? 'bg-[#6D28D9]/30 text-[#D4AF37] border border-[#D4AF37]/30' 
+                  ? 'bg-[#7C3AED]/30 text-[#D4AF37] border border-[#D4AF37]/30' 
                   : 'bg-emerald-500/10 text-[#00A57A] border border-[#00C896]/20'
               }`}>
                 <Mail className="w-3.5 h-3.5" />
@@ -408,7 +408,7 @@ export const Home: React.FC<HomeProps> = ({ onOpenContact, onOpenResumeDownload 
                 Have an Exciting Project in Mind?
               </h2>
 
-              <p className="text-slate-600 dark:text-zinc-300 text-sm sm:text-base leading-relaxed mb-8">
+              <p className="text-slate-600 dark:text-[#F8FAFC] text-sm sm:text-base leading-relaxed mb-8">
                 Currently open for full-time engineering roles, technical advisory, and bespoke high-performance web development.
               </p>
 

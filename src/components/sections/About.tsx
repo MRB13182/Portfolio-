@@ -43,7 +43,7 @@ export const About: React.FC = () => {
         <div className="flex flex-col items-center text-center mb-16">
           <div className={`inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-3 ${
             isDark 
-              ? 'bg-[#6D28D9]/20 text-[#D4AF37] border border-[#D4AF37]/30' 
+              ? 'bg-[#7C3AED]/20 text-[#D4AF37] border border-[#D4AF37]/30' 
               : 'bg-emerald-500/10 text-[#00A57A] border border-[#00C896]/20'
           }`}>
             <Sparkles className="w-3.5 h-3.5" />
@@ -80,42 +80,42 @@ export const About: React.FC = () => {
             <div>
               <div className="flex items-center gap-3 mb-6">
                 <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${
-                  isDark ? 'bg-[#6D28D9]/20 text-[#D4AF37] border border-[#6D28D9]/30' : 'bg-emerald-100 text-[#00A57A]'
+                  isDark ? 'bg-[#7C3AED]/20 text-[#D4AF37] border border-[#7C3AED]/30' : 'bg-emerald-100 text-[#00A57A]'
                 }`}>
                   <Terminal className="w-5 h-5" />
                 </div>
                 <div>
-                  <h3 className="font-bold text-lg leading-tight text-slate-900 dark:text-white">About MD. Moshiur Rahman</h3>
-                  <p className="text-xs text-slate-500 dark:text-[#A1A1AA]">Full Stack Engineer &amp; Product Designer</p>
+                  <h3 className="font-bold text-lg leading-tight text-slate-900 dark:text-[#F8FAFC]">About MD. Moshiur Rahman</h3>
+                  <p className="text-xs text-slate-500 dark:text-[#F8FAFC]">Full Stack Engineer &amp; Product Designer</p>
                 </div>
               </div>
 
-              <p className="text-slate-700 dark:text-[#A1A1AA] leading-relaxed text-base sm:text-lg mb-6">
+              <p className="text-slate-700 dark:text-[#F8FAFC] leading-relaxed text-base sm:text-lg mb-6">
                 {portfolioConfig.personal.extendedBio}
               </p>
 
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-4 border-t border-slate-200/60 dark:border-zinc-800">
-                <div className="flex items-center gap-2.5 text-sm font-medium text-slate-600 dark:text-zinc-300">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-4 border-t border-slate-200/60 dark:border-[rgba(212,175,55,0.2)]">
+                <div className="flex items-center gap-2.5 text-sm font-medium text-slate-600 dark:text-[#F8FAFC]">
                   <CheckCircle2 className="w-4 h-4 text-emerald-500 dark:text-[#D4AF37] shrink-0" />
                   <span>Next.js 15 &amp; React 19 Pioneer</span>
                 </div>
-                <div className="flex items-center gap-2.5 text-sm font-medium text-slate-600 dark:text-zinc-300">
+                <div className="flex items-center gap-2.5 text-sm font-medium text-slate-600 dark:text-[#F8FAFC]">
                   <CheckCircle2 className="w-4 h-4 text-emerald-500 dark:text-[#D4AF37] shrink-0" />
                   <span>Strict TypeScript &amp; Zod Schema</span>
                 </div>
-                <div className="flex items-center gap-2.5 text-sm font-medium text-slate-600 dark:text-zinc-300">
+                <div className="flex items-center gap-2.5 text-sm font-medium text-slate-600 dark:text-[#F8FAFC]">
                   <CheckCircle2 className="w-4 h-4 text-emerald-500 dark:text-[#D4AF37] shrink-0" />
                   <span>Micro-Frontend &amp; Serverless APIs</span>
                 </div>
-                <div className="flex items-center gap-2.5 text-sm font-medium text-slate-600 dark:text-zinc-300">
+                <div className="flex items-center gap-2.5 text-sm font-medium text-slate-600 dark:text-[#F8FAFC]">
                   <CheckCircle2 className="w-4 h-4 text-emerald-500 dark:text-[#D4AF37] shrink-0" />
                   <span>Design Systems in Figma &amp; Tailwind</span>
                 </div>
               </div>
             </div>
 
-            <div className="mt-8 pt-6 border-t border-slate-200/60 dark:border-zinc-800 flex items-center justify-between">
-              <div className="flex items-center gap-2 text-xs font-mono text-slate-500 dark:text-[#A1A1AA]">
+            <div className="mt-8 pt-6 border-t border-slate-200/60 dark:border-[rgba(212,175,55,0.2)] flex items-center justify-between">
+              <div className="flex items-center gap-2 text-xs font-mono text-slate-500 dark:text-[#F8FAFC]">
                 <Globe2 className="w-4 h-4 text-[#00A57A] dark:text-[#D4AF37]" />
                 <span>{portfolioConfig.personal.location}</span>
               </div>
@@ -139,12 +139,12 @@ export const About: React.FC = () => {
                 whileHover={{ y: -4 }}
                 className={`p-6 rounded-3xl backdrop-blur-xl border flex flex-col justify-between transition-all duration-300 ${
                   isDark
-                    ? 'bg-[rgba(15,15,20,0.85)] border-[rgba(212,175,55,0.25)] hover:border-[#D4AF37]/60 hover:shadow-[0_0_25px_rgba(109,40,217,0.25)]'
+                    ? 'bg-[rgba(15,15,20,0.85)] border-[rgba(212,175,55,0.25)] hover:border-[#D4AF37]/60 hover:shadow-[0_0_25px_rgba(124,58,237,0.25)]'
                     : 'bg-white/80 border-[#00C896]/20 hover:border-[#00C896]/50 shadow-[0_10px_30px_rgba(0,200,150,0.06)]'
                 }`}
               >
                 <div className="flex items-center justify-between mb-4">
-                  <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#A1A1AA]">
+                  <span className="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-[#F8FAFC]">
                     Metric
                   </span>
                   <TrendingUp className={`w-4 h-4 ${isDark ? 'text-[#D4AF37]' : 'text-[#00A57A]'}`} />
@@ -158,10 +158,10 @@ export const About: React.FC = () => {
                   }`}>
                     {stat.value}
                   </div>
-                  <div className="font-bold text-sm text-slate-800 dark:text-white">
+                  <div className="font-bold text-sm text-slate-800 dark:text-[#F8FAFC]">
                     {stat.label}
                   </div>
-                  <p className="text-[11px] text-slate-500 dark:text-[#A1A1AA] mt-1 leading-snug">
+                  <p className="text-[11px] text-slate-500 dark:text-[#F8FAFC] mt-1 leading-snug">
                     {stat.description}
                   </p>
                 </div>
@@ -183,19 +183,19 @@ export const About: React.FC = () => {
                 transition={{ duration: 0.5, delay: idx * 0.15 }}
                 className={`p-7 rounded-3xl backdrop-blur-xl border transition-all duration-300 hover:shadow-xl ${
                   isDark
-                    ? 'bg-[rgba(15,15,20,0.85)] border-[rgba(212,175,55,0.25)] hover:border-[#D4AF37]/60 hover:shadow-[0_0_30px_rgba(109,40,217,0.25)] text-white'
+                    ? 'bg-[rgba(15,15,20,0.85)] border-[rgba(212,175,55,0.25)] hover:border-[#D4AF37]/60 hover:shadow-[0_0_30px_rgba(124,58,237,0.25)] text-[#F8FAFC]'
                     : 'bg-white/70 border-slate-200/80 hover:border-[#00C896]/40 text-slate-900'
                 }`}
               >
                 <div className={`w-12 h-12 rounded-2xl flex items-center justify-center mb-5 ${
                   isDark 
-                    ? 'bg-[#6D28D9]/20 text-[#D4AF37] border border-[#6D28D9]/30 shadow-[0_0_15px_rgba(109,40,217,0.2)]' 
+                    ? 'bg-[#7C3AED]/20 text-[#D4AF37] border border-[#7C3AED]/30 shadow-[0_0_15px_rgba(124,58,237,0.2)]' 
                     : 'bg-emerald-50 text-[#00A57A] border border-emerald-200 shadow-sm'
                 }`}>
                   <Icon className="w-6 h-6" />
                 </div>
-                <h4 className="font-bold text-lg mb-2 text-slate-900 dark:text-white">{p.title}</h4>
-                <p className="text-sm text-slate-600 dark:text-[#A1A1AA] leading-relaxed">
+                <h4 className="font-bold text-lg mb-2 text-slate-900 dark:text-[#F8FAFC]">{p.title}</h4>
+                <p className="text-sm text-slate-600 dark:text-[#F8FAFC] leading-relaxed">
                   {p.description}
                 </p>
               </motion.div>

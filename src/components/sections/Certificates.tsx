@@ -46,7 +46,7 @@ export const Certificates: React.FC<CertificatesProps> = ({ onOpenCertificatesDo
       particleCount: 70,
       spread: 60,
       origin: { y: 0.3 },
-      colors: isDark ? ['#D4AF37', '#6D28D9'] : ['#00C896', '#7FFFD4']
+      colors: isDark ? ['#D4AF37', '#7C3AED'] : ['#00C896', '#7FFFD4']
     });
 
     const element = document.createElement('a');
@@ -80,7 +80,7 @@ export const Certificates: React.FC<CertificatesProps> = ({ onOpenCertificatesDo
           <div className="flex flex-col items-center sm:items-start text-center sm:text-left">
             <div className={`inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-3 ${
               isDark 
-                ? 'bg-[#6D28D9]/20 text-[#D4AF37] border border-[#D4AF37]/30' 
+                ? 'bg-[#7C3AED]/20 text-[#D4AF37] border border-[#D4AF37]/30' 
                 : 'bg-emerald-500/10 text-[#00A57A] border border-[#00C896]/20'
             }`}>
               <Award className="w-3.5 h-3.5" />
@@ -97,7 +97,7 @@ export const Certificates: React.FC<CertificatesProps> = ({ onOpenCertificatesDo
                 Accreditations
               </span>
             </h2>
-            <p className="text-slate-600 dark:text-zinc-400 max-w-xl text-sm sm:text-base">
+            <p className="text-slate-600 dark:text-[#F8FAFC] max-w-xl text-sm sm:text-base">
               Professional accreditations from Meta, Google Cloud, Microsoft, Amazon Web Services, and Vercel.
             </p>
           </div>
@@ -132,12 +132,12 @@ export const Certificates: React.FC<CertificatesProps> = ({ onOpenCertificatesDo
               id={`cert-card-${cert.id}`}
               className={`group relative rounded-3xl backdrop-blur-xl border overflow-hidden flex flex-col justify-between transition-all duration-300 cursor-pointer shadow-lg ${
                 isDark
-                  ? 'bg-[rgba(15,15,20,0.85)] border-[rgba(212,175,55,0.25)] hover:border-[#D4AF37]/60 hover:shadow-[0_0_30px_rgba(109,40,217,0.25)] text-white'
+                  ? 'bg-[rgba(15,15,20,0.85)] border-[rgba(212,175,55,0.25)] hover:border-[#D4AF37]/60 hover:shadow-[0_0_30px_rgba(124,58,237,0.25)] text-[#F8FAFC]'
                   : 'bg-white/90 border-slate-200/80 hover:border-[#00C896]/50 hover:shadow-[0_15px_40px_rgba(0,200,150,0.12)] text-slate-900'
               }`}
             >
               {/* Top Certificate Image Preview */}
-              <div className="relative w-full h-48 overflow-hidden bg-slate-50 dark:bg-zinc-900">
+              <div className="relative w-full h-48 overflow-hidden bg-slate-50 dark:bg-[#0B0B0F]">
                 <SafeImage
                   src={cert.image}
                   alt={cert.title}
@@ -161,12 +161,12 @@ export const Certificates: React.FC<CertificatesProps> = ({ onOpenCertificatesDo
               {/* Certificate Details */}
               <div className="p-6 flex flex-col justify-between flex-grow">
                 <div>
-                  <div className="flex items-center justify-between text-xs font-mono text-slate-500 dark:text-[#A1A1AA] mb-2">
+                  <div className="flex items-center justify-between text-xs font-mono text-slate-500 dark:text-[#F8FAFC] mb-2">
                     <div className="flex items-center gap-1.5">
                       <Calendar className="w-3.5 h-3.5 text-[#00A57A] dark:text-[#D4AF37]" />
                       <span>{cert.issueDate}</span>
                     </div>
-                    <span className="font-semibold text-slate-400 dark:text-[#A1A1AA] text-[10px]">{cert.credentialId}</span>
+                    <span className="font-semibold text-slate-400 dark:text-[#F8FAFC] text-[10px]">{cert.credentialId}</span>
                   </div>
 
                   <h3 className="text-lg font-extrabold tracking-tight mb-1 group-hover:text-emerald-600 dark:group-hover:text-[#FFD700] transition-colors line-clamp-2">
@@ -176,7 +176,7 @@ export const Certificates: React.FC<CertificatesProps> = ({ onOpenCertificatesDo
                     {cert.issuer}
                   </div>
 
-                  <p className="text-xs text-slate-600 dark:text-[#A1A1AA] line-clamp-2 leading-relaxed mb-4">
+                  <p className="text-xs text-slate-600 dark:text-[#F8FAFC] line-clamp-2 leading-relaxed mb-4">
                     {cert.description}
                   </p>
                 </div>
@@ -188,7 +188,7 @@ export const Certificates: React.FC<CertificatesProps> = ({ onOpenCertificatesDo
                       <span
                         key={sIdx}
                         className={`text-[10px] font-semibold px-2 py-0.5 rounded-md border ${
-                          isDark ? 'bg-[#0B0B0F] border-[rgba(212,175,55,0.2)] text-zinc-300' : 'bg-slate-50 border-slate-200 text-slate-700'
+                          isDark ? 'bg-[#0B0B0F] border-[rgba(212,175,55,0.2)] text-[#F8FAFC]' : 'bg-slate-50 border-slate-200 text-slate-700'
                         }`}
                       >
                         {s}
@@ -196,7 +196,7 @@ export const Certificates: React.FC<CertificatesProps> = ({ onOpenCertificatesDo
                     ))}
                   </div>
 
-                  <div className="pt-3 border-t border-slate-100 dark:border-zinc-800/80 flex items-center justify-between text-xs font-bold text-[#00A57A] dark:text-[#D4AF37]">
+                  <div className="pt-3 border-t border-slate-100 dark:border-[rgba(212,175,55,0.2)] flex items-center justify-between text-xs font-bold text-[#00A57A] dark:text-[#D4AF37]">
                     <span>View Credential Details</span>
                     <ExternalLink className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
                   </div>
@@ -229,7 +229,7 @@ export const Certificates: React.FC<CertificatesProps> = ({ onOpenCertificatesDo
               id="certificate-modal-container"
               className={`relative w-full max-w-2xl rounded-3xl p-6 sm:p-8 backdrop-blur-2xl border shadow-2xl z-10 overflow-hidden ${
                 isDark
-                  ? 'bg-[rgba(15,15,20,0.95)] border-[rgba(212,175,55,0.35)] shadow-[0_0_50px_rgba(109,40,217,0.3)] text-white'
+                  ? 'bg-[rgba(15,15,20,0.95)] border-[rgba(212,175,55,0.35)] shadow-[0_0_50px_rgba(124,58,237,0.3)] text-[#F8FAFC]'
                   : 'bg-white/95 border-[#00C896]/25 text-slate-900'
               }`}
             >
@@ -239,14 +239,14 @@ export const Certificates: React.FC<CertificatesProps> = ({ onOpenCertificatesDo
                 id="cert-modal-close-btn"
                 aria-label="Close certificate"
                 className={`absolute top-5 right-5 p-2 rounded-full border transition-colors cursor-pointer ${
-                  isDark ? 'border-zinc-800 bg-[#0B0B0F] text-zinc-400 hover:text-white' : 'border-slate-200 bg-slate-100 text-slate-600'
+                  isDark ? 'border-[rgba(212,175,55,0.3)] bg-[#0B0B0F] text-[#F8FAFC] hover:text-[#FFD700]' : 'border-slate-200 bg-slate-100 text-slate-600'
                 }`}
               >
                 <X className="w-5 h-5" />
               </button>
 
               {/* Modal Certificate Hero */}
-              <div className="relative w-full h-56 rounded-2xl overflow-hidden mb-6 border border-slate-200 dark:border-zinc-800 bg-slate-50 dark:bg-zinc-900">
+              <div className="relative w-full h-56 rounded-2xl overflow-hidden mb-6 border border-slate-200 dark:border-[rgba(212,175,55,0.25)] bg-slate-50 dark:bg-[#0B0B0F]">
                 <SafeImage
                   src={activeCert.image}
                   alt={activeCert.title}
@@ -259,28 +259,28 @@ export const Certificates: React.FC<CertificatesProps> = ({ onOpenCertificatesDo
               {/* Title & Organization */}
               <div className="mb-4">
                 <div className="flex items-center gap-2 mb-2">
-                  <div className="w-6 h-6 rounded-lg p-0.5 bg-white dark:bg-zinc-800 border border-slate-200 dark:border-zinc-700 flex items-center justify-center">
+                  <div className="w-6 h-6 rounded-lg p-0.5 bg-white dark:bg-[#0B0B0F] border border-slate-200 dark:border-[rgba(212,175,55,0.3)] flex items-center justify-center">
                     <img src={activeCert.issuerLogo} alt={activeCert.issuer} className="w-full h-full object-contain" />
                   </div>
                   <span className={`text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full ${
-                    isDark ? 'bg-[#6D28D9]/30 text-[#D4AF37] border border-[#D4AF37]/30' : 'bg-emerald-500/10 text-[#00A57A]'
+                    isDark ? 'bg-[#7C3AED]/30 text-[#D4AF37] border border-[#D4AF37]/30' : 'bg-emerald-500/10 text-[#00A57A]'
                   }`}>
                     {activeCert.issuer}
                   </span>
-                  <span className="text-xs font-mono text-slate-500 dark:text-[#A1A1AA]">
+                  <span className="text-xs font-mono text-slate-500 dark:text-[#F8FAFC]">
                     ID: {activeCert.credentialId}
                   </span>
                 </div>
                 <h3 className="text-2xl font-extrabold tracking-tight">{activeCert.title}</h3>
               </div>
 
-              <p className="text-sm text-slate-600 dark:text-[#A1A1AA] leading-relaxed mb-6">
+              <p className="text-sm text-slate-600 dark:text-[#F8FAFC] leading-relaxed mb-6">
                 {activeCert.description}
               </p>
 
               {/* Verified Competencies */}
               <div className="mb-8">
-                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-[#A1A1AA] mb-2.5">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-[#FFD700] mb-2.5">
                   Verified Engineering Competencies
                 </h4>
                 <div className="flex flex-wrap gap-2">
@@ -288,7 +288,7 @@ export const Certificates: React.FC<CertificatesProps> = ({ onOpenCertificatesDo
                     <span
                       key={idx}
                       className={`text-xs font-semibold px-3 py-1.5 rounded-xl border flex items-center gap-1.5 ${
-                        isDark ? 'bg-[#0B0B0F] border-[rgba(212,175,55,0.25)] text-white' : 'bg-slate-100 border-slate-200 text-slate-800'
+                        isDark ? 'bg-[#0B0B0F] border-[rgba(212,175,55,0.25)] text-[#F8FAFC]' : 'bg-slate-100 border-slate-200 text-slate-800'
                       }`}
                     >
                       <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 dark:text-[#D4AF37]" />
@@ -299,12 +299,12 @@ export const Certificates: React.FC<CertificatesProps> = ({ onOpenCertificatesDo
               </div>
 
               {/* Actions */}
-              <div className="pt-4 border-t border-slate-200/60 dark:border-zinc-800 flex flex-wrap items-center justify-between gap-3">
+              <div className="pt-4 border-t border-slate-200/60 dark:border-[rgba(212,175,55,0.2)] flex flex-wrap items-center justify-between gap-3">
                 <button
                   onClick={() => handleDownloadSingleCert(activeCert)}
                   id="cert-modal-download-btn"
                   className={`px-4 py-2 rounded-xl text-xs font-bold border flex items-center gap-2 cursor-pointer ${
-                    isDark ? 'bg-[#0B0B0F] border-zinc-700 text-zinc-200 hover:text-white' : 'bg-white border-slate-200 text-slate-700'
+                    isDark ? 'bg-[#0B0B0F] border-[rgba(212,175,55,0.3)] text-[#F8FAFC] hover:text-[#FFD700]' : 'bg-white border-slate-200 text-slate-700'
                   }`}
                 >
                   <Download className="w-4 h-4" />

@@ -62,7 +62,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
           id="project-modal-container"
           className={`relative w-full max-w-4xl max-h-[90vh] rounded-3xl backdrop-blur-2xl border shadow-2xl z-10 overflow-hidden flex flex-col ${
             isDark
-              ? 'bg-[rgba(15,15,20,0.95)] border-[rgba(212,175,55,0.35)] text-white shadow-[0_0_60px_rgba(109,40,217,0.3)]'
+              ? 'bg-[rgba(15,15,20,0.95)] border-[rgba(212,175,55,0.35)] text-[#F8FAFC] shadow-[0_0_60px_rgba(124,58,237,0.3)]'
               : 'bg-white/95 border-[#00C896]/25 text-slate-900 shadow-[0_25px_70px_rgba(0,200,150,0.2)]'
           }`}
         >
@@ -73,7 +73,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
             aria-label="Close project modal"
             className={`absolute top-5 right-5 z-30 p-2.5 rounded-full border transition-colors cursor-pointer ${
               isDark 
-                ? 'border-zinc-700 bg-[#0B0B0F] text-zinc-300 hover:text-white hover:border-[#D4AF37]' 
+                ? 'border-[rgba(212,175,55,0.3)] bg-[#0B0B0F] text-[#F8FAFC] hover:text-[#FFD700] hover:border-[#D4AF37]' 
                 : 'border-slate-200 bg-white/90 text-slate-600 hover:text-slate-900 hover:border-[#00C896]'
             }`}
           >
@@ -84,7 +84,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
           <div className="overflow-y-auto p-6 sm:p-8 lg:p-10">
             
             {/* Top Project Banner / Hero Preview */}
-            <div className="relative w-full h-56 sm:h-80 rounded-2xl overflow-hidden mb-8 border border-slate-200/60 dark:border-zinc-800 shadow-lg">
+            <div className="relative w-full h-56 sm:h-80 rounded-2xl overflow-hidden mb-8 border border-slate-200/60 dark:border-[rgba(212,175,55,0.25)] shadow-lg">
               <SafeImage
                 src={project.image}
                 alt={project.title}
@@ -141,7 +141,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
                   id="project-modal-github-link"
                   className={`px-5 py-2.5 rounded-xl font-semibold text-xs flex items-center gap-2 border transition-all ${
                     isDark
-                      ? 'bg-[#0B0B0F] border-zinc-700 text-zinc-200 hover:border-[#D4AF37] hover:text-white'
+                      ? 'bg-[#0B0B0F] border-[rgba(212,175,55,0.3)] text-[#F8FAFC] hover:border-[#D4AF37] hover:text-[#FFD700]'
                       : 'bg-white border-slate-200 text-slate-800 hover:border-[#00C896]'
                   }`}
                 >
@@ -153,10 +153,10 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
 
             {/* In-depth Description */}
             <div className="mb-8">
-              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-[#A1A1AA] mb-2.5">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-[#FFD700] mb-2.5">
                 Overview &amp; Problem Solved
               </h4>
-              <p className="text-sm sm:text-base text-slate-700 dark:text-[#A1A1AA] leading-relaxed">
+              <p className="text-sm sm:text-base text-slate-700 dark:text-[#F8FAFC] leading-relaxed">
                 {project.description}
               </p>
             </div>
@@ -164,7 +164,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
             {/* Key Features List */}
             {project.features && project.features.length > 0 && (
               <div className="mb-8">
-                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-[#A1A1AA] mb-3 flex items-center gap-2">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-[#FFD700] mb-3 flex items-center gap-2">
                   <Sparkles className="w-3.5 h-3.5 text-[#00A57A] dark:text-[#D4AF37]" />
                   Key Architectural Features
                 </h4>
@@ -174,7 +174,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
                       key={idx}
                       className={`p-3.5 rounded-2xl border flex items-start gap-3 ${
                         isDark
-                          ? 'bg-[#0B0B0F] border-[rgba(212,175,55,0.2)] text-zinc-300'
+                          ? 'bg-[#0B0B0F] border-[rgba(212,175,55,0.2)] text-[#F8FAFC]'
                           : 'bg-slate-50/80 border-slate-200/70 text-slate-700'
                       }`}
                     >
@@ -189,7 +189,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
             {/* Architecture Highlights */}
             {project.architecture && project.architecture.length > 0 && (
               <div className="mb-8">
-                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-[#A1A1AA] mb-3 flex items-center gap-2">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-[#FFD700] mb-3 flex items-center gap-2">
                   <Workflow className="w-3.5 h-3.5 text-[#00A57A] dark:text-[#D4AF37]" />
                   System Architecture Highlights
                 </h4>
@@ -199,7 +199,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
                       key={idx}
                       className={`p-3 rounded-xl border font-mono text-xs ${
                         isDark 
-                          ? 'bg-[#050505] border-[rgba(212,175,55,0.2)] text-[#A1A1AA]' 
+                          ? 'bg-[#050505] border-[rgba(212,175,55,0.2)] text-[#F8FAFC]' 
                           : 'bg-slate-100/70 border-slate-200 text-slate-700'
                       }`}
                     >
@@ -212,7 +212,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
 
             {/* Tech Stack Pills */}
             <div>
-              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-[#A1A1AA] mb-3">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 dark:text-[#FFD700] mb-3">
                 Technologies &amp; Libraries
               </h4>
               <div className="flex flex-wrap gap-2">
@@ -234,8 +234,8 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
           </div>
 
           {/* Modal Footer */}
-          <div className="p-4 sm:p-6 border-t border-slate-200/60 dark:border-zinc-800 flex items-center justify-between bg-slate-50/50 dark:bg-[#050505]">
-            <span className="text-xs text-slate-400 dark:text-[#A1A1AA] font-mono">
+          <div className="p-4 sm:p-6 border-t border-slate-200/60 dark:border-[rgba(212,175,55,0.2)] flex items-center justify-between bg-slate-50/50 dark:bg-[#050505]">
+            <span className="text-xs text-slate-400 dark:text-[#F8FAFC] font-mono">
               Engineered by MD. Moshiur Rahman
             </span>
             <button
@@ -243,7 +243,7 @@ export const ProjectModal: React.FC<ProjectModalProps> = ({ project, onClose }) 
               id="project-modal-footer-close-btn"
               className={`px-5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${
                 isDark
-                  ? 'bg-zinc-800 text-white hover:bg-zinc-700'
+                  ? 'bg-[#7C3AED]/40 text-[#F8FAFC] border border-[rgba(212,175,55,0.3)] hover:bg-[#7C3AED]/70'
                   : 'bg-slate-200 text-slate-800 hover:bg-slate-300'
               }`}
             >

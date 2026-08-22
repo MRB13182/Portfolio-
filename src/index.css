@@ -31,15 +31,15 @@
     --surface-solid: #0B0B0F;
     --card: rgba(15, 15, 20, 0.85);
     --card-border: rgba(212, 175, 55, 0.25);
-    --purple: #6D28D9;
+    --purple: #7C3AED;
     --purple-light: #A855F7;
     --gold: #D4AF37;
     --gold-light: #FFD700;
     --text: #F8FAFC;
-    --text-heading: #FFFFFF;
-    --muted: #A1A1AA;
+    --text-heading: #F8FAFC;
+    --muted: #F8FAFC;
     --border: rgba(212, 175, 55, 0.25);
-    --glow: rgba(109, 40, 217, 0.35);
+    --glow: rgba(124, 58, 237, 0.35);
     --highlight: rgba(212, 175, 55, 0.25);
   }
 
@@ -69,11 +69,11 @@
 }
 
 .glass-panel-dark {
-  background: rgba(18, 18, 18, 0.82);
+  background: rgba(18, 18, 24, 0.85);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(212, 175, 55, 0.15);
-  box-shadow: 0 10px 35px -10px rgba(0, 0, 0, 0.7), 0 0 25px rgba(109, 40, 217, 0.08);
+  border: 1px solid rgba(212, 175, 55, 0.25);
+  box-shadow: 0 10px 35px -10px rgba(0, 0, 0, 0.7), 0 0 25px rgba(109, 40, 217, 0.15);
 }
 
 /* Custom Scrollbar */
