@@ -10,18 +10,33 @@ export interface SocialLink {
   actionType?: 'link' | 'email' | 'whatsapp' | 'telegram';
 }
 
-export type SkillCategory = 'Frontend' | 'Backend' | 'Database' | 'Cloud & DevOps' | 'Design & Tools';
+export type SkillCategory = 
+  | 'Frontend' 
+  | 'Backend' 
+  | 'Database' 
+  | 'Cloud & DevOps' 
+  | 'UI/UX & Design' 
+  | 'Frontend Development'
+  | 'Backend Development'
+  | 'Cloud'
+  | 'Design'
+  | string;
 
 export interface Skill {
   id: string;
   name: string;
-  category: SkillCategory;
+  category: string;
   level: number; // 0-100%
-  experienceDuration: string;
-  iconName: string;
+  logo?: string;
+  experience?: string;
+  experienceDuration?: string;
+  iconName?: string;
   description: string;
-  proficiencyHighlights: string[];
-  projectsUsing: string[];
+  projects?: string[];
+  projectsUsing?: string[];
+  proficiencyHighlights?: string[];
+  keywords?: string[];
+  accentColor?: string;
 }
 
 export type ProjectCategory = 'All' | 'Full Stack' | 'AI & SaaS' | 'Mobile / Web' | 'UI / UX';
@@ -67,20 +82,20 @@ export interface EducationItem {
 }
 
 export interface Certificate {
-  id: string;
+  id?: string;
+  image: string;
   title: string;
-  issuer: string;
-  issuerLogo: string; // Dynamic path e.g. /certificates/logos/meta.png
+  issuer?: string;
+  issuerLogo?: string;
   theme?: string;
   category?: string;
   accent?: string;
-  issueDate: string;
+  issueDate?: string;
   expiryDate?: string;
-  credentialId: string;
-  credentialUrl: string;
-  image: string;
-  skills: string[];
-  description: string;
+  credentialId?: string;
+  credentialUrl?: string;
+  skills?: string[];
+  description?: string;
   verified?: boolean;
 }
 

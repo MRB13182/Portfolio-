@@ -1,5 +1,6 @@
 import { PortfolioConfig } from '../types';
-import { resolveCertificateImage } from '../utils/certificateAssets';
+import { detectedCertificates, defaultVerifiedCertificates } from '../utils/certificateAssets';
+import { skills } from './skills';
 
 export const assets = {
   logo: {
@@ -16,20 +17,13 @@ export const assets = {
     '/projects/project-6.webp',
   ],
   certificates: [
-    resolveCertificateImage(0),
-    resolveCertificateImage(1),
-    resolveCertificateImage(2),
-    resolveCertificateImage(3),
-    resolveCertificateImage(4),
-    resolveCertificateImage(5),
+    '/certificates/Cer1.png',
+    '/certificates/Cer2.png',
+    '/certificates/Cer3.png',
+    '/certificates/Cer4.png',
+    '/certificates/Cer5.png',
+    '/certificates/Cer6.png',
   ],
-  certificateLogos: {
-    google: 'Google',
-    hubspot: 'HubSpot',
-    semrush: 'Semrush',
-    ibm: 'IBM',
-    meta: 'Meta',
-  }
 };
 
 export const portfolioConfig: PortfolioConfig = {
@@ -139,200 +133,7 @@ export const portfolioConfig: PortfolioConfig = {
     }
   ],
 
-  skills: [
-    {
-      id: 'react',
-      name: 'React',
-      category: 'Frontend',
-      level: 96,
-      experienceDuration: '5 Years',
-      iconName: 'Atom',
-      description: 'Building declarative, reactive user interfaces with advanced state management, custom hooks, and concurrent rendering.',
-      proficiencyHighlights: [
-        'React 18 & 19 Concurrent Features',
-        'Custom Hooks & Compound Components',
-        'Zustand, Redux Toolkit & Context API',
-        'Performance Profiling & Virtualization'
-      ],
-      projectsUsing: ['Apex AI Workspace', 'Luxe Commerce Suite', 'Aether Cloud Analytics']
-    },
-    {
-      id: 'nextjs',
-      name: 'Next.js',
-      category: 'Frontend',
-      level: 94,
-      experienceDuration: '4 Years',
-      iconName: 'Zap',
-      description: 'Developing high-speed full stack web applications with App Router, Server Components, SSR/SSG, and Edge runtime.',
-      proficiencyHighlights: [
-        'App Router & Server Actions',
-        'Incremental Static Regeneration (ISR)',
-        'Edge Functions & Middleware',
-        'Dynamic SEO & OpenGraph Optimization'
-      ],
-      projectsUsing: ['Apex AI Workspace', 'Velocita Dashboard', 'Quantum Financial Engine']
-    },
-    {
-      id: 'typescript',
-      name: 'TypeScript',
-      category: 'Frontend',
-      level: 92,
-      experienceDuration: '4.5 Years',
-      iconName: 'Code2',
-      description: 'Writing strictly typed, maintainable, and bug-resistant enterprise code with generics, mapped types, and utility types.',
-      proficiencyHighlights: [
-        'Strict Type Safety & Generics',
-        'Type Narrowing & Discriminated Unions',
-        'API Contract Validation with Zod',
-        'Complex Interface Architectures'
-      ],
-      projectsUsing: ['Apex AI Workspace', 'Luxe Commerce Suite', 'Quantum Financial Engine', 'Aether Cloud Analytics']
-    },
-    {
-      id: 'javascript',
-      name: 'JavaScript (ES6+)',
-      category: 'Frontend',
-      level: 95,
-      experienceDuration: '5+ Years',
-      iconName: 'FileCode',
-      description: 'Deep understanding of event loops, asynchronous programming, prototypes, closures, and modern ECMAScript standards.',
-      proficiencyHighlights: [
-        'Async/Await & Promises',
-        'Web APIs & DOM Performance',
-        'Functional Programming Paradigms',
-        'Modern ESNext Features'
-      ],
-      projectsUsing: ['Apex AI Workspace', 'Luxe Commerce Suite', 'Velocita Dashboard']
-    },
-    {
-      id: 'tailwind',
-      name: 'Tailwind CSS',
-      category: 'Frontend',
-      level: 98,
-      experienceDuration: '4 Years',
-      iconName: 'Palette',
-      description: 'Creating bespoke, responsive, and luxury design systems using modern Tailwind CSS with container queries and fluid typography.',
-      proficiencyHighlights: [
-        'Custom Design Tokens & Plugins',
-        'Dark/Light Dual Theme Architecture',
-        'Fluid Responsive Layouts',
-        'Micro-interactions & Keyframe Animations'
-      ],
-      projectsUsing: ['Apex AI Workspace', 'Luxe Commerce Suite', 'Quantum Financial Engine', 'Velocita Dashboard']
-    },
-    {
-      id: 'html-css',
-      name: 'HTML5 & Modern CSS',
-      category: 'Frontend',
-      level: 98,
-      experienceDuration: '5+ Years',
-      iconName: 'Layout',
-      description: 'Semantic markup, accessibility (a11y) standards, CSS Grid, Flexbox, Subgrid, and CSS Custom Properties.',
-      proficiencyHighlights: [
-        'WCAG AA/AAA Accessibility',
-        'CSS Grid & Complex Flexbox Layouts',
-        'CSS Variables & Modern Selectors',
-        'Responsive Web Design Standards'
-      ],
-      projectsUsing: ['All Projects']
-    },
-    {
-      id: 'nodejs',
-      name: 'Node.js',
-      category: 'Backend',
-      level: 90,
-      experienceDuration: '4 Years',
-      iconName: 'Server',
-      description: 'Architecting scalable server-side microservices, event-driven backends, stream processors, and REST/GraphQL APIs.',
-      proficiencyHighlights: [
-        'Event-Driven Architecture',
-        'Streams, Buffers & File Systems',
-        'Clustering & Process Management',
-        'Microservices & Worker Threads'
-      ],
-      projectsUsing: ['Quantum Financial Engine', 'Aether Cloud Analytics', 'Velocita Dashboard']
-    },
-    {
-      id: 'express',
-      name: 'Express.js',
-      category: 'Backend',
-      level: 92,
-      experienceDuration: '4 Years',
-      iconName: 'Layers',
-      description: 'Crafting robust RESTful APIs with secure middleware pipelines, rate-limiting, JWT authentication, and validation.',
-      proficiencyHighlights: [
-        'RESTful API Design & Versioning',
-        'Auth Pipelines (JWT, OAuth2, RBAC)',
-        'Custom Error Handling Middleware',
-        'Security Headers & Rate Limiting'
-      ],
-      projectsUsing: ['Quantum Financial Engine', 'Luxe Commerce Suite']
-    },
-    {
-      id: 'mongodb',
-      name: 'MongoDB',
-      category: 'Database',
-      level: 88,
-      experienceDuration: '3.5 Years',
-      iconName: 'Database',
-      description: 'Designing high-throughput NoSQL document databases with indexing strategies, aggregation pipelines, and Mongoose ORM.',
-      proficiencyHighlights: [
-        'Aggregation Pipelines & Grouping',
-        'Compound & Partial Index Optimization',
-        'Mongoose Schema Validation',
-        'Replica Sets & Sharding Concepts'
-      ],
-      projectsUsing: ['Luxe Commerce Suite', 'Velocita Dashboard']
-    },
-    {
-      id: 'postgresql',
-      name: 'PostgreSQL',
-      category: 'Database',
-      level: 89,
-      experienceDuration: '3 Years',
-      iconName: 'Cpu',
-      description: 'Relational data modeling, ACID transactions, complex joins, CTEs, and integration with Prisma & Drizzle ORM.',
-      proficiencyHighlights: [
-        'Relational Schema Design & Normalization',
-        'Prisma & Drizzle ORM Integration',
-        'ACID Transactions & Row-level Security',
-        'Query Optimization & EXPLAIN ANALYZE'
-      ],
-      projectsUsing: ['Apex AI Workspace', 'Quantum Financial Engine', 'Aether Cloud Analytics']
-    },
-    {
-      id: 'figma',
-      name: 'Figma & UI/UX',
-      category: 'Design & Tools',
-      level: 92,
-      experienceDuration: '4 Years',
-      iconName: 'Figma',
-      description: 'Translating product vision into luxury interfaces with comprehensive design systems, interactive prototypes, and auto-layout.',
-      proficiencyHighlights: [
-        'Design System & Component Tokens',
-        'Interactive High-Fidelity Prototyping',
-        'Auto Layout & Responsive Constraints',
-        'Micro-interaction Wireframing'
-      ],
-      projectsUsing: ['Apex AI Workspace', 'Luxe Commerce Suite', 'Quantum Financial Engine']
-    },
-    {
-      id: 'docker-cloud',
-      name: 'Docker & Cloud CI/CD',
-      category: 'Cloud & DevOps',
-      level: 86,
-      experienceDuration: '3 Years',
-      iconName: 'Boxes',
-      description: 'Containerizing multi-tier applications, setting up automated CI/CD pipelines, and deploying to Cloud Run, Vercel, and AWS.',
-      proficiencyHighlights: [
-        'Multi-stage Dockerfile Optimization',
-        'GitHub Actions CI/CD Automation',
-        'GCP Cloud Run & Vercel Deployments',
-        'Environment Secret Management'
-      ],
-      projectsUsing: ['Apex AI Workspace', 'Aether Cloud Analytics']
-    }
-  ],
+  skills: skills,
 
   projects: [
     {
@@ -544,102 +345,5 @@ export const portfolioConfig: PortfolioConfig = {
     }
   ],
 
-  certificates: [
-    {
-      id: 'cert-1',
-      title: 'Google AI Professional Certificate',
-      issuer: 'Google',
-      issuerLogo: 'Google',
-      theme: 'Technical Google Style',
-      category: 'Artificial Intelligence',
-      accent: '#4285F4',
-      issueDate: 'October 2024',
-      credentialId: 'GOOG-AI-948102',
-      credentialUrl: 'https://coursera.org/verify/professional-cert/google-ai',
-      image: resolveCertificateImage(0),
-      skills: ['Generative AI', 'Gemini Models', 'Machine Learning', 'Prompt Engineering', 'TensorFlow'],
-      description: 'Comprehensive professional certification demonstrating advanced competencies in generative AI, modern deep learning architectures, Gemini foundation models, and enterprise AI solution integration.',
-      verified: true
-    },
-    {
-      id: 'cert-2',
-      title: 'Google UX Design Professional Certificate',
-      issuer: 'Google',
-      issuerLogo: 'Google',
-      theme: 'Creative Google Style',
-      category: 'UX / UI Design',
-      accent: '#34A853',
-      issueDate: 'May 2024',
-      credentialId: 'GOOG-UX-823190',
-      credentialUrl: 'https://coursera.org/verify/professional-cert/google-ux',
-      image: resolveCertificateImage(1),
-      skills: ['User Experience (UX)', 'Figma Design Systems', 'User Research', 'Wireframing', 'Prototyping'],
-      description: 'End-to-end design certification covering human-centered user research, accessible UI architecture, high-fidelity interactive prototyping, usability testing, and cross-platform design systems.',
-      verified: true
-    },
-    {
-      id: 'cert-3',
-      title: 'IBM Cybersecurity Fundamentals Certificate',
-      issuer: 'IBM',
-      issuerLogo: 'IBM',
-      theme: 'Enterprise Technology Style',
-      category: 'Cybersecurity',
-      accent: '#0F62FE',
-      issueDate: 'March 2024',
-      credentialId: 'IBM-SEC-661904',
-      credentialUrl: 'https://www.credly.com/org/ibm/badge/cybersecurity-fundamentals',
-      image: resolveCertificateImage(2),
-      skills: ['Network Security', 'Cryptography', 'Zero Trust Architecture', 'Threat Modeling', 'Incident Response'],
-      description: 'Industry-standard accreditation validating core security principles, penetration defense methodologies, encryption standards, IAM role enforcement, and secure software development lifecycle.',
-      verified: true
-    },
-    {
-      id: 'cert-4',
-      title: 'Meta Digital Marketing Associate Certificate',
-      issuer: 'Meta',
-      issuerLogo: 'Meta',
-      theme: 'Modern UI Style',
-      category: 'Digital Marketing',
-      accent: '#0081FB',
-      issueDate: 'November 2023',
-      credentialId: 'META-DM-339182',
-      credentialUrl: 'https://www.coursera.org/verify/professional-cert/meta-marketing',
-      image: resolveCertificateImage(3),
-      skills: ['Performance Marketing', 'Campaign Analytics', 'Meta Ads Manager', 'Audience Segmentation', 'Conversion Optimization'],
-      description: 'Demonstrated proficiency in digital campaign architecture, audience segmentation, conversion attribution modeling, Meta advertising ecosystems, and data-driven marketing analytics.',
-      verified: true
-    },
-    {
-      id: 'cert-5',
-      title: 'HubSpot SEO Certification',
-      issuer: 'HubSpot Academy',
-      issuerLogo: 'HubSpot',
-      theme: 'Marketing Education Style',
-      category: 'SEO & Marketing',
-      accent: '#FF7A59',
-      issueDate: 'January 2024',
-      credentialId: 'HUBSPOT-SEO-581932',
-      credentialUrl: 'https://academy.hubspot.com/certificates/seo',
-      image: resolveCertificateImage(4),
-      skills: ['Technical SEO', 'Content Strategy', 'Link Building', 'On-Page Optimization', 'Search Analytics'],
-      description: 'Accreditation verifying mastery in search engine optimization, content architecture, keyword clustering, Core Web Vitals optimization, and organic growth strategies.',
-      verified: true
-    },
-    {
-      id: 'cert-6',
-      title: 'Semrush SEO Crash Course with Brian Dean',
-      issuer: 'Semrush',
-      issuerLogo: 'Semrush',
-      theme: 'SEO Analytics Style',
-      category: 'SEO',
-      accent: '#FF642D',
-      issueDate: 'August 2024',
-      credentialId: 'SEMRUSH-BD-771204',
-      credentialUrl: 'https://www.semrush.com/academy/certificates/seo-crash-course',
-      image: resolveCertificateImage(5),
-      skills: ['High-Impact SEO', 'Competitive Intelligence', 'Backlink Outreach', 'Search Intent', 'SERP Domination'],
-      description: 'Advanced course curriculum on high-yield search engine strategies, competitive intelligence mining, intent-driven keyword ranking, and scalable backlink acquisition frameworks.',
-      verified: true
-    }
-  ]
+  certificates: detectedCertificates.length > 0 ? detectedCertificates : defaultVerifiedCertificates
 };

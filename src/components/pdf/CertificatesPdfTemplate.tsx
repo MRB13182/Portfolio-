@@ -1,12 +1,6 @@
 import React from 'react';
 import { portfolioConfig, assets } from '../../config/portfolio';
-import { IssuerLogo } from '../common/IssuerLogo';
-import { 
-  ShieldCheck, 
-  CheckCircle2, 
-  Calendar,
-  Award
-} from 'lucide-react';
+import { ShieldCheck, CheckCircle2, Award } from 'lucide-react';
 
 interface CertificatesPdfTemplateProps {
   theme: 'light' | 'dark';
@@ -20,8 +14,6 @@ export const CertificatesPdfTemplate: React.FC<CertificatesPdfTemplateProps> = (
   const isDark = theme === 'dark';
   const { personal, certificates } = portfolioConfig;
 
-  // Exact sRGB hex colors ensuring 100% standard PDF rasterization
-  // Paper is ALWAYS white (#FFFFFF) for professional crisp printing
   const paperBg = '#FFFFFF';
   const headerBg = isDark ? '#050505' : '#F0FDF4';
   const headerText = isDark ? '#FFFFFF' : '#0F172A';
@@ -29,15 +21,11 @@ export const CertificatesPdfTemplate: React.FC<CertificatesPdfTemplateProps> = (
   const headerTitleColor = isDark ? '#D4AF37' : '#00A57A';
   const headerDivider = isDark ? '#D4AF37' : '#00C896';
   
-  // Body Content Area (White background with crisp high-contrast dark typography)
   const bodyText = '#0F172A';
-  const bodyMuted = '#334155';
   const bodySubtle = '#64748B';
   const cardBg = '#F8FAFC';
-  const cardBorder = isDark ? 'rgba(212, 175, 55, 0.4)' : 'rgba(0, 200, 150, 0.3)';
+  const cardBorder = isDark ? 'rgba(212, 175, 55, 0.35)' : 'rgba(0, 200, 150, 0.25)';
   const borderLight = '#E2E8F0';
-  const accentColor = isDark ? '#7C3AED' : '#00A57A';
-  const goldColor = '#D4AF37';
 
   return (
     <div
@@ -58,7 +46,6 @@ export const CertificatesPdfTemplate: React.FC<CertificatesPdfTemplateProps> = (
         }}
         className="relative px-8 pt-7 pb-5 shrink-0 overflow-hidden"
       >
-        {/* Purple Glow in Dark Mode Header */}
         {isDark && (
           <div 
             style={{ 
@@ -85,10 +72,10 @@ export const CertificatesPdfTemplate: React.FC<CertificatesPdfTemplateProps> = (
                   className="w-3.5 h-3.5 object-contain inline-block"
                   onError={(e) => { e.currentTarget.style.display = 'none'; }}
                 />
-                <span>Official Credentials Portfolio</span>
+                <span>Official Verified Credentials</span>
               </div>
               <span style={{ color: headerSubText }} className="text-[9.5px] font-mono">
-                {certificates.length} Verified Accreditations
+                {certificates.length} Verified Certificates
               </span>
             </div>
 
@@ -96,7 +83,7 @@ export const CertificatesPdfTemplate: React.FC<CertificatesPdfTemplateProps> = (
               style={{ color: headerText }} 
               className="text-2xl font-black tracking-tight uppercase mb-0.5"
             >
-              Certified Engineering Credentials
+              Certified Professional Portfolio
             </h1>
 
             <div 
@@ -107,7 +94,6 @@ export const CertificatesPdfTemplate: React.FC<CertificatesPdfTemplateProps> = (
             </div>
           </div>
 
-          {/* Authenticity Seal */}
           <div 
             style={{ 
               backgroundColor: isDark ? '#121212' : '#FFFFFF',
@@ -123,103 +109,39 @@ export const CertificatesPdfTemplate: React.FC<CertificatesPdfTemplateProps> = (
                 style={{ color: isDark ? '#D4AF37' : '#00A57A' }}
                 className="text-[10px] font-black tracking-wider"
               >
-                100% VERIFIED
+                VERIFIED ASSETS
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      {/* ===================== CERTIFICATES STACK (ALL FIT IN A4 PAGE) ===================== */}
-      <div className="p-7 flex-grow flex flex-col justify-between space-y-2.5 bg-white">
-        {certificates.map((cert) => (
+      {/* ===================== 6 CERTIFICATE IMAGES GRID ===================== */}
+      <div className="p-7 flex-grow grid grid-cols-2 gap-4 bg-white items-stretch">
+        {certificates.slice(0, 6).map((cert, index) => (
           <div
-            key={cert.id}
+            key={cert.id || index}
             style={{ 
               backgroundColor: cardBg, 
               borderColor: cardBorder 
             }}
-            className="p-3.5 rounded-2xl border relative flex flex-col justify-between overflow-hidden shadow-sm"
+            className="p-3 rounded-2xl border flex flex-col justify-between overflow-hidden shadow-sm"
           >
-            <div className="flex items-start gap-4">
-              
-              {/* Organization Logo Asset */}
-              <div 
-                style={{ 
-                  backgroundColor: '#FFFFFF', 
-                  borderColor: borderLight 
-                }}
-                className="w-12 h-12 rounded-xl shrink-0 p-1.5 flex items-center justify-center border shadow-sm"
-              >
-                <IssuerLogo issuer={cert.issuer} className="w-full h-full object-contain" />
-              </div>
+            {/* Real Certificate Image */}
+            <div className="relative w-full h-[180px] rounded-xl overflow-hidden bg-slate-100 border border-slate-200 mb-2 flex items-center justify-center">
+              <img 
+                src={cert.image} 
+                alt={cert.title}
+                className="w-full h-full object-cover"
+                crossOrigin="anonymous"
+              />
+            </div>
 
-              {/* Certificate Details */}
-              <div className="flex-1">
-                <div className="flex items-center justify-between mb-0.5">
-                  <span 
-                    style={{ color: isDark ? '#7C3AED' : '#00A57A' }}
-                    className="text-[9px] font-bold uppercase tracking-wider"
-                  >
-                    {cert.issuer}
-                  </span>
-                  <div 
-                    style={{ color: bodySubtle }}
-                    className="flex items-center gap-1 text-[8.5px] font-mono"
-                  >
-                    <Calendar className="w-3 h-3 text-slate-400" />
-                    <span>{cert.issueDate}</span>
-                  </div>
-                </div>
-
-                <h2 className="text-sm font-extrabold tracking-tight mb-1" style={{ color: bodyText }}>
-                  {cert.title}
-                </h2>
-
-                <p 
-                  style={{ color: bodyMuted }}
-                  className="text-[9.5px] line-clamp-2 leading-relaxed mb-2"
-                >
-                  {cert.description}
-                </p>
-
-                {/* Skills Validated */}
-                <div className="flex flex-wrap items-center gap-1 mb-2">
-                  <span style={{ color: bodySubtle }} className="text-[8px] font-bold uppercase mr-1">Validated:</span>
-                  {cert.skills.map((skill, sIdx) => (
-                    <span
-                      key={sIdx}
-                      style={{ 
-                        backgroundColor: '#FFFFFF', 
-                        borderColor: borderLight, 
-                        color: bodyText 
-                      }}
-                      className="text-[8px] font-semibold px-2 py-0.5 rounded-md border"
-                    >
-                      {skill}
-                    </span>
-                  ))}
-                </div>
-
-                {/* Credential ID and Status */}
-                <div 
-                  style={{ borderColor: borderLight, color: bodySubtle }}
-                  className="pt-2 border-t flex items-center justify-between text-[8.5px]"
-                >
-                  <div className="font-mono">
-                    Credential ID: <span style={{ color: bodyText }} className="font-bold">{cert.credentialId}</span>
-                  </div>
-                  <div 
-                    style={{ color: isDark ? '#D4AF37' : '#00A57A' }}
-                    className="flex items-center gap-1 font-bold"
-                  >
-                    <CheckCircle2 className="w-3 h-3" />
-                    <span>Directly Verified</span>
-                  </div>
-                </div>
-
-              </div>
-
+            {/* Title */}
+            <div className="text-center pt-1 border-t border-slate-200">
+              <h3 className="text-xs font-bold truncate" style={{ color: bodyText }}>
+                {cert.title}
+              </h3>
             </div>
           </div>
         ))}
@@ -237,7 +159,6 @@ export const CertificatesPdfTemplate: React.FC<CertificatesPdfTemplateProps> = (
           Official Verified Credentials Ledger • {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}
         </div>
       </div>
-
     </div>
   );
 };
