@@ -1,21 +1,14 @@
 import React, { useEffect, useState, useRef, useCallback } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { Certificate } from '../../types';
-import { useTheme } from '../../context/ThemeContext';
 import { 
   X, 
   ZoomIn, 
   ZoomOut, 
-  RotateCcw, 
-  Maximize2, 
-  Minimize2,
+  ChevronLeft, 
+  ChevronRight, 
+  ShieldCheck, 
   ExternalLink,
-  ChevronLeft,
-  ChevronRight,
-  ShieldCheck,
-  Award,
-  Calendar,
-  Sparkles,
   Download
 } from 'lucide-react';
 import { IssuerLogo } from '../common/IssuerLogo';
@@ -33,12 +26,9 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
   onClose,
   onSelectCertificate,
 }) => {
-  const { isDark } = useTheme();
   const [zoomLevel, setZoomLevel] = useState<number>(1);
   const [position, setPosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const [isDragging, setIsDragging] = useState<boolean>(false);
-  const [isFullscreen, setIsFullscreen] = useState<boolean>(false);
-  const [showDetails, setShowDetails] = useState<boolean>(false);
   const dragStartRef = useRef<{ x: number; y: number }>({ x: 0, y: 0 });
   const touchStartRef = useRef<{ x: number; y: number; time: number }>({ x: 0, y: 0, time: 0 });
   const modalContainerRef = useRef<HTMLDivElement>(null);
@@ -111,17 +101,6 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
     e.stopPropagation();
     setZoomLevel(1);
     setPosition({ x: 0, y: 0 });
-  };
-
-  const toggleFullscreen = (e: React.MouseEvent) => {
-    e.stopPropagation();
-    if (!document.fullscreenElement) {
-      modalContainerRef.current?.requestFullscreen().catch(() => {});
-      setIsFullscreen(true);
-    } else {
-      document.exitFullscreen().catch(() => {});
-      setIsFullscreen(false);
-    }
   };
 
   // Mouse Drag Panning
@@ -203,14 +182,10 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
           onClick={(e) => e.stopPropagation()}
           onTouchStart={handleTouchStart}
           onTouchEnd={handleTouchEnd}
-          className={`relative w-full max-w-5xl max-h-[94vh] rounded-3xl backdrop-blur-3xl border shadow-2xl z-10 overflow-hidden flex flex-col ${
-            isDark
-              ? 'bg-[rgba(12,12,16,0.92)] border-[rgba(212,175,55,0.35)] text-[#F8FAFC] shadow-[0_0_90px_rgba(0,0,0,0.95)]'
-              : 'bg-[rgba(255,255,255,0.94)] border-[#00C896]/35 text-slate-900 shadow-[0_25px_75px_rgba(0,200,150,0.22)]'
-          }`}
+          className="relative w-full max-w-5xl max-h-[94vh] rounded-3xl backdrop-blur-3xl border shadow-2xl z-10 overflow-hidden flex flex-col bg-[rgba(12,12,16,0.92)] border-[rgba(212,175,55,0.35)] text-[#F8FAFC] shadow-[0_0_90px_rgba(0,0,0,0.95)]"
         >
           {/* Top Control Bar */}
-          <div className="flex items-center justify-between px-3.5 sm:px-6 py-3 border-b border-slate-200/50 dark:border-[rgba(212,175,55,0.25)] shrink-0 gap-2">
+          <div className="flex items-center justify-between px-3.5 sm:px-6 py-3 border-b border-[rgba(212,175,55,0.25)] shrink-0 gap-2">
             
             {/* Title & Issuer Info */}
             <div className="flex items-center gap-3 min-w-0 pr-2">
@@ -219,17 +194,15 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
               </div>
               <div className="min-w-0">
                 <div className="flex items-center gap-2">
-                  <h3 className="text-xs sm:text-base font-extrabold truncate text-slate-900 dark:text-[#F8FAFC]">
+                  <h3 className="text-xs sm:text-base font-extrabold truncate text-[#F8FAFC]">
                     {certificate.title}
                   </h3>
-                  <span className={`hidden md:inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase font-mono ${
-                    isDark ? 'bg-emerald-500/15 text-emerald-400 border border-emerald-500/30' : 'bg-emerald-50 text-emerald-600 border border-emerald-200'
-                  }`}>
+                  <span className="hidden md:inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase font-mono bg-emerald-500/15 text-emerald-400 border border-emerald-500/30">
                     <ShieldCheck className="w-3 h-3" />
                     <span>Verified</span>
                   </span>
                 </div>
-                <div className="flex items-center gap-2 text-[11px] text-slate-500 dark:text-[#CBD5E1] truncate font-medium">
+                <div className="flex items-center gap-2 text-[11px] text-[#CBD5E1] truncate font-medium">
                   <span>{certificate.issuer || 'Accredited Authority'}</span>
                   {certificate.category && (
                     <>
@@ -240,7 +213,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
                   {allCertificates.length > 0 && currentIndex !== -1 && (
                     <>
                       <span>•</span>
-                      <span className="font-mono text-[#00A57A] dark:text-[#D4AF37] font-bold">
+                      <span className="font-mono text-[#D4AF37] font-bold">
                         {currentIndex + 1} of {allCertificates.length}
                       </span>
                     </>
@@ -259,11 +232,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
                   disabled={!hasPrev}
                   title="Previous Certificate (Left Arrow / Swipe Right)"
                   id="cert-modal-prev-btn"
-                  className={`p-1.5 sm:p-2 rounded-xl border transition-all cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed ${
-                    isDark
-                      ? 'bg-[rgba(20,20,28,0.7)] text-[#F8FAFC] border-[rgba(212,175,55,0.25)] hover:border-[#D4AF37]'
-                      : 'bg-white text-slate-700 border-slate-200 hover:border-[#00C896]'
-                  }`}
+                  className="p-1.5 sm:p-2 rounded-xl border transition-all cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed bg-[rgba(20,20,28,0.7)] text-[#F8FAFC] border-[rgba(212,175,55,0.25)] hover:border-[#D4AF37]"
                 >
                   <ChevronLeft className="w-4 h-4" />
                 </button>
@@ -277,11 +246,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
                   disabled={!hasNext}
                   title="Next Certificate (Right Arrow / Swipe Left)"
                   id="cert-modal-next-btn"
-                  className={`p-1.5 sm:p-2 rounded-xl border transition-all cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed ${
-                    isDark
-                      ? 'bg-[rgba(20,20,28,0.7)] text-[#F8FAFC] border-[rgba(212,175,55,0.25)] hover:border-[#D4AF37]'
-                      : 'bg-white text-slate-700 border-slate-200 hover:border-[#00C896]'
-                  }`}
+                  className="p-1.5 sm:p-2 rounded-xl border transition-all cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed bg-[rgba(20,20,28,0.7)] text-[#F8FAFC] border-[rgba(212,175,55,0.25)] hover:border-[#D4AF37]"
                 >
                   <ChevronRight className="w-4 h-4" />
                 </button>
@@ -294,11 +259,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
                 disabled={zoomLevel <= 0.7}
                 title="Zoom Out (-)"
                 id="cert-modal-zoom-out"
-                className={`p-1.5 sm:p-2 rounded-xl border transition-all cursor-pointer disabled:opacity-30 ${
-                  isDark
-                    ? 'bg-[rgba(20,20,28,0.7)] text-[#F8FAFC] border-[rgba(212,175,55,0.25)] hover:border-[#D4AF37]'
-                    : 'bg-white text-slate-700 border-slate-200 hover:border-[#00C896]'
-                }`}
+                className="p-1.5 sm:p-2 rounded-xl border transition-all cursor-pointer disabled:opacity-30 bg-[rgba(20,20,28,0.7)] text-[#F8FAFC] border-[rgba(212,175,55,0.25)] hover:border-[#D4AF37]"
               >
                 <ZoomOut className="w-4 h-4" />
               </button>
@@ -309,11 +270,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
                 onClick={handleResetZoom}
                 title="Reset Zoom (0)"
                 id="cert-modal-zoom-reset"
-                className={`hidden xs:inline-block px-2 sm:px-2.5 py-1 sm:py-1.5 rounded-xl border text-[11px] sm:text-xs font-mono font-bold transition-all cursor-pointer ${
-                  isDark
-                    ? 'bg-[rgba(20,20,28,0.7)] text-[#D4AF37] border-[rgba(212,175,55,0.25)] hover:border-[#D4AF37]'
-                    : 'bg-white text-[#00A57A] border-slate-200 hover:border-[#00C896]'
-                }`}
+                className="hidden xs:inline-block px-2 sm:px-2.5 py-1 sm:py-1.5 rounded-xl border text-[11px] sm:text-xs font-mono font-bold transition-all cursor-pointer bg-[rgba(20,20,28,0.7)] text-[#D4AF37] border-[rgba(212,175,55,0.25)] hover:border-[#D4AF37]"
               >
                 {Math.round(zoomLevel * 100)}%
               </button>
@@ -325,11 +282,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
                 disabled={zoomLevel >= 3}
                 title="Zoom In (+)"
                 id="cert-modal-zoom-in"
-                className={`p-1.5 sm:p-2 rounded-xl border transition-all cursor-pointer disabled:opacity-30 ${
-                  isDark
-                    ? 'bg-[rgba(20,20,28,0.7)] text-[#F8FAFC] border-[rgba(212,175,55,0.25)] hover:border-[#D4AF37]'
-                    : 'bg-white text-slate-700 border-slate-200 hover:border-[#00C896]'
-                }`}
+                className="p-1.5 sm:p-2 rounded-xl border transition-all cursor-pointer disabled:opacity-30 bg-[rgba(20,20,28,0.7)] text-[#F8FAFC] border-[rgba(212,175,55,0.25)] hover:border-[#D4AF37]"
               >
                 <ZoomIn className="w-4 h-4" />
               </button>
@@ -341,11 +294,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
                 rel="noreferrer"
                 title="Open full image in high resolution"
                 id="cert-modal-open-tab"
-                className={`p-1.5 sm:p-2 rounded-xl border transition-all cursor-pointer hidden sm:flex items-center justify-center ${
-                  isDark
-                    ? 'bg-[rgba(20,20,28,0.7)] text-[#F8FAFC] border-[rgba(212,175,55,0.25)] hover:border-[#D4AF37]'
-                    : 'bg-white text-slate-700 border-slate-200 hover:border-[#00C896]'
-                }`}
+                className="p-1.5 sm:p-2 rounded-xl border transition-all cursor-pointer hidden sm:flex items-center justify-center bg-[rgba(20,20,28,0.7)] text-[#F8FAFC] border-[rgba(212,175,55,0.25)] hover:border-[#D4AF37]"
               >
                 <ExternalLink className="w-4 h-4" />
               </a>
@@ -356,11 +305,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
                 onClick={onClose}
                 title="Close (Esc)"
                 id="cert-modal-close-btn"
-                className={`p-1.5 sm:p-2 rounded-xl border transition-all cursor-pointer ml-1 ${
-                  isDark
-                    ? 'bg-[rgba(212,175,55,0.18)] text-[#D4AF37] hover:bg-[#D4AF37] hover:text-black border-[rgba(212,175,55,0.4)]'
-                    : 'bg-emerald-50 text-[#00A57A] hover:bg-[#00C896] hover:text-white border-emerald-200'
-                }`}
+                className="p-1.5 sm:p-2 rounded-xl border transition-all cursor-pointer ml-1 bg-[rgba(212,175,55,0.18)] text-[#D4AF37] hover:bg-[#D4AF37] hover:text-black border-[rgba(212,175,55,0.4)]"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -369,7 +314,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
 
           {/* Main Image Viewer Area */}
           <div 
-            className="relative flex-1 overflow-auto p-3 sm:p-6 md:p-8 flex items-center justify-center min-h-[320px] max-h-[calc(94vh-130px)] select-none bg-black/10 dark:bg-black/30"
+            className="relative flex-1 overflow-auto p-3 sm:p-6 md:p-8 flex items-center justify-center min-h-[320px] max-h-[calc(94vh-130px)] select-none bg-black/30"
             onMouseDown={handleMouseDown}
             onMouseMove={handleMouseMove}
             onMouseUp={handleMouseUp}
@@ -408,7 +353,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
               <img
                 src={certificate.image}
                 alt={certificate.title}
-                className="max-h-[68vh] sm:max-h-[72vh] w-auto max-w-full object-contain rounded-2xl shadow-2xl border border-slate-200/50 dark:border-white/10 pointer-events-none"
+                className="max-h-[68vh] sm:max-h-[72vh] w-auto max-w-full object-contain rounded-2xl shadow-2xl border border-white/10 pointer-events-none"
                 loading="eager"
                 decoding="sync"
                 onError={(e) => {
@@ -422,26 +367,26 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
           </div>
 
           {/* Bottom Info Bar with Credential ID & Skills */}
-          <div className="px-4 sm:px-6 py-2.5 bg-slate-50/80 dark:bg-[#0E0E14]/90 border-t border-slate-200/50 dark:border-[rgba(212,175,55,0.2)] flex flex-wrap items-center justify-between gap-2 text-xs font-medium shrink-0">
+          <div className="px-4 sm:px-6 py-2.5 bg-[#0E0E14]/90 border-t border-[rgba(212,175,55,0.2)] flex flex-wrap items-center justify-between gap-2 text-xs font-medium shrink-0">
             <div className="flex items-center gap-3">
-              <span className="flex items-center gap-1 text-emerald-600 dark:text-emerald-400 font-bold">
+              <span className="flex items-center gap-1 text-emerald-400 font-bold">
                 <ShieldCheck className="w-4 h-4" />
                 <span>Digitally Verified Credential</span>
               </span>
               {certificate.issueDate && (
-                <span className="text-slate-500 dark:text-[#CBD5E1] hidden sm:inline">
+                <span className="text-[#CBD5E1] hidden sm:inline">
                   Issued: {certificate.issueDate}
                 </span>
               )}
               {certificate.credentialId && (
-                <span className="font-mono text-slate-500 dark:text-[#CBD5E1] hidden md:inline">
+                <span className="font-mono text-[#CBD5E1] hidden md:inline">
                   ID: {certificate.credentialId}
                 </span>
               )}
             </div>
 
             <div className="flex items-center gap-2">
-              <span className="text-[11px] text-slate-400 dark:text-slate-500 font-mono hidden xs:inline">
+              <span className="text-[11px] text-slate-500 font-mono hidden xs:inline">
                 Swipe on mobile • Arrows on desktop
               </span>
               <a
@@ -449,11 +394,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
                 download={`${certificate.title.replace(/\s+/g, '_')}.png`}
                 target="_blank"
                 rel="noreferrer"
-                className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-xl text-[11px] font-bold border transition-all ${
-                  isDark 
-                    ? 'bg-[rgba(212,175,55,0.12)] text-[#D4AF37] border-[#D4AF37]/30 hover:bg-[#D4AF37] hover:text-black' 
-                    : 'bg-white text-[#00A57A] border-slate-200 hover:border-[#00C896]'
-                }`}
+                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-xl text-[11px] font-bold border transition-all bg-[rgba(212,175,55,0.12)] text-[#D4AF37] border-[#D4AF37]/30 hover:bg-[#D4AF37] hover:text-black"
               >
                 <Download className="w-3 h-3" />
                 <span>Save Image</span>

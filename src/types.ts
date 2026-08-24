@@ -1,4 +1,3 @@
-export type ThemeMode = 'light' | 'dark';
 export type PdfThemeMode = 'light' | 'dark';
 export type PdfDownloadType = 'resume' | 'certificates';
 

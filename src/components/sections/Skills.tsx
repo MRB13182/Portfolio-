@@ -1,5 +1,4 @@
 import React, { useState, useMemo } from 'react';
-import { useTheme } from '../../context/ThemeContext';
 import { skills as allSkills } from '../../config/skills';
 import { Skill } from '../../types';
 import { SkillModal } from '../modals/SkillModal';
@@ -13,7 +12,6 @@ import {
 import { motion } from 'motion/react';
 
 export const Skills: React.FC = () => {
-  const { isDark } = useTheme();
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('All');
   const [activeSkillModal, setActiveSkillModal] = useState<Skill | null>(null);
@@ -59,26 +57,18 @@ export const Skills: React.FC = () => {
         
         {/* Section Title */}
         <div className="flex flex-col items-center text-center mb-14">
-          <div className={`inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-3 ${
-            isDark 
-              ? 'bg-[#7C3AED]/20 text-[#D4AF37] border border-[#D4AF37]/30 shadow-[0_0_20px_rgba(212,175,55,0.15)]' 
-              : 'bg-emerald-500/10 text-[#00A57A] border border-[#00C896]/20 shadow-[0_4px_15px_rgba(0,200,150,0.1)]'
-          }`}>
+          <div className="inline-flex items-center gap-2 px-3.5 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-3 bg-[#7C3AED]/20 text-[#D4AF37] border border-[#D4AF37]/30 shadow-[0_0_20px_rgba(212,175,55,0.15)]">
             <Sparkles className="w-3.5 h-3.5" />
             <span>Technical Competency Matrix</span>
           </div>
 
           <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight mb-4">
             Mastered Stacks &amp;{' '}
-            <span className={`text-transparent bg-clip-text ${
-              isDark 
-                ? 'bg-gradient-to-r from-white via-[#D4AF37] to-[#FFD700]' 
-                : 'bg-gradient-to-r from-slate-900 via-[#00A57A] to-[#00C896]'
-            }`}>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-[#D4AF37] to-[#FFD700]">
               Engineering Capabilities
             </span>
           </h2>
-          <p className="text-slate-600 dark:text-[#F8FAFC] max-w-2xl text-base sm:text-lg">
+          <p className="text-[#F8FAFC] max-w-2xl text-base sm:text-lg">
             Interactive skill catalog featuring 44+ production-tested technologies. Click any skill to explore architectural highlights and production projects.
           </p>
         </div>
@@ -97,12 +87,8 @@ export const Skills: React.FC = () => {
                   id={`skill-filter-${cat.id.toLowerCase().replace(/[^a-z0-9]/g, '-')}`}
                   className={`px-4 py-2 rounded-xl text-xs font-bold whitespace-nowrap transition-all duration-300 cursor-pointer ${
                     isActive
-                      ? isDark
-                        ? 'bg-gradient-to-r from-[#7C3AED] to-[#D4AF37] text-white shadow-[0_0_15px_rgba(212,175,55,0.3)]'
-                        : 'bg-[#00C896] text-white shadow-[0_4px_15px_rgba(0,200,150,0.3)]'
-                      : isDark
-                        ? 'bg-[rgba(15,15,20,0.65)] text-[#F8FAFC] hover:text-[#FFD700] border border-[rgba(212,175,55,0.25)] hover:border-[#D4AF37]/50'
-                        : 'bg-white/80 text-slate-600 hover:text-slate-900 border border-slate-200 hover:border-slate-300'
+                      ? 'bg-gradient-to-r from-[#7C3AED] to-[#D4AF37] text-white shadow-[0_0_15px_rgba(212,175,55,0.3)]'
+                      : 'bg-[rgba(15,15,20,0.65)] text-[#F8FAFC] hover:text-[#FFD700] border border-[rgba(212,175,55,0.25)] hover:border-[#D4AF37]/50'
                   }`}
                 >
                   {cat.label}
@@ -113,25 +99,21 @@ export const Skills: React.FC = () => {
 
           {/* Search Input Bar */}
           <div className="relative w-full md:w-72">
-            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 dark:text-slate-300" />
+            <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-300" />
             <input
               type="text"
               id="skill-search-input"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search skill, react, node..."
-              className={`w-full pl-10 pr-9 py-2.5 rounded-xl text-xs font-medium border focus:outline-none transition-all ${
-                isDark
-                  ? 'bg-[rgba(15,15,20,0.65)] border-[rgba(212,175,55,0.25)] text-[#F8FAFC] placeholder-white/40 focus:border-[#D4AF37] focus:shadow-[0_0_15px_rgba(212,175,55,0.25)] focus:ring-1 focus:ring-[#D4AF37]'
-                  : 'bg-white border-slate-200 text-slate-900 placeholder-slate-400 focus:border-[#00C896] focus:shadow-[0_2px_15px_rgba(0,200,150,0.15)]'
-              }`}
+              className="w-full pl-10 pr-9 py-2.5 rounded-xl text-xs font-medium border focus:outline-none transition-all bg-[rgba(15,15,20,0.65)] border-[rgba(212,175,55,0.25)] text-[#F8FAFC] placeholder-white/40 focus:border-[#D4AF37] focus:shadow-[0_0_15px_rgba(212,175,55,0.25)] focus:ring-1 focus:ring-[#D4AF37]"
             />
             {searchQuery && (
               <button
                 onClick={() => setSearchQuery('')}
                 id="skill-search-clear-btn"
                 aria-label="Clear search"
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 dark:text-[#F8FAFC] dark:hover:text-[#FFD700]"
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[#F8FAFC] hover:text-[#FFD700]"
               >
                 <X className="w-3.5 h-3.5" />
               </button>
@@ -142,13 +124,13 @@ export const Skills: React.FC = () => {
 
         {/* Skills Grid - Glass Prism Style */}
         {filteredSkills.length === 0 ? (
-          <div className="text-center py-16 p-8 rounded-3xl border border-dashed border-slate-300 dark:border-[rgba(212,175,55,0.25)]">
-            <Cpu className="w-12 h-12 mx-auto text-slate-400 dark:text-[#D4AF37] mb-3" />
+          <div className="text-center py-16 p-8 rounded-3xl border border-dashed border-[rgba(212,175,55,0.25)]">
+            <Cpu className="w-12 h-12 mx-auto text-[#D4AF37] mb-3" />
             <h4 className="font-bold text-lg mb-1">No technologies match "{searchQuery}"</h4>
-            <p className="text-xs text-slate-500 dark:text-[#F8FAFC] mb-4">Try clearing your search query or selecting a different category.</p>
+            <p className="text-xs text-[#F8FAFC] mb-4">Try clearing your search query or selecting a different category.</p>
             <button
               onClick={() => { setSearchQuery(''); setSelectedCategory('All'); }}
-              className="px-4 py-2 rounded-xl text-xs font-bold bg-[#00C896] dark:bg-[#D4AF37] text-white dark:text-black cursor-pointer"
+              className="px-4 py-2 rounded-xl text-xs font-bold bg-[#D4AF37] text-black cursor-pointer"
             >
               Reset Filters
             </button>
@@ -171,16 +153,12 @@ export const Skills: React.FC = () => {
                   WebkitBackdropFilter: 'blur(20px)',
                   borderRadius: '28px',
                 }}
-                className={`group relative p-4 sm:p-5 border transition-all duration-300 cursor-pointer overflow-hidden flex flex-col items-center justify-center text-center ${
-                  isDark
-                    ? 'bg-[rgba(12,12,16,0.6)] border-[rgba(212,175,55,0.25)] hover:border-[#D4AF37]/70 hover:shadow-[0_0_25px_rgba(124,58,237,0.3)] text-[#F8FAFC]'
-                    : 'bg-[rgba(255,255,255,0.35)] border-[rgba(0,200,150,0.25)] hover:border-[#00C896]/70 hover:shadow-[0_10px_25px_rgba(0,200,150,0.18)] text-slate-900'
-                }`}
+                className="group relative p-4 sm:p-5 border transition-all duration-300 cursor-pointer overflow-hidden flex flex-col items-center justify-center text-center bg-[rgba(12,12,16,0.6)] border-[rgba(212,175,55,0.25)] hover:border-[#D4AF37]/70 hover:shadow-[0_0_25px_rgba(124,58,237,0.3)] text-[#F8FAFC]"
               >
                 {/* Ambient Glow */}
                 <div 
                   style={{
-                    backgroundColor: skill.accentColor || (isDark ? '#7C3AED' : '#00C896'),
+                    backgroundColor: skill.accentColor || '#7C3AED',
                   }}
                   className="absolute -right-8 -bottom-8 w-20 h-20 rounded-full blur-xl opacity-0 group-hover:opacity-30 transition-opacity pointer-events-none" 
                 />
@@ -190,17 +168,13 @@ export const Skills: React.FC = () => {
                   style={{
                     borderRadius: '20px',
                   }}
-                  className={`w-13 h-13 sm:w-14 sm:h-14 rounded-[20px] flex items-center justify-center mb-3 transition-transform duration-300 group-hover:scale-110 shadow-sm ${
-                    isDark 
-                      ? 'bg-[#15151E] border border-[rgba(212,175,55,0.2)] group-hover:border-[#D4AF37]/50 group-hover:shadow-[0_0_15px_rgba(124,58,237,0.35)]' 
-                      : 'bg-white border border-slate-200/80 group-hover:border-[#00C896]/50 group-hover:shadow-[0_4px_15px_rgba(0,200,150,0.2)]'
-                  }`}
+                  className="w-13 h-13 sm:w-14 sm:h-14 rounded-[20px] flex items-center justify-center mb-3 transition-transform duration-300 group-hover:scale-110 shadow-sm bg-[#15151E] border border-[rgba(212,175,55,0.2)] group-hover:border-[#D4AF37]/50 group-hover:shadow-[0_0_15px_rgba(124,58,237,0.35)]"
                 >
                   <TechLogo logo={skill.logo || skill.id} size={32} className="w-7 h-7 sm:w-8 sm:h-8" />
                 </div>
 
                 {/* Skill Name */}
-                <h3 className="font-extrabold text-xs sm:text-sm leading-tight mb-2 truncate max-w-full group-hover:text-[#00A57A] dark:group-hover:text-[#FFD700] transition-colors">
+                <h3 className="font-extrabold text-xs sm:text-sm leading-tight mb-2 truncate max-w-full group-hover:text-[#FFD700] transition-colors">
                   {skill.name}
                 </h3>
 
@@ -209,11 +183,7 @@ export const Skills: React.FC = () => {
                   style={{
                     borderRadius: '9999px',
                   }}
-                  className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] sm:text-xs font-black font-mono tracking-tight transition-all ${
-                    isDark
-                      ? 'bg-[#D4AF37]/15 text-[#D4AF37] border border-[#D4AF37]/30 group-hover:bg-[#D4AF37] group-hover:text-black'
-                      : 'bg-emerald-500/10 text-[#00A57A] border border-emerald-500/20 group-hover:bg-[#00C896] group-hover:text-white'
-                  }`}
+                  className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] sm:text-xs font-black font-mono tracking-tight transition-all bg-[#D4AF37]/15 text-[#D4AF37] border border-[#D4AF37]/30 group-hover:bg-[#D4AF37] group-hover:text-black"
                 >
                   <span>{skill.level}%</span>
                 </div>

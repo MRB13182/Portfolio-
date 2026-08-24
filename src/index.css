@@ -2,24 +2,6 @@
 
 @layer base {
   :root {
-    --theme-mode: 'light';
-    --primary: #00C896;
-    --primary-dark: #00A57A;
-    --accent: #7FFFD4;
-    --background: #F7FAF9;
-    --surface: rgba(255, 255, 255, 0.85);
-    --surface-solid: #FFFFFF;
-    --card: rgba(255, 255, 255, 0.75);
-    --card-border: rgba(0, 200, 150, 0.16);
-    --text: #0F172A;
-    --text-heading: #09121F;
-    --muted: #64748B;
-    --border: rgba(0, 200, 150, 0.15);
-    --glow: rgba(0, 200, 150, 0.25);
-    --highlight: rgba(127, 255, 212, 0.35);
-  }
-
-  .theme-dark, [data-theme="dark"], .dark {
     --theme-mode: 'dark';
     --bg-primary: #050505;
     --bg-secondary: #0B0B0F;
@@ -45,9 +27,9 @@
 
   html {
     font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-    color: var(--text);
-    background-color: var(--background);
-    transition: background-color 0.4s ease, color 0.4s ease;
+    color: #F8FAFC;
+    background-color: #050505;
+    color-scheme: dark;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -59,15 +41,7 @@
   }
 }
 
-/* Glassmorphism utility classes */
-.glass-panel-light {
-  background: rgba(255, 255, 255, 0.78);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(0, 200, 150, 0.18);
-  box-shadow: 0 10px 30px -10px rgba(0, 200, 150, 0.08), 0 4px 12px rgba(15, 23, 42, 0.03);
-}
-
+/* Glassmorphism utility class */
 .glass-panel-dark {
   background: rgba(18, 18, 24, 0.85);
   backdrop-filter: blur(20px);
@@ -87,23 +61,15 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(100, 116, 139, 0.25);
+  background: rgba(212, 175, 55, 0.25);
   border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 200, 150, 0.5);
-}
-
-.dark ::-webkit-scrollbar-thumb:hover {
   background: rgba(212, 175, 55, 0.5);
 }
 
 /* Ambient Animated Radial Gradients */
-.emerald-ambient-glow {
-  background: radial-gradient(circle at 50% 50%, rgba(0, 200, 150, 0.12) 0%, rgba(127, 255, 212, 0.04) 45%, transparent 70%);
-}
-
 .mamba-ambient-glow {
   background: radial-gradient(circle at 50% 50%, rgba(109, 40, 217, 0.2) 0%, rgba(212, 175, 55, 0.08) 40%, transparent 70%);
 }

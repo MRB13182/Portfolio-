@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
-import { ThemeProvider, useTheme } from './context/ThemeContext';
 import { LuxuryBackground } from './components/common/LuxuryBackground';
 import { ScrollToTop } from './components/common/ScrollToTop';
 import { PageTransition } from './components/common/PageTransition';
@@ -71,8 +70,7 @@ function AnimatedRoutes({
   );
 }
 
-function PortfolioApp() {
-  const { isDark } = useTheme();
+export default function App() {
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
   const [pdfDownloadModal, setPdfDownloadModal] = useState<{
     isOpen: boolean;
@@ -99,9 +97,7 @@ function PortfolioApp() {
   return (
     <BrowserRouter>
       <ScrollToTop />
-      <div className={`min-h-screen relative font-sans selection:bg-[#00C896]/25 dark:selection:bg-[#7C3AED]/40 flex flex-col justify-between ${
-        isDark ? 'theme-dark bg-[#050505] text-[#F8FAFC]' : 'bg-[#F7FAF9] text-[#0F172A]'
-      }`}>
+      <div className="min-h-screen relative font-sans selection:bg-[#7C3AED]/40 flex flex-col justify-between bg-[#050505] text-[#F8FAFC]">
         {/* Ambient Animated Luxury Glows */}
         <LuxuryBackground />
 
@@ -140,13 +136,5 @@ function PortfolioApp() {
         />
       </div>
     </BrowserRouter>
-  );
-}
-
-export default function App() {
-  return (
-    <ThemeProvider>
-      <PortfolioApp />
-    </ThemeProvider>
   );
 }
