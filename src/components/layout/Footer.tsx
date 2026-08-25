@@ -1,5 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { useTheme } from '../../context/ThemeContext';
 import { portfolioConfig, assets } from '../../config/portfolio';
 import { 
   ArrowUp, 
@@ -25,6 +26,8 @@ export const Footer: React.FC<FooterProps> = ({
   onOpenResumeDownload,
   onOpenCertificatesDownload
 }) => {
+  const { isDark } = useTheme();
+
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -41,21 +44,34 @@ export const Footer: React.FC<FooterProps> = ({
     }
   };
 
+  const currentLogo = isDark ? assets.logo.dark : assets.logo.light;
+
   return (
     <footer
       id="main-footer"
-      className="relative pt-16 pb-28 md:pb-16 border-t backdrop-blur-2xl transition-colors bg-[rgba(5,5,8,0.45)] border-[rgba(212,175,55,0.2)] text-[#F8FAFC]"
+      className={`relative pt-16 pb-28 md:pb-16 border-t backdrop-blur-2xl transition-colors duration-300 ${
+        isDark
+          ? 'bg-[rgba(5,5,8,0.75)] border-[rgba(212,175,55,0.2)] text-[#F8FAFC]'
+          : 'bg-white/70 border-slate-200/80 text-slate-800'
+      }`}
     >
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 pb-12 border-b border-[rgba(212,175,55,0.2)] items-start">
+        <div className={`grid grid-cols-1 md:grid-cols-12 gap-10 pb-12 border-b items-start ${
+          isDark ? 'border-[rgba(212,175,55,0.2)]' : 'border-slate-200'
+        }`}>
           
           {/* Brand Col */}
           <div className="md:col-span-5 flex flex-col items-start">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-xl flex items-center justify-center p-1 relative overflow-hidden bg-[#0B0B0F] border border-[#D4AF37]/30 shadow-[0_0_15px_rgba(212,175,55,0.15)]">
+              <div className={`w-10 h-10 rounded-xl flex items-center justify-center p-1 relative overflow-hidden ${
+                isDark 
+                  ? 'bg-[#0B0B0F] border border-[#D4AF37]/30 shadow-[0_0_15px_rgba(212,175,55,0.15)]' 
+                  : 'bg-white border border-[#00C896]/30 shadow-[0_2px_12px_rgba(0,200,150,0.15)]'
+              }`}>
                 <img
-                  src={assets.logo.dark}
+                  key={currentLogo}
+                  src={currentLogo}
                   alt={`${portfolioConfig.personal.name} Logo`}
                   className="w-full h-full object-contain"
                   onError={(e) => {
@@ -66,22 +82,30 @@ export const Footer: React.FC<FooterProps> = ({
                 />
                 <span 
                   style={{ display: 'none' }}
-                  className="font-black text-sm items-center justify-center w-full h-full text-[#D4AF37]"
+                  className={`font-black text-sm items-center justify-center w-full h-full ${
+                    isDark ? 'text-[#D4AF37]' : 'text-[#00A57A]'
+                  }`}
                 >
                   MR
                 </span>
               </div>
               <div>
-                <h3 className="font-extrabold text-base sm:text-lg text-[#F8FAFC] leading-tight">
+                <h3 className={`font-extrabold text-base sm:text-lg leading-tight ${
+                  isDark ? 'text-[#F8FAFC]' : 'text-slate-900'
+                }`}>
                   {portfolioConfig.personal.name}
                 </h3>
-                <p className="text-xs text-[#D4AF37] font-semibold">
+                <p className={`text-xs font-semibold ${
+                  isDark ? 'text-[#D4AF37]' : 'text-[#00A57A]'
+                }`}>
                   {portfolioConfig.personal.titles[0]} &amp; UI/UX Designer
                 </p>
               </div>
             </div>
 
-            <p className="text-xs sm:text-sm text-[#F8FAFC] max-w-sm leading-relaxed mb-6">
+            <p className={`text-xs sm:text-sm max-w-sm leading-relaxed mb-6 ${
+              isDark ? 'text-[#A1A1AA]' : 'text-slate-600'
+            }`}>
               {portfolioConfig.personal.bio}
             </p>
 
@@ -95,7 +119,11 @@ export const Footer: React.FC<FooterProps> = ({
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={social.name}
-                    className="w-8 h-8 rounded-lg flex items-center justify-center border transition-all border-[rgba(212,175,55,0.25)] bg-[#0B0B0F] text-[#F8FAFC] hover:text-[#FFD700] hover:border-[#D4AF37]"
+                    className={`w-8 h-8 rounded-lg flex items-center justify-center border transition-all ${
+                      isDark
+                        ? 'border-[rgba(212,175,55,0.25)] bg-[#0B0B0F] text-[#F8FAFC] hover:text-[#FFD700] hover:border-[#D4AF37]'
+                        : 'border-slate-200 bg-white text-slate-700 hover:text-[#00A57A] hover:border-[#00C896]'
+                    }`}
                   >
                     <Icon className="w-4 h-4" />
                   </a>
@@ -106,37 +134,63 @@ export const Footer: React.FC<FooterProps> = ({
 
           {/* Navigation Jump Links & Download Links */}
           <div className="md:col-span-4">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-[#F8FAFC] mb-4">
+            <h4 className={`text-xs font-bold uppercase tracking-wider mb-4 ${
+              isDark ? 'text-[#F8FAFC]' : 'text-slate-900'
+            }`}>
               Pages &amp; Resources
             </h4>
             <div className="grid grid-cols-2 gap-2 text-xs font-medium">
-              <Link to="/" className="hover:text-[#D4AF37] transition-colors py-1">
+              <Link 
+                to="/" 
+                className={`transition-colors py-1 ${
+                  isDark ? 'text-[#A1A1AA] hover:text-[#D4AF37]' : 'text-slate-600 hover:text-[#00A57A]'
+                }`}
+              >
                 Home
               </Link>
-              <Link to="/skills" className="hover:text-[#D4AF37] transition-colors py-1">
+              <Link 
+                to="/skills" 
+                className={`transition-colors py-1 ${
+                  isDark ? 'text-[#A1A1AA] hover:text-[#D4AF37]' : 'text-slate-600 hover:text-[#00A57A]'
+                }`}
+              >
                 Skills &amp; Tech
               </Link>
-              <Link to="/projects" className="hover:text-[#D4AF37] transition-colors py-1">
+              <Link 
+                to="/projects" 
+                className={`transition-colors py-1 ${
+                  isDark ? 'text-[#A1A1AA] hover:text-[#D4AF37]' : 'text-slate-600 hover:text-[#00A57A]'
+                }`}
+              >
                 Projects
               </Link>
-              <Link to="/experience" className="hover:text-[#D4AF37] transition-colors py-1">
+              <Link 
+                to="/experience" 
+                className={`transition-colors py-1 ${
+                  isDark ? 'text-[#A1A1AA] hover:text-[#D4AF37]' : 'text-slate-600 hover:text-[#00A57A]'
+                }`}
+              >
                 Experience
               </Link>
 
               {onOpenResumeDownload && (
                 <button
                   onClick={onOpenResumeDownload}
-                  className="text-left font-bold text-[#D4AF37] hover:underline py-1 flex items-center gap-1 cursor-pointer col-span-2 mt-1"
+                  className={`text-left font-bold hover:underline py-1 flex items-center gap-1 cursor-pointer col-span-2 mt-1 ${
+                    isDark ? 'text-[#D4AF37]' : 'text-[#00A57A]'
+                  }`}
                 >
                   <FileText className="w-3 h-3" />
-                  <span>Resume (A4 Luxury PDF)</span>
+                  <span>Resume (A4 PDF)</span>
                 </button>
               )}
 
               {onOpenCertificatesDownload && (
                 <button
                   onClick={onOpenCertificatesDownload}
-                  className="text-left font-bold text-[#D4AF37] hover:underline py-1 flex items-center gap-1 cursor-pointer col-span-2"
+                  className={`text-left font-bold hover:underline py-1 flex items-center gap-1 cursor-pointer col-span-2 ${
+                    isDark ? 'text-[#D4AF37]' : 'text-[#00A57A]'
+                  }`}
                 >
                   <Award className="w-3 h-3" />
                   <span>Verified Credentials</span>
@@ -147,16 +201,24 @@ export const Footer: React.FC<FooterProps> = ({
 
           {/* Quick Inquiry CTA */}
           <div className="md:col-span-3 flex flex-col items-start">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-[#F8FAFC] mb-3">
+            <h4 className={`text-xs font-bold uppercase tracking-wider mb-3 ${
+              isDark ? 'text-[#F8FAFC]' : 'text-slate-900'
+            }`}>
               Have a Project in Mind?
             </h4>
-            <p className="text-xs text-[#F8FAFC] mb-4 leading-relaxed">
+            <p className={`text-xs mb-4 leading-relaxed ${
+              isDark ? 'text-[#A1A1AA]' : 'text-slate-600'
+            }`}>
               Available for full-time senior roles, strategic consulting, and contract engineering.
             </p>
             <button
               onClick={onOpenContact}
               id="footer-open-contact-btn"
-              className="px-4 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer shadow-md bg-[#D4AF37] text-black hover:bg-[#FFD700] shadow-[0_0_15px_rgba(212,175,55,0.25)]"
+              className={`px-4 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer shadow-md ${
+                isDark
+                  ? 'bg-[#D4AF37] text-black hover:bg-[#FFD700] shadow-[0_0_15px_rgba(212,175,55,0.25)]'
+                  : 'bg-[#00C896] text-white hover:bg-[#00A57A] shadow-[0_4px_15px_rgba(0,200,150,0.3)]'
+              }`}
             >
               <Mail className="w-3.5 h-3.5" />
               <span>Get In Touch</span>
@@ -167,20 +229,24 @@ export const Footer: React.FC<FooterProps> = ({
 
         {/* Bottom Bar: Copyright & Back to Top */}
         <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
-          <div className="flex items-center gap-1.5 text-[#F8FAFC]">
+          <div className={`flex items-center gap-1.5 ${isDark ? 'text-[#A1A1AA]' : 'text-slate-500'}`}>
             <span>© {new Date().getFullYear()} {portfolioConfig.personal.name}. All rights reserved.</span>
           </div>
 
           <div className="flex items-center gap-4">
-            <span className="text-[#F8FAFC] font-mono text-[11px]">
-              Black Mamba Luxury Edition
+            <span className={`font-mono text-[11px] ${isDark ? 'text-[#D4AF37]/80' : 'text-[#00A57A]'}`}>
+              {isDark ? 'Black Mamba Luxury Dark' : 'Apple Titanium Emerald Light'}
             </span>
 
             <button
               onClick={scrollToTop}
               id="footer-back-to-top-btn"
               aria-label="Back to top"
-              className="p-2 rounded-xl border transition-all cursor-pointer bg-[#0B0B0F] border-[rgba(212,175,55,0.25)] text-[#F8FAFC] hover:border-[#D4AF37] hover:text-[#FFD700]"
+              className={`p-2 rounded-xl border transition-all cursor-pointer ${
+                isDark
+                  ? 'bg-[#0B0B0F] border-[rgba(212,175,55,0.25)] text-[#F8FAFC] hover:border-[#D4AF37] hover:text-[#FFD700]'
+                  : 'bg-white border-slate-200 text-slate-700 hover:border-[#00C896] hover:text-[#00A57A]'
+              }`}
             >
               <ArrowUp className="w-4 h-4" />
             </button>

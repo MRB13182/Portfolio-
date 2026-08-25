@@ -1,5 +1,6 @@
 import React from 'react';
 import { Skill } from '../../types';
+import { useTheme } from '../../context/ThemeContext';
 import { TechLogo } from '../common/TechLogo';
 import { 
   X, 
@@ -19,6 +20,8 @@ interface SkillModalProps {
 }
 
 export const SkillModal: React.FC<SkillModalProps> = ({ skill, onClose }) => {
+  const { isDark } = useTheme();
+
   React.useEffect(() => {
     if (!skill) return;
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -50,10 +53,12 @@ export const SkillModal: React.FC<SkillModalProps> = ({ skill, onClose }) => {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           onClick={onClose}
-          className="fixed inset-0 bg-black/75 backdrop-blur-md transition-opacity"
+          className={`fixed inset-0 backdrop-blur-md transition-opacity cursor-pointer ${
+            isDark ? 'bg-black/75' : 'bg-black/40'
+          }`}
         />
 
-        {/* Modal Window - Glass Prism Style */}
+        {/* Modal Window */}
         <motion.div
           initial={{ opacity: 0, scale: 0.92, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -65,12 +70,16 @@ export const SkillModal: React.FC<SkillModalProps> = ({ skill, onClose }) => {
             WebkitBackdropFilter: 'blur(24px)',
             borderRadius: '28px',
           }}
-          className="relative w-full max-w-xl p-6 sm:p-8 border shadow-2xl z-10 overflow-hidden bg-[rgba(12,12,16,0.85)] border-[rgba(212,175,55,0.35)] text-[#F8FAFC] shadow-[0_0_60px_rgba(124,58,237,0.35)]"
+          className={`relative w-full max-w-xl p-6 sm:p-8 border shadow-2xl z-10 overflow-hidden ${
+            isDark
+              ? 'bg-[rgba(12,12,16,0.85)] border-[rgba(212,175,55,0.35)] text-[#F8FAFC] shadow-[0_0_60px_rgba(124,58,237,0.35)]'
+              : 'bg-white/95 border-[rgba(0,200,150,0.3)] text-slate-800 shadow-[0_20px_60px_rgba(0,0,0,0.15)]'
+          }`}
         >
           {/* Ambient Glow in Modal */}
           <div 
             style={{
-              backgroundColor: skill.accentColor || '#7C3AED',
+              backgroundColor: skill.accentColor || (isDark ? '#7C3AED' : '#00C896'),
             }}
             className="absolute -top-24 -right-24 w-52 h-52 rounded-full blur-3xl opacity-20 pointer-events-none" 
           />
@@ -80,7 +89,11 @@ export const SkillModal: React.FC<SkillModalProps> = ({ skill, onClose }) => {
             onClick={onClose}
             id="skill-modal-close-btn"
             aria-label="Close skill details"
-            className="absolute top-5 right-5 p-2 rounded-full border transition-all cursor-pointer border-[rgba(212,175,55,0.3)] bg-[#0B0B0F] text-[#F8FAFC] hover:text-[#FFD700] hover:border-[#D4AF37] hover:scale-105"
+            className={`absolute top-5 right-5 p-2 rounded-full border transition-all cursor-pointer hover:scale-105 ${
+              isDark
+                ? 'border-[rgba(212,175,55,0.3)] bg-[#0B0B0F] text-[#F8FAFC] hover:text-[#FFD700] hover:border-[#D4AF37]'
+                : 'border-slate-200 bg-slate-100 text-slate-600 hover:text-slate-900 hover:border-[#00C896]'
+            }`}
           >
             <X className="w-5 h-5" />
           </button>
@@ -91,26 +104,38 @@ export const SkillModal: React.FC<SkillModalProps> = ({ skill, onClose }) => {
             <div 
               style={{
                 borderRadius: '20px',
-                borderColor: skill.accentColor ? `${skill.accentColor}40` : 'rgba(212,175,55,0.3)',
+                borderColor: skill.accentColor 
+                  ? `${skill.accentColor}40` 
+                  : (isDark ? 'rgba(212,175,55,0.3)' : 'rgba(0,200,150,0.3)'),
               }}
-              className="w-16 h-16 rounded-[20px] flex items-center justify-center shrink-0 border shadow-lg bg-[#121218]"
+              className={`w-16 h-16 rounded-[20px] flex items-center justify-center shrink-0 border shadow-lg ${
+                isDark ? 'bg-[#121218]' : 'bg-slate-50'
+              }`}
             >
               <TechLogo logo={skill.logo || skill.id} size={36} className="w-9 h-9" />
             </div>
 
             <div>
               <div className="flex flex-wrap items-center gap-2 mb-1.5">
-                <span className="text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full border bg-[#7C3AED]/30 text-[#D4AF37] border-[#D4AF37]/30">
+                <span className={`text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full border ${
+                  isDark
+                    ? 'bg-[#7C3AED]/30 text-[#D4AF37] border-[#D4AF37]/30'
+                    : 'bg-emerald-50 text-[#00A57A] border-emerald-200'
+                }`}>
                   {skill.category}
                 </span>
                 
-                <span className="text-xs font-semibold text-slate-300 flex items-center gap-1">
-                  <Clock className="w-3.5 h-3.5 text-[#D4AF37]" />
+                <span className={`text-xs font-semibold flex items-center gap-1 ${
+                  isDark ? 'text-slate-300' : 'text-slate-500'
+                }`}>
+                  <Clock className={`w-3.5 h-3.5 ${isDark ? 'text-[#D4AF37]' : 'text-[#00A57A]'}`} />
                   Experience: {experienceValue}
                 </span>
               </div>
               
-              <h3 className="text-2xl sm:text-3xl font-extrabold tracking-tight">
+              <h3 className={`text-2xl sm:text-3xl font-extrabold tracking-tight ${
+                isDark ? 'text-[#F8FAFC]' : 'text-slate-900'
+              }`}>
                 {skill.name}
               </h3>
             </div>
@@ -121,19 +146,31 @@ export const SkillModal: React.FC<SkillModalProps> = ({ skill, onClose }) => {
             style={{
               borderRadius: '20px',
             }}
-            className="mb-6 p-4 rounded-[20px] bg-[#0B0B0F]/90 border border-[rgba(212,175,55,0.25)]"
+            className={`mb-6 p-4 rounded-[20px] border ${
+              isDark
+                ? 'bg-[#0B0B0F]/90 border-[rgba(212,175,55,0.25)]'
+                : 'bg-slate-50 border-slate-200'
+            }`}
           >
             <div className="flex justify-between items-center mb-2">
-              <span className="text-xs font-bold uppercase tracking-wider text-[#FFD700] flex items-center gap-1.5">
-                <BarChart3 className="w-4 h-4 text-[#D4AF37]" />
+              <span className={`text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 ${
+                isDark ? 'text-[#FFD700]' : 'text-slate-700'
+              }`}>
+                <BarChart3 className={`w-4 h-4 ${isDark ? 'text-[#D4AF37]' : 'text-[#00A57A]'}`} />
                 Technical Mastery Level
               </span>
-              <span className="text-base font-black font-mono text-[#FFD700]">
+              <span className={`text-base font-black font-mono ${
+                isDark ? 'text-[#FFD700]' : 'text-[#00A57A]'
+              }`}>
                 {skill.level}%
               </span>
             </div>
             
-            <div className="w-full h-3.5 bg-[#050505] border border-[rgba(212,175,55,0.2)] rounded-full overflow-hidden p-0.5">
+            <div className={`w-full h-3.5 rounded-full overflow-hidden p-0.5 border ${
+              isDark
+                ? 'bg-[#050505] border-[rgba(212,175,55,0.2)]'
+                : 'bg-slate-200/70 border-slate-300'
+            }`}>
               <motion.div
                 initial={{ width: 0 }}
                 animate={{ width: `${skill.level}%` }}
@@ -143,7 +180,9 @@ export const SkillModal: React.FC<SkillModalProps> = ({ skill, onClose }) => {
                 }}
                 className={`h-full rounded-full ${
                   !skill.accentColor
-                    ? 'bg-gradient-to-r from-[#7C3AED] via-[#D4AF37] to-[#FFD700]'
+                    ? isDark
+                      ? 'bg-gradient-to-r from-[#7C3AED] via-[#D4AF37] to-[#FFD700]'
+                      : 'bg-gradient-to-r from-[#00C896] to-[#00A57A]'
                     : ''
                 }`}
               />
@@ -152,11 +191,15 @@ export const SkillModal: React.FC<SkillModalProps> = ({ skill, onClose }) => {
 
           {/* Detailed Description */}
           <div className="mb-6">
-            <h4 className="text-xs font-bold uppercase tracking-wider text-[#FFD700] mb-2 flex items-center gap-1.5">
-              <Layers className="w-3.5 h-3.5 text-[#D4AF37]" />
+            <h4 className={`text-xs font-bold uppercase tracking-wider mb-2 flex items-center gap-1.5 ${
+              isDark ? 'text-[#FFD700]' : 'text-slate-700'
+            }`}>
+              <Layers className={`w-3.5 h-3.5 ${isDark ? 'text-[#D4AF37]' : 'text-[#00A57A]'}`} />
               Architectural Overview &amp; Usage
             </h4>
-            <p className="text-sm sm:text-base text-[#F8FAFC] leading-relaxed">
+            <p className={`text-sm sm:text-base leading-relaxed ${
+              isDark ? 'text-[#A1A1AA]' : 'text-slate-600'
+            }`}>
               {skill.description}
             </p>
           </div>
@@ -164,16 +207,24 @@ export const SkillModal: React.FC<SkillModalProps> = ({ skill, onClose }) => {
           {/* Key Strengths / Highlights */}
           {highlights.length > 0 && (
             <div className="mb-6">
-              <h4 className="text-xs font-bold uppercase tracking-wider text-[#FFD700] mb-2">
+              <h4 className={`text-xs font-bold uppercase tracking-wider mb-2 ${
+                isDark ? 'text-[#FFD700]' : 'text-slate-700'
+              }`}>
                 Core Strengths &amp; Implementations
               </h4>
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                 {highlights.map((highlight, idx) => (
                   <div 
                     key={idx}
-                    className="flex items-center gap-2 text-xs font-medium text-[#F8FAFC] bg-[#121218] p-2.5 rounded-xl border border-[rgba(212,175,55,0.2)]"
+                    className={`flex items-center gap-2 text-xs font-medium p-2.5 rounded-xl border ${
+                      isDark
+                        ? 'text-[#F8FAFC] bg-[#121218] border-[rgba(212,175,55,0.2)]'
+                        : 'text-slate-700 bg-slate-50 border-slate-200'
+                    }`}
                   >
-                    <CheckCircle2 className="w-3.5 h-3.5 text-[#D4AF37] shrink-0" />
+                    <CheckCircle2 className={`w-3.5 h-3.5 shrink-0 ${
+                      isDark ? 'text-[#D4AF37]' : 'text-[#00C896]'
+                    }`} />
                     <span>{highlight}</span>
                   </div>
                 ))}
@@ -184,17 +235,23 @@ export const SkillModal: React.FC<SkillModalProps> = ({ skill, onClose }) => {
           {/* Projects Using This Skill */}
           {projectsList.length > 0 && (
             <div>
-              <h4 className="text-xs font-bold uppercase tracking-wider text-[#FFD700] mb-2.5 flex items-center gap-1.5">
-                <FolderGit2 className="w-3.5 h-3.5 text-[#D4AF37]" />
+              <h4 className={`text-xs font-bold uppercase tracking-wider mb-2.5 flex items-center gap-1.5 ${
+                isDark ? 'text-[#FFD700]' : 'text-slate-700'
+              }`}>
+                <FolderGit2 className={`w-3.5 h-3.5 ${isDark ? 'text-[#D4AF37]' : 'text-[#00A57A]'}`} />
                 Projects Powered by {skill.name}
               </h4>
               <div className="flex flex-wrap gap-2">
                 {projectsList.map((proj, idx) => (
                   <span
                     key={idx}
-                    className="inline-flex items-center gap-1 text-xs font-semibold px-3 py-1.5 rounded-xl border transition-all bg-[#121218] border-[rgba(212,175,55,0.3)] text-[#FFD700] shadow-[0_0_10px_rgba(212,175,55,0.1)]"
+                    className={`inline-flex items-center gap-1 text-xs font-semibold px-3 py-1.5 rounded-xl border transition-all ${
+                      isDark
+                        ? 'bg-[#121218] border-[rgba(212,175,55,0.3)] text-[#FFD700] shadow-[0_0_10px_rgba(212,175,55,0.1)]'
+                        : 'bg-emerald-50 border-emerald-200 text-[#00A57A] shadow-sm'
+                    }`}
                   >
-                    <Sparkles className="w-3 h-3 text-[#D4AF37]" />
+                    <Sparkles className={`w-3 h-3 ${isDark ? 'text-[#D4AF37]' : 'text-[#00A57A]'}`} />
                     <span>{proj}</span>
                   </span>
                 ))}
@@ -203,11 +260,17 @@ export const SkillModal: React.FC<SkillModalProps> = ({ skill, onClose }) => {
           )}
 
           {/* Bottom Action */}
-          <div className="mt-8 pt-4 border-t border-[rgba(212,175,55,0.2)] flex justify-end">
+          <div className={`mt-8 pt-4 border-t flex justify-end ${
+            isDark ? 'border-[rgba(212,175,55,0.2)]' : 'border-slate-200'
+          }`}>
             <button
               onClick={onClose}
               id="skill-modal-done-btn"
-              className="px-6 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer bg-gradient-to-r from-[#7C3AED] to-[#D4AF37] text-white hover:shadow-[0_0_20px_rgba(212,175,55,0.4)]"
+              className={`px-6 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer ${
+                isDark
+                  ? 'bg-gradient-to-r from-[#7C3AED] to-[#D4AF37] text-white hover:shadow-[0_0_20px_rgba(212,175,55,0.4)]'
+                  : 'bg-gradient-to-r from-[#00C896] to-[#00A57A] text-white hover:shadow-[0_4px_20px_rgba(0,200,150,0.3)]'
+              }`}
             >
               Done
             </button>

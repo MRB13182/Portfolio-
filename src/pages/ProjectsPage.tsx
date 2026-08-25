@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { portfolioConfig } from '../config/portfolio';
 import { Project, ProjectCategory } from '../types';
+import { useTheme } from '../context/ThemeContext';
 import { SafeImage } from '../components/common/SafeImage';
 import { ProjectModal } from '../components/modals/ProjectModal';
 import { 
@@ -14,6 +15,7 @@ import {
 import { motion } from 'motion/react';
 
 export const ProjectsPage: React.FC = () => {
+  const { isDark } = useTheme();
   const [selectedCategory, setSelectedCategory] = useState<ProjectCategory>('All');
   const [searchQuery, setSearchQuery] = useState('');
   const [activeProjectModal, setActiveProjectModal] = useState<Project | null>(null);
@@ -34,19 +36,29 @@ export const ProjectsPage: React.FC = () => {
       
       {/* Page Header */}
       <div className="flex flex-col items-center text-center mb-12">
-        <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-4 bg-[#7C3AED]/20 text-[#D4AF37] border border-[#D4AF37]/30 shadow-[0_0_20px_rgba(212,175,55,0.15)]">
+        <div className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-4 ${
+          isDark
+            ? 'bg-[#7C3AED]/20 text-[#D4AF37] border border-[#D4AF37]/30 shadow-[0_0_20px_rgba(212,175,55,0.15)]'
+            : 'bg-emerald-500/10 text-[#00A57A] border border-emerald-500/25 shadow-[0_2px_12px_rgba(0,200,150,0.15)]'
+        }`}>
           <Layers className="w-4 h-4" />
           <span>Case Studies &amp; Architectures</span>
         </div>
 
         <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight mb-4">
           Featured{' '}
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-[#D4AF37] to-[#FFD700]">
+          <span className={`text-transparent bg-clip-text ${
+            isDark
+              ? 'bg-gradient-to-r from-white via-[#D4AF37] to-[#FFD700]'
+              : 'bg-gradient-to-r from-slate-900 via-[#00A57A] to-[#00C896]'
+          }`}>
             Projects
           </span>
         </h1>
         
-        <p className="text-[#F8FAFC] max-w-2xl text-base sm:text-lg leading-relaxed">
+        <p className={`max-w-2xl text-base sm:text-lg leading-relaxed ${
+          isDark ? 'text-[#A1A1AA]' : 'text-slate-600'
+        }`}>
           Explore complete production platforms, enterprise SaaS suites, and full-stack solutions built with high performance and clean design.
         </p>
       </div>
@@ -56,19 +68,27 @@ export const ProjectsPage: React.FC = () => {
         
         {/* Search Input */}
         <div className="relative w-full md:w-80">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#F8FAFC]" />
+          <Search className={`absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 ${
+            isDark ? 'text-slate-400' : 'text-slate-500'
+          }`} />
           <input
             type="text"
             placeholder="Search projects, technologies..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             id="projects-search-input"
-            className="w-full pl-10 pr-10 py-2.5 rounded-2xl text-xs sm:text-sm border transition-all outline-none backdrop-blur-2xl bg-[rgba(12,12,16,0.45)] border-[#7C3AED]/40 text-[#F8FAFC] placeholder-white/50 focus:border-[#D4AF37] focus:shadow-[0_0_15px_rgba(212,175,55,0.25)] focus:ring-1 focus:ring-[#D4AF37]"
+            className={`w-full pl-10 pr-10 py-2.5 rounded-2xl text-xs sm:text-sm border transition-all outline-none backdrop-blur-2xl ${
+              isDark
+                ? 'bg-[rgba(12,12,16,0.45)] border-[#7C3AED]/40 text-[#F8FAFC] placeholder-white/50 focus:border-[#D4AF37] focus:shadow-[0_0_15px_rgba(212,175,55,0.25)] focus:ring-1 focus:ring-[#D4AF37]'
+                : 'bg-white/90 border-slate-200 text-slate-900 placeholder-slate-400 focus:border-[#00C896] focus:shadow-[0_2px_15px_rgba(0,200,150,0.2)] focus:ring-1 focus:ring-[#00C896]'
+            }`}
           />
           {searchQuery && (
             <button
               onClick={() => setSearchQuery('')}
-              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#F8FAFC] hover:text-[#FFD700]"
+              className={`absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer ${
+                isDark ? 'text-slate-400 hover:text-[#FFD700]' : 'text-slate-400 hover:text-slate-900'
+              }`}
             >
               <X className="w-4 h-4" />
             </button>
@@ -76,7 +96,11 @@ export const ProjectsPage: React.FC = () => {
         </div>
 
         {/* Category Pills */}
-        <div className="inline-flex items-center gap-1.5 p-1.5 rounded-2xl border backdrop-blur-2xl overflow-x-auto max-w-full bg-[rgba(12,12,16,0.45)] border-[rgba(212,175,55,0.25)]">
+        <div className={`inline-flex items-center gap-1.5 p-1.5 rounded-2xl border backdrop-blur-2xl overflow-x-auto max-w-full ${
+          isDark 
+            ? 'bg-[rgba(12,12,16,0.45)] border-[rgba(212,175,55,0.25)]' 
+            : 'bg-white/85 border-slate-200'
+        }`}>
           {categories.map((cat) => {
             const isActive = selectedCategory === cat;
             return (
@@ -86,8 +110,12 @@ export const ProjectsPage: React.FC = () => {
                 id={`projects-category-filter-${cat.toLowerCase().replace(/[^a-z0-9]/g, '-')}`}
                 className={`px-3.5 sm:px-4 py-2 rounded-xl text-xs font-bold transition-all duration-300 whitespace-nowrap cursor-pointer ${
                   isActive
-                    ? 'bg-gradient-to-r from-[#7C3AED] to-[#D4AF37] text-white shadow-[0_0_15px_rgba(212,175,55,0.3)]'
-                    : 'text-[#F8FAFC] hover:text-[#FFD700] hover:bg-white/5'
+                    ? isDark
+                      ? 'bg-gradient-to-r from-[#7C3AED] to-[#D4AF37] text-white shadow-[0_0_15px_rgba(212,175,55,0.3)]'
+                      : 'bg-gradient-to-r from-[#00C896] to-[#00A57A] text-white shadow-[0_4px_15px_rgba(0,200,150,0.3)]'
+                    : isDark
+                      ? 'text-[#F8FAFC] hover:text-[#FFD700] hover:bg-white/5'
+                      : 'text-slate-700 hover:text-[#00A57A] hover:bg-slate-50'
                 }`}
               >
                 {cat}
@@ -100,15 +128,19 @@ export const ProjectsPage: React.FC = () => {
 
       {/* Projects Grid */}
       {filteredProjects.length === 0 ? (
-        <div className="text-center py-20 p-8 rounded-3xl border border-dashed border-[rgba(212,175,55,0.25)]">
-          <Layers className="w-12 h-12 mx-auto text-[#D4AF37] mb-3" />
+        <div className={`text-center py-20 p-8 rounded-3xl border border-dashed ${
+          isDark ? 'border-[rgba(212,175,55,0.25)]' : 'border-slate-300'
+        }`}>
+          <Layers className={`w-12 h-12 mx-auto mb-3 ${isDark ? 'text-[#D4AF37]' : 'text-[#00A57A]'}`} />
           <h3 className="text-base font-bold mb-1">No projects matched your criteria</h3>
-          <p className="text-xs text-[#F8FAFC] mb-4">
+          <p className={`text-xs mb-4 ${isDark ? 'text-[#A1A1AA]' : 'text-slate-500'}`}>
             Try adjusting your search query "{searchQuery}" or select another category filter.
           </p>
           <button
             onClick={() => { setSelectedCategory('All'); setSearchQuery(''); }}
-            className="text-xs font-bold text-[#D4AF37] hover:underline cursor-pointer"
+            className={`text-xs font-bold hover:underline cursor-pointer ${
+              isDark ? 'text-[#D4AF37]' : 'text-[#00A57A]'
+            }`}
           >
             Reset Filters
           </button>
@@ -125,10 +157,14 @@ export const ProjectsPage: React.FC = () => {
               whileHover={{ y: -8 }}
               onClick={() => setActiveProjectModal(project)}
               id={`project-card-${project.id}`}
-              className="group relative rounded-3xl backdrop-blur-2xl border overflow-hidden flex flex-col justify-between transition-all duration-500 cursor-pointer shadow-lg bg-[rgba(12,12,16,0.45)] border-[rgba(212,175,55,0.22)] hover:border-[#D4AF37]/60 hover:shadow-[0_0_30px_rgba(124,58,237,0.25)] text-[#F8FAFC]"
+              className={`group relative rounded-3xl backdrop-blur-2xl border overflow-hidden flex flex-col justify-between transition-all duration-500 cursor-pointer shadow-lg ${
+                isDark
+                  ? 'bg-[rgba(12,12,16,0.45)] border-[rgba(212,175,55,0.22)] hover:border-[#D4AF37]/60 hover:shadow-[0_0_30px_rgba(124,58,237,0.25)] text-[#F8FAFC]'
+                  : 'bg-white/85 border-[rgba(0,200,150,0.2)] hover:border-[#00C896] hover:shadow-[0_12px_30px_rgba(0,200,150,0.15)] text-slate-800 shadow-sm'
+              }`}
             >
               {/* Project Image Thumbnail */}
-              <div className="relative w-full h-52 sm:h-56 overflow-hidden bg-[#0B0B0F]">
+              <div className={`relative w-full h-52 sm:h-56 overflow-hidden ${isDark ? 'bg-[#0B0B0F]' : 'bg-slate-100'}`}>
                 <SafeImage
                   src={project.image}
                   alt={project.title}
@@ -139,13 +175,21 @@ export const ProjectsPage: React.FC = () => {
                 />
 
                 <div className="absolute top-3.5 left-3.5 z-10">
-                  <span className="text-[10px] font-extrabold uppercase tracking-wider px-3 py-1 rounded-full backdrop-blur-md shadow-md bg-[#050505]/90 text-[#FFD700] border border-[#D4AF37]/40">
+                  <span className={`text-[10px] font-extrabold uppercase tracking-wider px-3 py-1 rounded-full backdrop-blur-md shadow-md ${
+                    isDark
+                      ? 'bg-[#050505]/90 text-[#FFD700] border border-[#D4AF37]/40'
+                      : 'bg-white/90 text-[#00A57A] border border-[#00C896]/30'
+                  }`}>
                     {project.category}
                   </span>
                 </div>
 
                 <div className="absolute top-3.5 right-3.5 z-10">
-                  <div className="w-8 h-8 rounded-full flex items-center justify-center backdrop-blur-md opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-md bg-[#D4AF37] text-black shadow-[0_0_15px_rgba(212,175,55,0.4)]">
+                  <div className={`w-8 h-8 rounded-full flex items-center justify-center backdrop-blur-md opacity-0 group-hover:opacity-100 transition-all duration-300 shadow-md ${
+                    isDark
+                      ? 'bg-[#D4AF37] text-black shadow-[0_0_15px_rgba(212,175,55,0.4)]'
+                      : 'bg-[#00C896] text-white shadow-[0_4px_15px_rgba(0,200,150,0.4)]'
+                  }`}>
                     <ArrowUpRight className="w-4 h-4" />
                   </div>
                 </div>
@@ -154,10 +198,14 @@ export const ProjectsPage: React.FC = () => {
               {/* Card Body */}
               <div className="p-6 flex flex-col flex-grow justify-between">
                 <div>
-                  <h3 className="text-xl font-extrabold tracking-tight mb-2 group-hover:text-[#FFD700] transition-colors line-clamp-1">
+                  <h3 className={`text-xl font-extrabold tracking-tight mb-2 transition-colors line-clamp-1 ${
+                    isDark ? 'group-hover:text-[#FFD700]' : 'group-hover:text-[#00A57A]'
+                  }`}>
                     {project.title}
                   </h3>
-                  <p className="text-xs sm:text-sm text-[#F8FAFC] line-clamp-2 leading-relaxed mb-4">
+                  <p className={`text-xs sm:text-sm line-clamp-2 leading-relaxed mb-4 ${
+                    isDark ? 'text-[#A1A1AA]' : 'text-slate-600'
+                  }`}>
                     {project.tagline}
                   </p>
                 </div>
@@ -168,21 +216,31 @@ export const ProjectsPage: React.FC = () => {
                     {project.techStack.slice(0, 4).map((tech, idx) => (
                       <span
                         key={idx}
-                        className="text-[10px] font-semibold px-2.5 py-1 rounded-lg border bg-[#0B0B0F] border-[rgba(212,175,55,0.2)] text-[#F8FAFC]"
+                        className={`text-[10px] font-semibold px-2.5 py-1 rounded-lg border ${
+                          isDark
+                            ? 'bg-[#0B0B0F] border-[rgba(212,175,55,0.2)] text-[#F8FAFC]'
+                            : 'bg-emerald-50/70 border-emerald-200/80 text-slate-700'
+                        }`}
                       >
                         {tech}
                       </span>
                     ))}
                     {project.techStack.length > 4 && (
-                      <span className="text-[10px] font-mono px-2 py-1 text-[#D4AF37]">
+                      <span className={`text-[10px] font-mono px-2 py-1 ${
+                        isDark ? 'text-[#D4AF37]' : 'text-[#00A57A]'
+                      }`}>
                         +{project.techStack.length - 4}
                       </span>
                     )}
                   </div>
 
                   {/* Card Footer Actions */}
-                  <div className="pt-3 border-t border-[rgba(212,175,55,0.25)] flex items-center justify-between">
-                    <span className="text-xs font-bold text-[#D4AF37] flex items-center gap-1 group-hover:underline">
+                  <div className={`pt-3 border-t flex items-center justify-between ${
+                    isDark ? 'border-[rgba(212,175,55,0.25)]' : 'border-slate-200'
+                  }`}>
+                    <span className={`text-xs font-bold flex items-center gap-1 group-hover:underline ${
+                      isDark ? 'text-[#D4AF37]' : 'text-[#00A57A]'
+                    }`}>
                       Explore Case Study
                       <ArrowUpRight className="w-3.5 h-3.5" />
                     </span>
@@ -194,7 +252,9 @@ export const ProjectsPage: React.FC = () => {
                           target="_blank"
                           rel="noopener noreferrer"
                           aria-label="GitHub Repository"
-                          className="p-1.5 rounded-lg text-[#F8FAFC] hover:text-[#FFD700] transition-colors"
+                          className={`p-1.5 rounded-lg transition-colors ${
+                            isDark ? 'text-[#F8FAFC] hover:text-[#FFD700]' : 'text-slate-600 hover:text-[#00A57A]'
+                          }`}
                         >
                           <Github className="w-4 h-4" />
                         </a>
@@ -205,7 +265,9 @@ export const ProjectsPage: React.FC = () => {
                           target="_blank"
                           rel="noopener noreferrer"
                           aria-label="Live Demo"
-                          className="p-1.5 rounded-lg text-[#F8FAFC] hover:text-[#FFD700] transition-colors"
+                          className={`p-1.5 rounded-lg transition-colors ${
+                            isDark ? 'text-[#F8FAFC] hover:text-[#FFD700]' : 'text-slate-600 hover:text-[#00A57A]'
+                          }`}
                         >
                           <ExternalLink className="w-4 h-4" />
                         </a>
@@ -229,4 +291,3 @@ export const ProjectsPage: React.FC = () => {
     </div>
   );
 };
-

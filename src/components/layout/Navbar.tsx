@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, Link, useLocation } from 'react-router-dom';
+import { useTheme } from '../../context/ThemeContext';
 import { portfolioConfig, assets } from '../../config/portfolio';
 import { 
   Menu, 
@@ -7,8 +8,8 @@ import {
   Mail, 
   FileText,
   ArrowRight,
-  Sparkles,
-  Command
+  Sun,
+  Moon
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -22,13 +23,13 @@ export const Navbar: React.FC<NavbarProps> = ({
   onOpenResumeDownload 
 }) => {
   const location = useLocation();
+  const { theme, isDark, toggleTheme } = useTheme();
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [logoImageError, setLogoImageError] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      // Smooth trigger threshold for morphing
       setScrolled(window.scrollY > 40);
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
@@ -42,6 +43,8 @@ export const Navbar: React.FC<NavbarProps> = ({
     { name: 'Projects', path: '/projects' },
     { name: 'Experience', path: '/experience' },
   ];
+
+  const currentLogo = isDark ? assets.logo.dark : assets.logo.light;
 
   return (
     <>
@@ -58,10 +61,14 @@ export const Navbar: React.FC<NavbarProps> = ({
             damping: 32,
             mass: 0.8
           }}
-          className={`pointer-events-auto transition-colors duration-300 ${
+          className={`pointer-events-auto transition-all duration-300 ${
             scrolled
-              ? 'w-[94%] sm:w-[90%] max-w-4xl mt-3 sm:mt-4 py-2 px-3 sm:px-4 rounded-2xl bg-[rgba(12,12,16,0.65)] backdrop-blur-2xl border border-[rgba(212,175,55,0.3)] shadow-[0_16px_40px_rgba(0,0,0,0.8),0_0_25px_rgba(124,58,237,0.22)] ring-1 ring-white/5'
-              : 'w-full max-w-7xl mt-0 pt-4 sm:pt-6 pb-2 px-4 sm:px-6 lg:px-8 rounded-b-3xl bg-[rgba(5,5,8,0.35)] backdrop-blur-xl border-b border-[#D4AF37]/15 shadow-[0_10px_35px_rgba(0,0,0,0.5)]'
+              ? isDark
+                ? 'w-[94%] sm:w-[90%] max-w-4xl mt-3 sm:mt-4 py-2 px-3 sm:px-4 rounded-2xl bg-[rgba(12,12,16,0.75)] backdrop-blur-2xl border border-[rgba(212,175,55,0.3)] shadow-[0_16px_40px_rgba(0,0,0,0.8),0_0_25px_rgba(124,58,237,0.22)] ring-1 ring-white/5 text-[#F8FAFC]'
+                : 'w-[94%] sm:w-[90%] max-w-4xl mt-3 sm:mt-4 py-2 px-3 sm:px-4 rounded-2xl bg-white/85 backdrop-blur-2xl border border-[rgba(0,200,150,0.25)] shadow-[0_16px_35px_rgba(0,200,150,0.12),0_4px_12px_rgba(0,0,0,0.05)] ring-1 ring-emerald-500/10 text-[#0F172A]'
+              : isDark
+                ? 'w-full max-w-7xl mt-0 pt-4 sm:pt-6 pb-2 px-4 sm:px-6 lg:px-8 rounded-b-3xl bg-[rgba(5,5,8,0.35)] backdrop-blur-xl border-b border-[#D4AF37]/15 shadow-[0_10px_35px_rgba(0,0,0,0.5)] text-[#F8FAFC]'
+                : 'w-full max-w-7xl mt-0 pt-4 sm:pt-6 pb-2 px-4 sm:px-6 lg:px-8 rounded-b-3xl bg-white/40 backdrop-blur-xl border-b border-[rgba(0,200,150,0.15)] shadow-[0_10px_30px_rgba(0,200,150,0.06)] text-[#0F172A]'
           }`}
         >
           <div className="flex items-center justify-between gap-2 sm:gap-4">
@@ -76,12 +83,19 @@ export const Navbar: React.FC<NavbarProps> = ({
                 layout
                 className={`relative rounded-xl flex items-center justify-center transition-transform duration-300 group-hover:scale-105 ${
                   scrolled ? 'w-8 h-8 sm:w-9 sm:h-9' : 'w-10 h-10 sm:w-12 sm:h-12'
-                } bg-gradient-to-tr from-[#7C3AED] via-[#0D0D0D] to-[#D4AF37] p-[1.5px] shadow-[0_0_20px_rgba(124,58,237,0.35)]`}
+                } ${
+                  isDark
+                    ? 'bg-gradient-to-tr from-[#7C3AED] via-[#0D0D0D] to-[#D4AF37] p-[1.5px] shadow-[0_0_20px_rgba(124,58,237,0.35)]'
+                    : 'bg-gradient-to-tr from-[#00C896] via-white to-[#7FFFD4] p-[1.5px] shadow-[0_4px_15px_rgba(0,200,150,0.25)]'
+                }`}
               >
-                <div className="w-full h-full rounded-[9px] bg-[#0A0A0A] flex items-center justify-center overflow-hidden p-1 relative">
+                <div className={`w-full h-full rounded-[9px] flex items-center justify-center overflow-hidden p-1 relative ${
+                  isDark ? 'bg-[#0A0A0A]' : 'bg-white'
+                }`}>
                   {!logoImageError ? (
                     <img
-                      src={assets.logo.dark}
+                      key={currentLogo}
+                      src={currentLogo}
                       alt={`${portfolioConfig.personal.name} Logo`}
                       className="w-full h-full object-contain"
                       onLoad={(e) => {
@@ -97,7 +111,11 @@ export const Navbar: React.FC<NavbarProps> = ({
                     <span 
                       className={`font-black tracking-tighter flex items-center justify-center w-full h-full ${
                         scrolled ? 'text-xs sm:text-sm' : 'text-sm sm:text-base'
-                      } text-transparent bg-clip-text bg-gradient-to-tr from-[#FFD700] to-[#D4AF37]`}
+                      } text-transparent bg-clip-text ${
+                        isDark 
+                          ? 'bg-gradient-to-tr from-[#FFD700] to-[#D4AF37]' 
+                          : 'bg-gradient-to-tr from-[#00A57A] to-[#00C896]'
+                      }`}
                     >
                       MR
                     </span>
@@ -117,10 +135,16 @@ export const Navbar: React.FC<NavbarProps> = ({
                       transition={{ duration: 0.2 }}
                       className="flex items-center gap-1.5"
                     >
-                      <span className="font-black text-sm sm:text-base tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-white via-[#FFD700] to-[#D4AF37]">
+                      <span className={`font-black text-sm sm:text-base tracking-wider text-transparent bg-clip-text ${
+                        isDark 
+                          ? 'bg-gradient-to-r from-white via-[#FFD700] to-[#D4AF37]' 
+                          : 'bg-gradient-to-r from-slate-900 via-[#00A57A] to-[#00C896]'
+                      }`}>
                         MR
                       </span>
-                      <span className="w-1.5 h-1.5 rounded-full animate-pulse bg-[#FFD700]" />
+                      <span className={`w-1.5 h-1.5 rounded-full animate-pulse ${
+                        isDark ? 'bg-[#FFD700]' : 'bg-[#00C896]'
+                      }`} />
                     </motion.div>
                   ) : (
                     <motion.div
@@ -132,12 +156,18 @@ export const Navbar: React.FC<NavbarProps> = ({
                       className="flex flex-col"
                     >
                       <div className="flex items-center gap-2">
-                        <span className="font-extrabold text-sm sm:text-base tracking-tight leading-tight truncate text-[#F8FAFC]">
+                        <span className={`font-extrabold text-sm sm:text-base tracking-tight leading-tight truncate ${
+                          isDark ? 'text-[#F8FAFC]' : 'text-slate-900'
+                        }`}>
                           {portfolioConfig.personal.name}
                         </span>
-                        <span className="hidden sm:inline-block w-1.5 h-1.5 rounded-full bg-[#D4AF37]" />
+                        <span className={`hidden sm:inline-block w-1.5 h-1.5 rounded-full ${
+                          isDark ? 'bg-[#D4AF37]' : 'bg-[#00C896]'
+                        }`} />
                       </div>
-                      <span className="text-[11px] font-mono tracking-wider truncate uppercase text-[#D4AF37]/90">
+                      <span className={`text-[11px] font-mono tracking-wider truncate uppercase ${
+                        isDark ? 'text-[#D4AF37]/90' : 'text-[#00A57A]'
+                      }`}>
                         {portfolioConfig.personal.titles[0]}
                       </span>
                     </motion.div>
@@ -151,8 +181,12 @@ export const Navbar: React.FC<NavbarProps> = ({
               id="desktop-nav" 
               className={`hidden md:flex items-center transition-all duration-300 ${
                 scrolled
-                  ? 'gap-1 p-1 rounded-xl bg-[#0B0B0F]/90 border border-[rgba(212,175,55,0.25)] shadow-inner'
-                  : 'gap-1.5 lg:gap-2 px-3 py-1.5 rounded-2xl bg-[rgba(15,15,20,0.85)] border border-[#D4AF37]/20 backdrop-blur-md shadow-sm'
+                  ? isDark
+                    ? 'gap-1 p-1 rounded-xl bg-[#0B0B0F]/90 border border-[rgba(212,175,55,0.25)] shadow-inner'
+                    : 'gap-1 p-1 rounded-xl bg-slate-100/90 border border-slate-200 shadow-inner'
+                  : isDark
+                    ? 'gap-1.5 lg:gap-2 px-3 py-1.5 rounded-2xl bg-[rgba(15,15,20,0.85)] border border-[#D4AF37]/20 backdrop-blur-md shadow-sm'
+                    : 'gap-1.5 lg:gap-2 px-3 py-1.5 rounded-2xl bg-white/80 border border-slate-200/80 backdrop-blur-md shadow-sm'
               }`}
             >
               {navLinks.map((link) => {
@@ -168,15 +202,21 @@ export const Navbar: React.FC<NavbarProps> = ({
                         : 'px-4 py-2 text-xs lg:text-sm rounded-xl'
                     } ${
                       isActive
-                        ? 'text-[#F8FAFC]'
-                        : 'text-[#F8FAFC]/90 hover:text-[#F8FAFC] hover:bg-white/10'
+                        ? isDark ? 'text-[#F8FAFC]' : 'text-[#00A57A] font-bold'
+                        : isDark
+                          ? 'text-[#F8FAFC]/80 hover:text-[#F8FAFC] hover:bg-white/10'
+                          : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
                     }`}
                   >
                     {isActive && (
                       <motion.div
                         layoutId="active-nav-glow"
                         transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-                        className="absolute inset-0 rounded-lg sm:rounded-xl -z-10 bg-[#7C3AED]/40 border border-[#D4AF37]/45 shadow-[0_0_15px_rgba(212,175,55,0.3)]"
+                        className={`absolute inset-0 rounded-lg sm:rounded-xl -z-10 ${
+                          isDark
+                            ? 'bg-[#7C3AED]/40 border border-[#D4AF37]/45 shadow-[0_0_15px_rgba(212,175,55,0.3)]'
+                            : 'bg-emerald-500/10 border border-[#00C896]/30 shadow-[0_2px_12px_rgba(0,200,150,0.2)]'
+                        }`}
                       />
                     )}
                     <span className="relative z-10">{link.name}</span>
@@ -185,15 +225,38 @@ export const Navbar: React.FC<NavbarProps> = ({
               })}
             </nav>
 
-            {/* Right: Desktop Action Suite */}
+            {/* Right: Desktop Action Suite & Theme Toggle */}
             <div className="hidden md:flex items-center gap-2 sm:gap-2.5 shrink-0">
+              {/* Theme Toggle Button */}
+              <button
+                onClick={toggleTheme}
+                id="theme-toggle-btn"
+                aria-label={`Switch to ${isDark ? 'Light' : 'Dark'} theme`}
+                title={`Switch to ${isDark ? 'Apple Titanium Emerald Light' : 'Black Mamba Gold Dark'} Mode`}
+                className={`p-2 sm:p-2.5 rounded-xl border transition-all duration-300 cursor-pointer flex items-center justify-center ${
+                  isDark
+                    ? 'bg-[#0B0B0F] border-[rgba(212,175,55,0.3)] text-[#FFD700] hover:bg-[#D4AF37]/20 hover:border-[#D4AF37]'
+                    : 'bg-white border-slate-200 text-[#00A57A] hover:bg-emerald-50 hover:border-[#00C896]'
+                } shadow-sm active:scale-95`}
+              >
+                {isDark ? (
+                  <Sun className="w-4 h-4 text-[#FFD700]" />
+                ) : (
+                  <Moon className="w-4 h-4 text-[#00A57A]" />
+                )}
+              </button>
+
               {/* Get In Touch Contact Modal Trigger */}
               <button
                 onClick={onOpenContact}
                 id="navbar-contact-btn"
                 className={`font-bold transition-all duration-300 flex items-center gap-2 cursor-pointer shadow-md active:scale-95 ${
                   scrolled ? 'px-3 py-2 text-xs rounded-lg' : 'px-4 py-2.5 text-xs lg:text-sm rounded-xl'
-                } bg-gradient-to-r from-[#D4AF37] to-[#FFD700] text-black hover:opacity-95 shadow-[0_0_20px_rgba(212,175,55,0.3)]`}
+                } ${
+                  isDark
+                    ? 'bg-gradient-to-r from-[#D4AF37] to-[#FFD700] text-black hover:opacity-95 shadow-[0_0_20px_rgba(212,175,55,0.3)]'
+                    : 'bg-gradient-to-r from-[#00C896] to-[#00A57A] text-white hover:opacity-95 shadow-[0_4px_20px_rgba(0,200,150,0.35)]'
+                }`}
               >
                 <Mail className={scrolled ? 'w-3.5 h-3.5' : 'w-4 h-4'} />
                 <span>Get In Touch</span>
@@ -202,11 +265,29 @@ export const Navbar: React.FC<NavbarProps> = ({
 
             {/* Mobile Right Controls */}
             <div className="flex md:hidden items-center gap-1.5">
+              {/* Mobile Theme Toggle */}
+              <button
+                onClick={toggleTheme}
+                id="mobile-theme-toggle-btn"
+                aria-label="Toggle theme"
+                className={`p-2 rounded-xl border transition-colors ${
+                  isDark
+                    ? 'bg-[#0B0B0F] border-[rgba(212,175,55,0.3)] text-[#FFD700]'
+                    : 'bg-white border-slate-200 text-[#00A57A]'
+                }`}
+              >
+                {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+              </button>
+
               <button
                 onClick={() => setMobileMenuOpen(true)}
                 id="mobile-menu-open-btn"
                 aria-label="Open navigation drawer"
-                className="p-2 rounded-xl border transition-colors bg-[rgba(15,15,20,0.85)] border-[#D4AF37]/30 text-[#F8FAFC]"
+                className={`p-2 rounded-xl border transition-colors ${
+                  isDark
+                    ? 'bg-[rgba(15,15,20,0.85)] border-[#D4AF37]/30 text-[#F8FAFC]'
+                    : 'bg-white/90 border-slate-200 text-slate-800'
+                }`}
               >
                 <Menu className="w-5 h-5" />
               </button>
@@ -249,6 +330,7 @@ const MobileDrawer: React.FC<MobileDrawerProps> = ({
   onOpenResumeDownload,
 }) => {
   const location = useLocation();
+  const { isDark, toggleTheme } = useTheme();
 
   if (!isOpen) return null;
 
@@ -263,32 +345,55 @@ const MobileDrawer: React.FC<MobileDrawerProps> = ({
       {/* Drawer Panel */}
       <div
         id="mobile-slide-drawer"
-        className="relative w-4/5 max-w-sm h-full flex flex-col justify-between p-6 overflow-y-auto transition-transform duration-300 shadow-2xl backdrop-blur-2xl bg-[rgba(12,12,16,0.85)] border-l border-[#D4AF37]/25 text-[#F8FAFC] shadow-[0_0_50px_rgba(0,0,0,0.9)]"
+        className={`relative w-4/5 max-w-sm h-full flex flex-col justify-between p-6 overflow-y-auto transition-transform duration-300 shadow-2xl backdrop-blur-2xl ${
+          isDark
+            ? 'bg-[rgba(12,12,16,0.92)] border-l border-[#D4AF37]/25 text-[#F8FAFC] shadow-[0_0_50px_rgba(0,0,0,0.9)]'
+            : 'bg-white/95 border-l border-slate-200 text-slate-900 shadow-[0_0_40px_rgba(0,200,150,0.15)]'
+        }`}
       >
         {/* Top Header */}
         <div>
-          <div className="flex items-center justify-between pb-6 border-b border-[rgba(212,175,55,0.25)]">
+          <div className={`flex items-center justify-between pb-6 border-b ${
+            isDark ? 'border-[rgba(212,175,55,0.25)]' : 'border-slate-200'
+          }`}>
             <div className="flex items-center gap-3">
-              <div className="w-9 h-9 rounded-lg flex items-center justify-center p-1 relative overflow-hidden bg-[#0B0B0F] border border-[#D4AF37]/30">
-                <span className="font-black text-xs items-center justify-center w-full h-full flex text-[#D4AF37]">
+              <div className={`w-9 h-9 rounded-lg flex items-center justify-center p-1 relative overflow-hidden ${
+                isDark ? 'bg-[#0B0B0F] border border-[#D4AF37]/30' : 'bg-emerald-50 border border-[#00C896]/30'
+              }`}>
+                <span className={`font-black text-xs items-center justify-center w-full h-full flex ${
+                  isDark ? 'text-[#D4AF37]' : 'text-[#00A57A]'
+                }`}>
                   MR
                 </span>
               </div>
               <div>
                 <h4 className="font-bold text-sm leading-tight">{portfolioConfig.personal.name}</h4>
-                <p className="text-[11px] font-mono text-[#F8FAFC]">
+                <p className={`text-[11px] font-mono ${isDark ? 'text-[#F8FAFC]/70' : 'text-slate-500'}`}>
                   {portfolioConfig.personal.titles[0]}
                 </p>
               </div>
             </div>
-            <button
-              onClick={onClose}
-              id="mobile-drawer-close-btn"
-              aria-label="Close menu"
-              className="p-1.5 rounded-lg text-[#F8FAFC] hover:text-[#FFD700] cursor-pointer"
-            >
-              <X className="w-5 h-5" />
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                onClick={toggleTheme}
+                aria-label="Toggle theme mode"
+                className={`p-1.5 rounded-lg transition-colors ${
+                  isDark ? 'text-[#FFD700] hover:bg-white/10' : 'text-[#00A57A] hover:bg-slate-100'
+                }`}
+              >
+                {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+              </button>
+              <button
+                onClick={onClose}
+                id="mobile-drawer-close-btn"
+                aria-label="Close menu"
+                className={`p-1.5 rounded-lg cursor-pointer ${
+                  isDark ? 'text-[#F8FAFC] hover:text-[#FFD700]' : 'text-slate-600 hover:text-slate-900'
+                }`}
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
           </div>
 
           {/* Navigation Links: Home, Skills, Projects, Experience */}
@@ -303,8 +408,12 @@ const MobileDrawer: React.FC<MobileDrawerProps> = ({
                   id={`mobile-link-${link.name.toLowerCase()}`}
                   className={`flex items-center justify-between px-4 py-3 rounded-xl text-sm font-semibold transition-all ${
                     isActive
-                      ? 'bg-[#7C3AED]/30 text-[#D4AF37] border border-[#D4AF37]/30 shadow-[0_0_15px_rgba(212,175,55,0.15)]'
-                      : 'text-[#F8FAFC] hover:bg-[#7C3AED]/20 hover:text-[#FFD700]'
+                      ? isDark
+                        ? 'bg-[#7C3AED]/30 text-[#D4AF37] border border-[#D4AF37]/30 shadow-[0_0_15px_rgba(212,175,55,0.15)]'
+                        : 'bg-emerald-500/10 text-[#00A57A] border border-[#00C896]/30 shadow-[0_2px_10px_rgba(0,200,150,0.1)]'
+                      : isDark
+                        ? 'text-[#F8FAFC] hover:bg-[#7C3AED]/20 hover:text-[#FFD700]'
+                        : 'text-slate-700 hover:bg-emerald-50 hover:text-[#00A57A]'
                   }`}
                 >
                   <span>{link.name}</span>
@@ -316,20 +425,30 @@ const MobileDrawer: React.FC<MobileDrawerProps> = ({
         </div>
 
         {/* Bottom Drawer Actions: Download Resume + Get In Touch */}
-        <div className="pt-6 border-t border-[rgba(212,175,55,0.25)] flex flex-col gap-2.5">
+        <div className={`pt-6 border-t flex flex-col gap-2.5 ${
+          isDark ? 'border-[rgba(212,175,55,0.25)]' : 'border-slate-200'
+        }`}>
           <button
             onClick={onOpenResumeDownload}
             id="mobile-drawer-resume-btn"
-            className="w-full py-3 px-4 rounded-xl text-xs font-bold border flex items-center justify-center gap-2 cursor-pointer transition-all bg-[rgba(15,15,20,0.85)] border-[#D4AF37]/30 text-[#F8FAFC] hover:border-[#D4AF37]"
+            className={`w-full py-3 px-4 rounded-xl text-xs font-bold border flex items-center justify-center gap-2 cursor-pointer transition-all ${
+              isDark
+                ? 'bg-[rgba(15,15,20,0.85)] border-[#D4AF37]/30 text-[#F8FAFC] hover:border-[#D4AF37]'
+                : 'bg-white border-slate-200 text-slate-800 hover:border-[#00C896] hover:text-[#00A57A]'
+            }`}
           >
-            <FileText className="w-4 h-4 text-[#D4AF37]" />
+            <FileText className={`w-4 h-4 ${isDark ? 'text-[#D4AF37]' : 'text-[#00A57A]'}`} />
             <span>Download Resume</span>
           </button>
 
           <button
             onClick={onOpenContact}
             id="mobile-drawer-contact-btn"
-            className="w-full py-3 px-4 rounded-xl text-xs font-bold text-center flex items-center justify-center gap-2 shadow-lg cursor-pointer transition-all bg-gradient-to-r from-[#D4AF37] to-[#FFD700] text-black shadow-[0_0_20px_rgba(212,175,55,0.3)]"
+            className={`w-full py-3 px-4 rounded-xl text-xs font-bold text-center flex items-center justify-center gap-2 shadow-lg cursor-pointer transition-all ${
+              isDark
+                ? 'bg-gradient-to-r from-[#D4AF37] to-[#FFD700] text-black shadow-[0_0_20px_rgba(212,175,55,0.3)]'
+                : 'bg-gradient-to-r from-[#00C896] to-[#00A57A] text-white shadow-[0_4px_20px_rgba(0,200,150,0.3)]'
+            }`}
           >
             <Mail className="w-4 h-4" />
             <span>Get In Touch</span>
@@ -339,5 +458,3 @@ const MobileDrawer: React.FC<MobileDrawerProps> = ({
     </div>
   );
 };
-
-

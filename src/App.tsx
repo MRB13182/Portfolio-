@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { BrowserRouter, Routes, Route, useLocation, Navigate } from 'react-router-dom';
+import { ThemeProvider, useTheme } from './context/ThemeContext';
 import { LuxuryBackground } from './components/common/LuxuryBackground';
 import { ScrollToTop } from './components/common/ScrollToTop';
 import { PageTransition } from './components/common/PageTransition';
@@ -13,6 +14,77 @@ import { ContactModal } from './components/modals/ContactModal';
 import { DownloadCustomizationModal } from './components/modals/DownloadCustomizationModal';
 import { PdfDownloadType } from './types';
 import { AnimatePresence } from 'motion/react';
+
+function AppContent() {
+  const { isDark } = useTheme();
+  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
+  const [pdfDownloadModal, setPdfDownloadModal] = useState<{
+    isOpen: boolean;
+    type: PdfDownloadType;
+  }>({
+    isOpen: false,
+    type: 'resume',
+  });
+
+  const handleOpenPdfDownload = (type: PdfDownloadType) => {
+    setPdfDownloadModal({
+      isOpen: true,
+      type,
+    });
+  };
+
+  const handleClosePdfDownload = () => {
+    setPdfDownloadModal(prev => ({
+      ...prev,
+      isOpen: false,
+    }));
+  };
+
+  return (
+    <div className={`min-h-screen relative font-sans transition-colors duration-300 flex flex-col justify-between ${
+      isDark 
+        ? 'bg-[#050505] text-[#F8FAFC] selection:bg-[#7C3AED]/40' 
+        : 'bg-[#F8FAFC] text-[#0F172A] selection:bg-[#00C896]/30'
+    }`}>
+      {/* Ambient Animated Luxury / Emerald Glows */}
+      <LuxuryBackground />
+
+      {/* Sticky Glass Navbar */}
+      <Navbar
+        onOpenContact={() => setIsContactModalOpen(true)}
+        onOpenResumeDownload={() => handleOpenPdfDownload('resume')}
+      />
+
+      {/* Dynamic Route View Transitions */}
+      <main className="relative z-10 flex-grow">
+        <AnimatedRoutes
+          onOpenContact={() => setIsContactModalOpen(true)}
+          onOpenResumeDownload={handleOpenPdfDownload}
+        />
+      </main>
+
+      {/* Persistent Multi-Page Footer */}
+      <Footer 
+        onOpenContact={() => setIsContactModalOpen(true)} 
+        onOpenResumeDownload={() => handleOpenPdfDownload('resume')}
+        onOpenCertificatesDownload={() => handleOpenPdfDownload('certificates')}
+      />
+
+      {/* Floating Global Contact Modal */}
+      <ContactModal
+        isOpen={isContactModalOpen}
+        onClose={() => setIsContactModalOpen(false)}
+      />
+
+      {/* Download Customization Modal (Resume & Verified Certificates) */}
+      <DownloadCustomizationModal
+        isOpen={pdfDownloadModal.isOpen}
+        type={pdfDownloadModal.type}
+        onClose={handleClosePdfDownload}
+      />
+    </div>
+  );
+}
 
 function AnimatedRoutes({
   onOpenContact,
@@ -71,70 +143,12 @@ function AnimatedRoutes({
 }
 
 export default function App() {
-  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
-  const [pdfDownloadModal, setPdfDownloadModal] = useState<{
-    isOpen: boolean;
-    type: PdfDownloadType;
-  }>({
-    isOpen: false,
-    type: 'resume',
-  });
-
-  const handleOpenPdfDownload = (type: PdfDownloadType) => {
-    setPdfDownloadModal({
-      isOpen: true,
-      type,
-    });
-  };
-
-  const handleClosePdfDownload = () => {
-    setPdfDownloadModal(prev => ({
-      ...prev,
-      isOpen: false,
-    }));
-  };
-
   return (
-    <BrowserRouter>
-      <ScrollToTop />
-      <div className="min-h-screen relative font-sans selection:bg-[#7C3AED]/40 flex flex-col justify-between bg-[#050505] text-[#F8FAFC]">
-        {/* Ambient Animated Luxury Glows */}
-        <LuxuryBackground />
-
-        {/* Sticky Glass Navbar */}
-        <Navbar
-          onOpenContact={() => setIsContactModalOpen(true)}
-          onOpenResumeDownload={() => handleOpenPdfDownload('resume')}
-        />
-
-        {/* Dynamic Route View Transitions */}
-        <main className="relative z-10 flex-grow">
-          <AnimatedRoutes
-            onOpenContact={() => setIsContactModalOpen(true)}
-            onOpenResumeDownload={handleOpenPdfDownload}
-          />
-        </main>
-
-        {/* Persistent Multi-Page Footer */}
-        <Footer 
-          onOpenContact={() => setIsContactModalOpen(true)} 
-          onOpenResumeDownload={() => handleOpenPdfDownload('resume')}
-          onOpenCertificatesDownload={() => handleOpenPdfDownload('certificates')}
-        />
-
-        {/* Floating Global Contact Modal */}
-        <ContactModal
-          isOpen={isContactModalOpen}
-          onClose={() => setIsContactModalOpen(false)}
-        />
-
-        {/* Download Customization Modal (Resume & Verified Certificates) */}
-        <DownloadCustomizationModal
-          isOpen={pdfDownloadModal.isOpen}
-          type={pdfDownloadModal.type}
-          onClose={handleClosePdfDownload}
-        />
-      </div>
-    </BrowserRouter>
+    <ThemeProvider>
+      <BrowserRouter>
+        <ScrollToTop />
+        <AppContent />
+      </BrowserRouter>
+    </ThemeProvider>
   );
 }
