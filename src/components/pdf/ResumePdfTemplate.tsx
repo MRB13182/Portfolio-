@@ -87,12 +87,14 @@ export const ResumePdfTemplate: React.FC<ResumePdfTemplateProps> = ({
                 }}
                 className="text-[9.5px] font-extrabold uppercase tracking-widest px-2.5 py-0.5 rounded-full border flex items-center gap-1.5"
               >
-                <img 
-                  src={isDark ? assets.logo.dark : assets.logo.light} 
-                  alt="Logo" 
-                  className="w-3.5 h-3.5 object-contain inline-block"
-                  onError={(e) => { e.currentTarget.style.display = 'none'; }}
-                />
+                {(isDark ? assets.logo.dark : assets.logo.light) ? (
+                  <img 
+                    src={isDark ? assets.logo.dark : assets.logo.light} 
+                    alt="Logo" 
+                    className="w-3.5 h-3.5 object-contain inline-block"
+                    onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                  />
+                ) : null}
                 <span>Curriculum Vitae • Executive Profile</span>
               </div>
             </div>
@@ -131,22 +133,28 @@ export const ResumePdfTemplate: React.FC<ResumePdfTemplateProps> = ({
               }}
               className="w-22 h-22 rounded-2xl overflow-hidden p-1 border-2 relative"
             >
-              <img
-                src={portfolioConfig.assets.profileImage}
-                alt={personal.name}
-                className="w-full h-full object-cover rounded-xl"
-                onError={(e) => {
-                  const target = e.currentTarget;
-                  target.style.display = 'none';
-                  if (target.parentElement) {
-                    target.parentElement.innerHTML = `
-                      <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:18px;background-color:${headerBg};color:${headerTitleColor}">
-                        <span>MR</span>
-                      </div>
-                    `;
-                  }
-                }}
-              />
+              {portfolioConfig.assets.profileImage ? (
+                <img
+                  src={portfolioConfig.assets.profileImage}
+                  alt={personal.name}
+                  className="w-full h-full object-cover rounded-xl"
+                  onError={(e) => {
+                    const target = e.currentTarget;
+                    target.style.display = 'none';
+                    if (target.parentElement) {
+                      target.parentElement.innerHTML = `
+                        <div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;font-weight:900;font-size:18px;background-color:${headerBg};color:${headerTitleColor}">
+                          <span>MR</span>
+                        </div>
+                      `;
+                    }
+                  }}
+                />
+              ) : (
+                <div style={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 900, fontSize: '18px', backgroundColor: headerBg, color: headerTitleColor }}>
+                  <span>MR</span>
+                </div>
+              )}
             </div>
           </div>
         </div>

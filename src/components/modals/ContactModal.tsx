@@ -116,15 +116,15 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
           exit={{ opacity: 0, scale: 0.9, y: 25 }}
           transition={{ type: 'spring', damping: 25, stiffness: 280 }}
           id="contact-modal-window"
-          className={`relative w-full max-w-3xl rounded-3xl backdrop-blur-3xl border shadow-2xl z-10 overflow-hidden flex flex-col ${
+          className={`relative w-full max-w-3xl rounded-[32px] backdrop-blur-3xl border shadow-2xl z-10 overflow-hidden flex flex-col ${
             isDark
-              ? 'bg-[rgba(12,12,16,0.85)] border-[rgba(212,175,55,0.35)] text-[#F8FAFC] shadow-[0_0_80px_rgba(124,58,237,0.3)]'
-              : 'bg-white/95 border-[rgba(0,200,150,0.3)] text-slate-800 shadow-[0_20px_60px_rgba(0,0,0,0.15)]'
+              ? 'bg-[#0A0A0A] border-[rgba(212,175,55,0.35)] text-[#FFFFFF] shadow-[0_0_80px_rgba(123,44,255,0.35)]'
+              : 'bg-white/95 border-[rgba(18,214,160,0.3)] text-slate-800 shadow-[0_20px_60px_rgba(18,214,160,0.18)]'
           }`}
         >
           {/* Ambient Glow */}
           <div className={`absolute -top-32 -left-32 w-64 h-64 rounded-full blur-3xl pointer-events-none ${
-            isDark ? 'opacity-20 bg-[#7C3AED]' : 'opacity-15 bg-[#00C896]'
+            isDark ? 'opacity-20 bg-[#7B2CFF]' : 'opacity-15 bg-[#12D6A0]'
           }`} />
 
           {/* Close Button */}
@@ -134,8 +134,8 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
             aria-label="Close contact dialog"
             className={`absolute top-5 right-5 z-20 p-2 rounded-full border transition-colors cursor-pointer ${
               isDark
-                ? 'border-[rgba(212,175,55,0.3)] bg-[#0B0B0F] text-[#F8FAFC] hover:text-[#FFD700] hover:border-[#D4AF37]'
-                : 'border-slate-200 bg-slate-100 text-slate-600 hover:text-slate-900 hover:border-[#00C896]'
+                ? 'border-[rgba(212,175,55,0.3)] bg-[#0B0B0F] text-[#FFFFFF] hover:text-[#F5D06F] hover:border-[#D4AF37]'
+                : 'border-slate-200 bg-slate-100 text-slate-600 hover:text-slate-900 hover:border-[#12D6A0]'
             }`}
           >
             <X className="w-5 h-5" />
@@ -147,8 +147,8 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
             <div className="mb-8">
               <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider mb-2.5 ${
                 isDark
-                  ? 'bg-[#7C3AED]/20 text-[#D4AF37] border border-[#D4AF37]/30'
-                  : 'bg-emerald-500/10 text-[#00A57A] border border-emerald-500/25'
+                  ? 'bg-[#7B2CFF]/20 text-[#D4AF37] border border-[#D4AF37]/30'
+                  : 'bg-emerald-500/10 text-[#12D6A0] border border-emerald-500/25'
               }`}>
                 <Sparkles className="w-3.5 h-3.5" />
                 <span>Start a Project &amp; Connect</span>
@@ -157,8 +157,8 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
                 Let's Build Something <br className="hidden sm:inline" />
                 <span className={`text-transparent bg-clip-text ${
                   isDark
-                    ? 'bg-gradient-to-r from-white via-[#D4AF37] to-[#FFD700]'
-                    : 'bg-gradient-to-r from-slate-900 via-[#00A57A] to-[#00C896]'
+                    ? 'bg-gradient-to-r from-white via-[#D4AF37] to-[#F5D06F]'
+                    : 'bg-gradient-to-r from-slate-900 via-[#12D6A0] to-[#0EB385]'
                 }`}>
                   Remarkable Together
                 </span>
@@ -191,10 +191,10 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
                         setIsSuccess(false);
                         setFormData({ name: '', email: '', subject: '', message: '' });
                       }}
-                      className={`px-4 py-2 rounded-xl text-xs font-bold cursor-pointer ${
+                      className={`px-4 py-2 rounded-2xl text-xs font-bold cursor-pointer ${
                         isDark
-                          ? 'bg-[#D4AF37] text-black hover:bg-[#FFD700]'
-                          : 'bg-[#00C896] text-white hover:bg-[#00A57A]'
+                          ? 'bg-[#D4AF37] text-black hover:bg-[#F5D06F]'
+                          : 'bg-[#12D6A0] text-slate-950 hover:bg-[#0EB385]'
                       }`}
                     >
                       Send Another Message
@@ -205,7 +205,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                       <div>
                         <label htmlFor="contact-name" className={`block text-xs font-bold uppercase tracking-wider mb-1.5 ${
-                          isDark ? 'text-[#FFD700]' : 'text-slate-700'
+                          isDark ? 'text-[#F5D06F]' : 'text-slate-700'
                         }`}>
                           Your Name *
                         </label>
@@ -217,17 +217,17 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
                           value={formData.name}
                           onChange={handleInputChange}
                           placeholder="e.g. John Doe"
-                          className={`w-full px-3.5 py-2.5 rounded-xl text-xs font-medium border focus:outline-none transition-all ${
+                          className={`w-full px-3.5 py-2.5 rounded-2xl text-xs font-medium border focus:outline-none transition-all ${
                             isDark
-                              ? 'bg-[#0B0B0F] border-[rgba(212,175,55,0.25)] text-[#F8FAFC] placeholder-slate-400 focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]'
-                              : 'bg-white border-slate-200 text-slate-900 placeholder-slate-400 focus:border-[#00C896] focus:ring-1 focus:ring-[#00C896]'
+                              ? 'bg-[#0B0B0F] border-[rgba(212,175,55,0.25)] text-[#FFFFFF] placeholder-slate-400 focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]'
+                              : 'bg-white border-slate-200 text-slate-900 placeholder-slate-400 focus:border-[#12D6A0] focus:ring-1 focus:ring-[#12D6A0]'
                           }`}
                         />
                       </div>
 
                       <div>
                         <label htmlFor="contact-email" className={`block text-xs font-bold uppercase tracking-wider mb-1.5 ${
-                          isDark ? 'text-[#FFD700]' : 'text-slate-700'
+                          isDark ? 'text-[#F5D06F]' : 'text-slate-700'
                         }`}>
                           Email Address *
                         </label>
@@ -239,10 +239,10 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
                           value={formData.email}
                           onChange={handleInputChange}
                           placeholder="john@example.com"
-                          className={`w-full px-3.5 py-2.5 rounded-xl text-xs font-medium border focus:outline-none transition-all ${
+                          className={`w-full px-3.5 py-2.5 rounded-2xl text-xs font-medium border focus:outline-none transition-all ${
                             isDark
-                              ? 'bg-[#0B0B0F] border-[rgba(212,175,55,0.25)] text-[#F8FAFC] placeholder-slate-400 focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]'
-                              : 'bg-white border-slate-200 text-slate-900 placeholder-slate-400 focus:border-[#00C896] focus:ring-1 focus:ring-[#00C896]'
+                              ? 'bg-[#0B0B0F] border-[rgba(212,175,55,0.25)] text-[#FFFFFF] placeholder-slate-400 focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]'
+                              : 'bg-white border-slate-200 text-slate-900 placeholder-slate-400 focus:border-[#12D6A0] focus:ring-1 focus:ring-[#12D6A0]'
                           }`}
                         />
                       </div>
@@ -250,7 +250,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
 
                     <div>
                       <label htmlFor="contact-subject" className={`block text-xs font-bold uppercase tracking-wider mb-1.5 ${
-                        isDark ? 'text-[#FFD700]' : 'text-slate-700'
+                        isDark ? 'text-[#F5D06F]' : 'text-slate-700'
                       }`}>
                         Subject / Project Scope
                       </label>
@@ -261,17 +261,17 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
                         value={formData.subject}
                         onChange={handleInputChange}
                         placeholder="e.g. Next.js SaaS Web Application"
-                        className={`w-full px-3.5 py-2.5 rounded-xl text-xs font-medium border focus:outline-none transition-all ${
+                        className={`w-full px-3.5 py-2.5 rounded-2xl text-xs font-medium border focus:outline-none transition-all ${
                           isDark
-                            ? 'bg-[#0B0B0F] border-[rgba(212,175,55,0.25)] text-[#F8FAFC] placeholder-slate-400 focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]'
-                            : 'bg-white border-slate-200 text-slate-900 placeholder-slate-400 focus:border-[#00C896] focus:ring-1 focus:ring-[#00C896]'
+                            ? 'bg-[#0B0B0F] border-[rgba(212,175,55,0.25)] text-[#FFFFFF] placeholder-slate-400 focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]'
+                            : 'bg-white border-slate-200 text-slate-900 placeholder-slate-400 focus:border-[#12D6A0] focus:ring-1 focus:ring-[#12D6A0]'
                         }`}
                       />
                     </div>
 
                     <div>
                       <label htmlFor="contact-message" className={`block text-xs font-bold uppercase tracking-wider mb-1.5 ${
-                        isDark ? 'text-[#FFD700]' : 'text-slate-700'
+                        isDark ? 'text-[#F5D06F]' : 'text-slate-700'
                       }`}>
                         Message Details *
                       </label>
@@ -283,10 +283,10 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
                         value={formData.message}
                         onChange={handleInputChange}
                         placeholder="Tell me about your timeline, vision, and requirements..."
-                        className={`w-full px-3.5 py-2.5 rounded-xl text-xs font-medium border focus:outline-none transition-all resize-none ${
+                        className={`w-full px-3.5 py-2.5 rounded-2xl text-xs font-medium border focus:outline-none transition-all resize-none ${
                           isDark
-                            ? 'bg-[#0B0B0F] border-[rgba(212,175,55,0.25)] text-[#F8FAFC] placeholder-slate-400 focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]'
-                            : 'bg-white border-slate-200 text-slate-900 placeholder-slate-400 focus:border-[#00C896] focus:ring-1 focus:ring-[#00C896]'
+                            ? 'bg-[#0B0B0F] border-[rgba(212,175,55,0.25)] text-[#FFFFFF] placeholder-slate-400 focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37]'
+                            : 'bg-white border-slate-200 text-slate-900 placeholder-slate-400 focus:border-[#12D6A0] focus:ring-1 focus:ring-[#12D6A0]'
                         }`}
                       />
                     </div>
@@ -295,10 +295,10 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
                       type="submit"
                       disabled={isSubmitting}
                       id="contact-form-submit-btn"
-                      className={`w-full py-3 px-6 rounded-xl font-bold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer shadow-lg active:scale-98 ${
+                      className={`w-full py-3 px-6 rounded-2xl font-bold text-xs flex items-center justify-center gap-2 transition-all cursor-pointer shadow-lg active:scale-98 ${
                         isDark
-                          ? 'bg-gradient-to-r from-[#D4AF37] to-[#FFD700] text-black hover:opacity-95 shadow-[0_0_20px_rgba(212,175,55,0.3)]'
-                          : 'bg-gradient-to-r from-[#00C896] to-[#00A57A] text-white hover:opacity-95 shadow-[0_4px_20px_rgba(0,200,150,0.3)]'
+                          ? 'bg-gradient-to-r from-[#D4AF37] to-[#F5D06F] text-black hover:opacity-95 shadow-[0_0_20px_rgba(212,175,55,0.3)]'
+                          : 'bg-gradient-to-r from-[#12D6A0] to-[#0EB385] text-slate-950 hover:opacity-95 shadow-[0_4px_20px_rgba(18,214,160,0.3)]'
                       }`}
                     >
                       {isSubmitting ? (
@@ -323,15 +323,15 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
                 }`}>
                   <div className="flex items-center justify-between mb-1">
                     <span className={`text-[11px] font-bold uppercase tracking-wider flex items-center gap-1.5 ${
-                      isDark ? 'text-[#FFD700]' : 'text-slate-700'
+                      isDark ? 'text-[#F5D06F]' : 'text-slate-700'
                     }`}>
-                      <Mail className={`w-3.5 h-3.5 ${isDark ? 'text-[#D4AF37]' : 'text-[#00A57A]'}`} />
+                      <Mail className={`w-3.5 h-3.5 ${isDark ? 'text-[#D4AF37]' : 'text-[#12D6A0]'}`} />
                       Direct Email
                     </span>
                     <button
                       onClick={() => handleCopy(portfolioConfig.personal.email, 'email')}
                       className={`text-[10px] font-semibold flex items-center gap-1 cursor-pointer ${
-                        isDark ? 'text-[#D4AF37]' : 'text-[#00A57A]'
+                        isDark ? 'text-[#D4AF37]' : 'text-[#12D6A0]'
                       }`}
                     >
                       <Copy className="w-3 h-3" />
@@ -341,7 +341,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
                   <a
                     href={`mailto:${portfolioConfig.personal.email}`}
                     className={`text-xs font-bold font-mono hover:underline break-all ${
-                      isDark ? 'text-[#FFD700]' : 'text-[#00A57A]'
+                      isDark ? 'text-[#F5D06F]' : 'text-[#12D6A0]'
                     }`}
                   >
                     {portfolioConfig.personal.email}
@@ -351,7 +351,7 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
                 {/* Instant Social Channels Grid */}
                 <div>
                   <h4 className={`text-xs font-bold uppercase tracking-wider mb-3 ${
-                    isDark ? 'text-[#FFD700]' : 'text-slate-700'
+                    isDark ? 'text-[#F5D06F]' : 'text-slate-700'
                   }`}>
                     Instant Social Connect
                   </h4>
@@ -365,13 +365,13 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
                           target="_blank"
                           rel="noopener noreferrer"
                           id={`modal-social-${social.name.toLowerCase()}`}
-                          className={`p-2.5 rounded-xl border flex items-center gap-2.5 text-xs font-semibold transition-all hover:scale-102 ${
+                          className={`p-2.5 rounded-2xl border flex items-center gap-2.5 text-xs font-semibold transition-all hover:scale-102 ${
                             isDark
-                              ? 'bg-[#0B0B0F] border-[rgba(212,175,55,0.2)] text-[#F8FAFC] hover:border-[#D4AF37] hover:text-[#FFD700]'
-                              : 'bg-white border-slate-200 text-slate-700 hover:border-[#00C896] hover:text-[#00A57A]'
+                              ? 'bg-[#0B0B0F] border-[rgba(212,175,55,0.2)] text-[#FFFFFF] hover:border-[#D4AF37] hover:text-[#F5D06F]'
+                              : 'bg-white border-slate-200 text-slate-700 hover:border-[#12D6A0] hover:text-[#12D6A0]'
                           }`}
                         >
-                          <Icon className={`w-4 h-4 ${isDark ? 'text-[#D4AF37]' : 'text-[#00A57A]'}`} />
+                          <Icon className={`w-4 h-4 ${isDark ? 'text-[#D4AF37]' : 'text-[#12D6A0]'}`} />
                           <span>{social.name}</span>
                         </a>
                       );
@@ -382,11 +382,11 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
                 {/* Status Box */}
                 <div className={`p-3.5 rounded-2xl border text-xs leading-relaxed ${
                   isDark
-                    ? 'bg-[#0B0B0F] border-[rgba(212,175,55,0.25)] text-[#F8FAFC]'
+                    ? 'bg-[#0B0B0F] border-[rgba(212,175,55,0.25)] text-[#FFFFFF]'
                     : 'bg-slate-50 border-slate-200 text-slate-600'
                 }`}>
                   <p className={`font-semibold text-[11px] uppercase tracking-wider mb-1 ${
-                    isDark ? 'text-[#FFD700]' : 'text-[#00A57A]'
+                    isDark ? 'text-[#F5D06F]' : 'text-[#12D6A0]'
                   }`}>
                     ⚡ Response Guarantee
                   </p>

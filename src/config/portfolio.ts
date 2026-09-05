@@ -17,12 +17,12 @@ export const assets = {
     '/projects/project-6.webp',
   ],
   certificates: [
-    '/certificates/Cer1.png',
-    '/certificates/Cer2.png',
-    '/certificates/Cer3.png',
-    '/certificates/Cer4.png',
-    '/certificates/Cer5.png',
-    '/certificates/Cer6.png',
+    '/certificate/cer1.png',
+    '/certificate/cer2.png',
+    '/certificate/cer3.png',
+    '/certificate/cer4.png',
+    '/certificate/cer5.png',
+    '/certificate/cer6.png',
   ],
 };
 

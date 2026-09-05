@@ -1,18 +1,20 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { portfolioConfig } from '../../config/portfolio';
 import { Certificate } from '../../types';
 import { useTheme } from '../../context/ThemeContext';
 import { CertificateModal } from '../modals/CertificateModal';
 import { IssuerLogo } from '../common/IssuerLogo';
+import { SafeImage } from '../common/SafeImage';
 import { 
   Award, 
   ChevronLeft, 
   ChevronRight, 
   ShieldCheck, 
-  CheckCircle2, 
   Maximize2,
-  LayoutGrid,
-  SlidersHorizontal
+  Play,
+  Pause,
+  ExternalLink,
+  Sparkles
 } from 'lucide-react';
 import { motion } from 'motion/react';
 
@@ -25,32 +27,22 @@ export const CertificatesShowcase: React.FC<CertificatesShowcaseProps> = ({
 }) => {
   const { isDark } = useTheme();
   const [selectedCert, setSelectedCert] = useState<Certificate | null>(null);
+  const [isPaused, setIsPaused] = useState<boolean>(false);
   const [isHovered, setIsHovered] = useState<boolean>(false);
-  const [selectedCategory, setSelectedCategory] = useState<string>('All');
-  const [viewMode, setViewMode] = useState<'carousel' | 'grid'>('carousel');
-  const carouselTrackRef = useRef<HTMLDivElement>(null);
+  const [isTouching, setIsTouching] = useState<boolean>(false);
+  const marqueeRef = useRef<HTMLDivElement>(null);
+  const touchStartRef = useRef<{ x: number; y: number; time: number }>({ x: 0, y: 0, time: 0 });
 
-  // Certificates list directly from portfolioConfig
+  // 6 verified certificates in exact specified order
   const certificates: Certificate[] = portfolioConfig.certificates && portfolioConfig.certificates.length > 0
     ? portfolioConfig.certificates
     : [];
 
-  // Extract unique categories
-  const categories = ['All', ...Array.from(new Set(certificates.map(c => c.category || 'General').filter(Boolean)))];
-
-  // Filtered certificates based on category tab
-  const filteredCertificates = selectedCategory === 'All'
-    ? certificates
-    : certificates.filter(c => c.category === selectedCategory);
-
-  // Repeat for continuous seamless infinite ribbon loop in carousel mode
-  const loopItems = [
-    ...filteredCertificates,
-    ...filteredCertificates,
-    ...filteredCertificates,
-  ];
+  // Duplicate for seamless 60fps infinite marquee loop
+  const marqueeItems = [...certificates, ...certificates];
 
   const handleCardClick = (cert: Certificate) => {
+    setIsPaused(true);
     if (onOpenCertificate) {
       onOpenCertificate(cert);
     } else {
@@ -58,367 +50,270 @@ export const CertificatesShowcase: React.FC<CertificatesShowcaseProps> = ({
     }
   };
 
-  const handleScrollPrev = () => {
-    if (carouselTrackRef.current) {
-      carouselTrackRef.current.scrollBy({ left: -340, behavior: 'smooth' });
+  // Provider badge styles based on theme
+  const getProviderBadgeStyle = (issuer: string) => {
+    const norm = issuer.toLowerCase();
+    if (norm.includes('google')) {
+      return isDark 
+        ? 'bg-[#4285F4]/15 text-[#8AB4F8] border-[#4285F4]/30' 
+        : 'bg-[#4285F4]/10 text-[#1967D2] border-[#4285F4]/25';
     }
+    if (norm.includes('ibm')) {
+      return isDark 
+        ? 'bg-[#0F62FE]/15 text-[#78A9FF] border-[#0F62FE]/30' 
+        : 'bg-[#0F62FE]/10 text-[#0043CE] border-[#0F62FE]/25';
+    }
+    if (norm.includes('meta')) {
+      return isDark 
+        ? 'bg-[#0081FB]/15 text-[#60A5FA] border-[#0081FB]/30' 
+        : 'bg-[#0081FB]/10 text-[#0064D2] border-[#0081FB]/25';
+    }
+    if (norm.includes('hubspot')) {
+      return isDark 
+        ? 'bg-[#FF7A59]/15 text-[#FFA182] border-[#FF7A59]/30' 
+        : 'bg-[#FF7A59]/10 text-[#D84C23] border-[#FF7A59]/25';
+    }
+    if (norm.includes('semrush')) {
+      return isDark 
+        ? 'bg-[#FF642D]/15 text-[#FF8E66] border-[#FF642D]/30' 
+        : 'bg-[#FF642D]/10 text-[#CC4614] border-[#FF642D]/25';
+    }
+    return isDark 
+      ? 'bg-[#D4AF37]/15 text-[#FFD700] border-[#D4AF37]/30' 
+      : 'bg-emerald-50 text-[#00A57A] border-emerald-200';
   };
 
-  const handleScrollNext = () => {
-    if (carouselTrackRef.current) {
-      carouselTrackRef.current.scrollBy({ left: 340, behavior: 'smooth' });
-    }
-  };
+  const isAnimationPaused = isPaused || isHovered || isTouching || selectedCert !== null;
 
   return (
     <section 
       id="certificates-section" 
-      className="relative py-16 sm:py-24 overflow-hidden select-none"
+      aria-label="Professional Certificates and Accreditations"
+      className={`relative py-20 sm:py-28 overflow-hidden border-t ${
+        isDark ? 'border-[rgba(212,175,55,0.2)]' : 'border-slate-200'
+      }`}
     >
       {/* Ambient background aura */}
-      <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4/5 h-48 blur-3xl pointer-events-none rounded-full ${
+      <div className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-4/5 h-72 blur-3xl pointer-events-none rounded-full ${
         isDark
-          ? 'opacity-20 bg-gradient-to-r from-[#7C3AED] via-[#D4AF37] to-[#7C3AED]'
-          : 'opacity-15 bg-gradient-to-r from-[#00C896] via-[#7FFFD4] to-[#00C896]'
+          ? 'opacity-25 bg-gradient-to-r from-[#7B2CFF] via-[#D4AF37] to-[#7B2CFF]'
+          : 'opacity-15 bg-gradient-to-r from-[#12D6A0] via-[#8EF0D1] to-[#12D6A0]'
       }`} />
 
       {/* Section Header */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-10 sm:mb-12 relative z-10">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-12 relative z-10">
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
           <div>
-            <div className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-3.5 ${
+            <div className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-3.5 ${
               isDark
-                ? 'bg-[rgba(124,58,237,0.18)] text-[#D4AF37] border border-[#D4AF37]/35 shadow-[0_0_15px_rgba(212,175,55,0.15)]'
-                : 'bg-emerald-500/10 text-[#00A57A] border border-emerald-500/25 shadow-[0_2px_12px_rgba(0,200,150,0.15)]'
+                ? 'bg-[#7B2CFF]/20 text-[#F5D06F] border border-[#D4AF37]/35 shadow-[0_0_20px_rgba(212,175,55,0.18)]'
+                : 'bg-emerald-500/10 text-[#12D6A0] border border-[rgba(18,214,160,0.3)] shadow-[0_2px_12px_rgba(18,214,160,0.15)]'
             }`}>
-              <Award className={`w-3.5 h-3.5 ${isDark ? 'text-[#FFD700]' : 'text-[#00A57A]'}`} />
+              <Award className={`w-3.5 h-3.5 ${isDark ? 'text-[#F5D06F]' : 'text-[#12D6A0]'}`} />
               <span>Official Accreditations</span>
-              <span className="font-mono text-[10px] opacity-75 font-semibold">({certificates.length} Verified)</span>
+              <span className="font-mono text-[10px] opacity-80 font-semibold">(6 Verified Credentials)</span>
             </div>
 
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight mb-2">
               Verified{' '}
               <span className={`text-transparent bg-clip-text ${
                 isDark
-                  ? 'bg-gradient-to-r from-white via-[#FFD700] to-[#D4AF37]'
-                  : 'bg-gradient-to-r from-slate-900 via-[#00A57A] to-[#00C896]'
+                  ? 'bg-gradient-to-r from-white via-[#F5D06F] to-[#D4AF37]'
+                  : 'bg-gradient-to-r from-slate-900 via-[#12D6A0] to-[#8EF0D1]'
               }`}>
-                Certificates &amp; Credentials
+                Certificates
               </span>
             </h2>
             <p className={`text-xs sm:text-sm max-w-2xl leading-relaxed ${
-              isDark ? 'text-[#CBD5E1]' : 'text-slate-600'
+              isDark ? 'text-[#A1A1AA]' : 'text-slate-600'
             }`}>
-              Industry-recognized technical certifications in full stack engineering, system architecture, UI/UX design, and cloud cybersecurity. Click any card to inspect full high-resolution credentials.
+              Continuously moving showcase of verified credentials from Google, IBM, Meta, HubSpot, and Semrush. Hover or touch to inspect. Click any certificate to open fullscreen high-resolution view.
             </p>
           </div>
 
-          {/* View Mode & Gallery Switcher */}
-          <div className="flex items-center gap-2 self-start md:self-auto">
-            <div className={`p-1 rounded-2xl border flex items-center gap-1 backdrop-blur-2xl ${
-              isDark
-                ? 'bg-[rgba(12,12,16,0.6)] border-[rgba(212,175,55,0.25)]'
-                : 'bg-white/85 border-slate-200'
-            }`}>
-              <button
-                type="button"
-                onClick={() => setViewMode('carousel')}
-                id="cert-view-carousel-btn"
-                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-                  viewMode === 'carousel'
-                    ? isDark
-                      ? 'bg-gradient-to-r from-[#D4AF37] to-[#FFD700] text-black shadow-md'
-                      : 'bg-gradient-to-r from-[#00C896] to-[#00A57A] text-white shadow-sm'
-                    : isDark
-                      ? 'text-[#CBD5E1] hover:text-white'
-                      : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                <SlidersHorizontal className="w-3.5 h-3.5" />
-                <span className="hidden sm:inline">Flow</span>
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setViewMode('grid')}
-                id="cert-view-grid-btn"
-                className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 ${
-                  viewMode === 'grid'
-                    ? isDark
-                      ? 'bg-gradient-to-r from-[#D4AF37] to-[#FFD700] text-black shadow-md'
-                      : 'bg-gradient-to-r from-[#00C896] to-[#00A57A] text-white shadow-sm'
-                    : isDark
-                      ? 'text-[#CBD5E1] hover:text-white'
-                      : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                <LayoutGrid className="w-3.5 h-3.5" />
-                <span className="hidden sm:inline">Gallery</span>
-              </button>
-            </div>
+          {/* Quick Play/Pause & Live Info */}
+          <div className="flex items-center gap-3 self-start md:self-auto">
+            <button
+              type="button"
+              onClick={() => setIsPaused(prev => !prev)}
+              title={isPaused ? 'Resume infinite scroll' : 'Pause infinite scroll'}
+              aria-label={isPaused ? 'Resume infinite scroll' : 'Pause infinite scroll'}
+              className={`px-4 py-2.5 rounded-2xl border transition-all cursor-pointer backdrop-blur-2xl flex items-center gap-2 text-xs font-semibold shadow-sm active:scale-95 ${
+                !isPaused
+                  ? isDark
+                    ? 'bg-[#D4AF37]/15 border-[#D4AF37]/40 text-[#F5D06F]'
+                    : 'bg-emerald-50 border-[rgba(18,214,160,0.35)] text-[#0EB385]'
+                  : isDark
+                    ? 'bg-[rgba(17,17,17,0.75)] border-[rgba(212,175,55,0.2)] text-[#A1A1AA]'
+                    : 'bg-white border-slate-200 text-slate-500'
+              }`}
+            >
+              {!isPaused ? (
+                <>
+                  <Pause className="w-3.5 h-3.5" />
+                  <span>Infinite 60fps</span>
+                </>
+              ) : (
+                <>
+                  <Play className="w-3.5 h-3.5" />
+                  <span>Paused</span>
+                </>
+              )}
+            </button>
           </div>
         </div>
-
-        {/* Category Filter Pills */}
-        {categories.length > 2 && (
-          <div className="flex items-center gap-2 overflow-x-auto pb-2 mt-6 scrollbar-none">
-            {categories.map((cat) => (
-              <button
-                key={cat}
-                type="button"
-                onClick={() => setSelectedCategory(cat)}
-                className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold whitespace-nowrap transition-all cursor-pointer border ${
-                  selectedCategory === cat
-                    ? isDark
-                      ? 'bg-[#D4AF37]/20 text-[#FFD700] border-[#D4AF37] shadow-[0_0_15px_rgba(212,175,55,0.2)]'
-                      : 'bg-emerald-50 text-[#00A57A] border-[#00C896] shadow-sm'
-                    : isDark
-                      ? 'bg-[rgba(12,12,16,0.45)] text-slate-400 border-[rgba(212,175,55,0.15)] hover:border-[#D4AF37]/40 hover:text-[#F8FAFC]'
-                      : 'bg-white/80 text-slate-600 border-slate-200 hover:border-[#00C896] hover:text-slate-900'
-                }`}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
-        )}
       </div>
 
-      {/* ===================== VIEW MODE 1: CONTINUOUS CAROUSEL ===================== */}
-      {viewMode === 'carousel' && (
-        <div 
-          className="relative w-full overflow-hidden py-4 group"
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
-          onTouchStart={() => setIsHovered(true)}
-          onTouchEnd={() => setIsHovered(false)}
+      {/* Infinite Horizontal Auto-Scrolling Marquee Track */}
+      <div 
+        className="relative w-full overflow-hidden py-4 select-none"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+        onTouchStart={() => setIsTouching(true)}
+        onTouchEnd={() => setIsTouching(false)}
+      >
+        {/* Soft edge gradient fades */}
+        <div className={`hidden sm:block absolute left-0 top-0 bottom-0 w-32 z-20 pointer-events-none ${
+          isDark 
+            ? 'bg-gradient-to-r from-[#050505] to-transparent' 
+            : 'bg-gradient-to-r from-[#F8FBFA] to-transparent'
+        }`} />
+        <div className={`hidden sm:block absolute right-0 top-0 bottom-0 w-32 z-20 pointer-events-none ${
+          isDark 
+            ? 'bg-gradient-to-l from-[#050505] to-transparent' 
+            : 'bg-gradient-to-l from-[#F8FBFA] to-transparent'
+        }`} />
+
+        {/* Marquee Inner Track */}
+        <div
+          ref={marqueeRef}
+          className={`animate-marquee gap-6 sm:gap-8 px-4 ${
+            isAnimationPaused ? 'marquee-paused' : ''
+          }`}
+          style={{
+            animationDuration: '32s',
+          }}
         >
-          {/* Edge masking gradients */}
-          <div className={`absolute top-0 left-0 bottom-0 w-12 sm:w-32 z-20 pointer-events-none ${
-            isDark 
-              ? 'bg-gradient-to-r from-[#050505] via-[#050505]/80 to-transparent' 
-              : 'bg-gradient-to-r from-[#F8FAFC] via-[#F8FAFC]/80 to-transparent'
-          }`} />
-          <div className={`absolute top-0 right-0 bottom-0 w-12 sm:w-32 z-20 pointer-events-none ${
-            isDark 
-              ? 'bg-gradient-to-l from-[#050505] via-[#050505]/80 to-transparent' 
-              : 'bg-gradient-to-l from-[#F8FAFC] via-[#F8FAFC]/80 to-transparent'
-          }`} />
+          {marqueeItems.map((cert, index) => {
+            const originalIndex = index % certificates.length;
 
-          {/* Carousel Arrow Controls */}
-          <button
-            type="button"
-            onClick={handleScrollPrev}
-            title="Previous Certificates"
-            id="cert-carousel-prev-btn"
-            className={`absolute left-4 sm:left-8 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full border shadow-2xl backdrop-blur-2xl transition-all opacity-0 group-hover:opacity-100 cursor-pointer ${
-              isDark
-                ? 'bg-[rgba(12,12,16,0.85)] border-[rgba(212,175,55,0.4)] text-[#D4AF37] hover:bg-[#D4AF37] hover:text-black'
-                : 'bg-white/90 border-slate-200 text-[#00A57A] hover:bg-[#00C896] hover:text-white'
-            }`}
-          >
-            <ChevronLeft className="w-5 h-5" />
-          </button>
-
-          <button
-            type="button"
-            onClick={handleScrollNext}
-            title="Next Certificates"
-            id="cert-carousel-next-btn"
-            className={`absolute right-4 sm:right-8 top-1/2 -translate-y-1/2 z-30 p-3 rounded-full border shadow-2xl backdrop-blur-2xl transition-all opacity-0 group-hover:opacity-100 cursor-pointer ${
-              isDark
-                ? 'bg-[rgba(12,12,16,0.85)] border-[rgba(212,175,55,0.4)] text-[#D4AF37] hover:bg-[#D4AF37] hover:text-black'
-                : 'bg-white/90 border-slate-200 text-[#00A57A] hover:bg-[#00C896] hover:text-white'
-            }`}
-          >
-            <ChevronRight className="w-5 h-5" />
-          </button>
-
-          {/* Continuous Infinite Track */}
-          <div 
-            ref={carouselTrackRef}
-            className="flex items-stretch gap-5 sm:gap-7 w-max animate-marquee"
-            style={{
-              animationPlayState: isHovered ? 'paused' : 'running',
-              willChange: 'transform'
-            }}
-          >
-            {loopItems.map((cert, loopIndex) => {
-              return (
-                <div
-                  key={`${cert.image}-${loopIndex}`}
-                  onClick={() => handleCardClick(cert)}
-                  id={`cert-card-${loopIndex}`}
-                  className={`group/card relative w-[290px] sm:w-[340px] md:w-[370px] shrink-0 rounded-3xl backdrop-blur-2xl border transition-all duration-300 overflow-hidden p-4 sm:p-5 flex flex-col justify-between cursor-pointer hover:-translate-y-2 hover:shadow-2xl ${
-                    isDark
-                      ? 'bg-[rgba(12,12,16,0.6)] border-[rgba(212,175,55,0.25)] hover:border-[#D4AF37] hover:shadow-[0_0_35px_rgba(212,175,55,0.22)] text-[#F8FAFC]'
-                      : 'bg-white/90 border-[rgba(0,200,150,0.2)] hover:border-[#00C896] hover:shadow-[0_12px_30px_rgba(0,200,150,0.15)] text-slate-800 shadow-sm'
-                  }`}
-                >
-                  {/* Real Certificate Image Frame */}
-                  <div className={`relative w-full aspect-[1.44/1] rounded-2xl overflow-hidden mb-4 border shadow-inner flex items-center justify-center ${
-                    isDark ? 'bg-black/60 border-white/10' : 'bg-slate-50 border-slate-200'
-                  }`}>
-                    <img 
-                      src={cert.image} 
-                      alt={cert.title}
-                      className="w-full h-full object-contain p-1 transition-transform duration-500 group-hover/card:scale-105"
-                      loading="lazy"
-                      onError={(e) => {
-                        const target = e.currentTarget;
-                        if (!target.src.includes('/certificates/')) {
-                          target.src = `/certificates/${cert.image.split('/').pop()}`;
-                        }
-                      }}
-                    />
-
-                    {/* Verified Seal Icon */}
-                    <div className="absolute top-2.5 right-2.5 z-10">
-                      <div className={`p-1 rounded-full shadow-lg backdrop-blur-md ${
-                        isDark 
-                          ? 'bg-black/70 text-[#FFD700] border border-[#D4AF37]/40' 
-                          : 'bg-white/80 text-[#00A57A] border border-[#00C896]/30'
-                      }`}>
-                        <ShieldCheck className="w-4 h-4" />
-                      </div>
-                    </div>
-                    
-                    {/* Hover Overlay */}
-                    <div className="absolute inset-0 bg-black/45 backdrop-blur-[2px] opacity-0 group-hover/card:opacity-100 transition-opacity duration-250 flex items-center justify-center gap-2 text-white text-xs font-bold pointer-events-none">
-                      <div className="px-3.5 py-2 rounded-xl bg-black/75 border border-white/20 shadow-xl flex items-center gap-2 text-white">
-                        <Maximize2 className={`w-4 h-4 ${isDark ? 'text-[#FFD700]' : 'text-[#00C896]'}`} />
-                        <span>View Certificate</span>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Bottom Metadata */}
-                  <div className={`space-y-2 pt-1 border-t ${isDark ? 'border-white/10' : 'border-slate-200'}`}>
-                    <div className="flex items-start justify-between gap-2">
-                      <h4 className={`text-sm sm:text-base font-extrabold tracking-tight leading-snug transition-colors line-clamp-2 ${
-                        isDark 
-                          ? 'text-[#F8FAFC] group-hover/card:text-[#D4AF37]' 
-                          : 'text-slate-900 group-hover/card:text-[#00A57A]'
-                      }`}>
-                        {cert.title}
-                      </h4>
-                    </div>
-
-                    <div className="flex items-center justify-between text-xs pt-1">
-                      <div className={`flex items-center gap-1.5 font-semibold truncate ${
-                        isDark ? 'text-[#CBD5E1]' : 'text-slate-600'
-                      }`}>
-                        <IssuerLogo issuer={cert.issuer || 'Google'} className="w-4 h-4" size={16} />
-                        <span className="truncate">{cert.issuer || 'Accredited Issuer'}</span>
-                      </div>
-
-                      <div className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-extrabold uppercase font-mono shrink-0 bg-emerald-500/15 text-emerald-500 border border-emerald-500/30">
-                        <CheckCircle2 className="w-3 h-3" />
-                        <span>Verified</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-      )}
-
-      {/* ===================== VIEW MODE 2: CURATED GALLERY GRID ===================== */}
-      {viewMode === 'grid' && (
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-            {filteredCertificates.map((cert, index) => (
-              <motion.div
-                key={cert.id || index}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: index * 0.08 }}
+            return (
+              <div
+                key={`${cert.id || originalIndex}-${index}`}
                 onClick={() => handleCardClick(cert)}
-                id={`cert-grid-card-${index}`}
-                className={`group/card relative rounded-3xl backdrop-blur-2xl border transition-all duration-300 overflow-hidden p-5 flex flex-col justify-between cursor-pointer hover:-translate-y-2 hover:shadow-2xl ${
+                tabIndex={0}
+                role="button"
+                aria-label={`Inspect ${cert.title} by ${cert.issuer}`}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    handleCardClick(cert);
+                  }
+                }}
+                id={`marquee-certificate-card-${index + 1}`}
+                className={`flex-shrink-0 w-[290px] sm:w-[360px] md:w-[390px] rounded-[32px] backdrop-blur-2xl border transition-all duration-300 cursor-pointer overflow-hidden flex flex-col group relative shadow-lg hover:-translate-y-2 focus:outline-none focus:ring-2 focus:ring-offset-2 ${
                   isDark
-                    ? 'bg-[rgba(12,12,16,0.6)] border-[rgba(212,175,55,0.25)] hover:border-[#D4AF37] hover:shadow-[0_0_35px_rgba(212,175,55,0.22)] text-[#F8FAFC]'
-                    : 'bg-white/90 border-[rgba(0,200,150,0.2)] hover:border-[#00C896] hover:shadow-[0_12px_30px_rgba(0,200,150,0.15)] text-slate-800 shadow-sm'
+                    ? 'bg-[rgba(17,17,17,0.75)] border-[rgba(212,175,55,0.25)] hover:border-[#D4AF37] hover:shadow-[0_0_35px_rgba(212,175,55,0.3)] ring-offset-black focus:ring-[#D4AF37] text-[#FFFFFF]'
+                    : 'bg-white/95 border-[rgba(18,214,160,0.25)] hover:border-[#12D6A0] hover:shadow-[0_16px_35px_rgba(18,214,160,0.18)] ring-offset-white focus:ring-[#12D6A0] text-slate-800 shadow-sm'
                 }`}
               >
-                {/* Real Certificate Image Frame */}
-                <div className={`relative w-full aspect-[1.44/1] rounded-2xl overflow-hidden mb-4 border shadow-inner flex items-center justify-center ${
-                  isDark ? 'bg-black/60 border-white/10' : 'bg-slate-50 border-slate-200'
+                {/* Certificate Preview Image Frame */}
+                <div className={`relative w-full aspect-[4/3] overflow-hidden p-3.5 ${
+                  isDark ? 'bg-[#0A0A0A]' : 'bg-slate-50'
                 }`}>
-                  <img 
-                    src={cert.image} 
-                    alt={cert.title}
-                    className="w-full h-full object-contain p-1 transition-transform duration-500 group-hover/card:scale-105"
+                  <SafeImage
+                    src={cert.image}
+                    alt={`${cert.title} - ${cert.issuer} Certificate`}
+                    fallbackType="certificate"
+                    fallbackText={cert.title}
                     loading="lazy"
-                    onError={(e) => {
-                      const target = e.currentTarget;
-                      if (!target.src.includes('/certificates/')) {
-                        target.src = `/certificates/${cert.image.split('/').pop()}`;
-                      }
-                    }}
+                    className="w-full h-full object-contain transition-transform duration-500 group-hover:scale-105"
                   />
 
-                  {/* Corner Verified Badge */}
-                  <div className="absolute top-2.5 right-2.5 z-10">
-                    <div className={`p-1 rounded-full shadow-lg backdrop-blur-md ${
-                      isDark 
-                        ? 'bg-black/70 text-[#FFD700] border border-[#D4AF37]/40' 
-                        : 'bg-white/80 text-[#00A57A] border border-[#00C896]/30'
+                  {/* Provider Logo Floating Chip */}
+                  <div className="absolute top-3 left-3 z-10">
+                    <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold backdrop-blur-md border shadow-sm ${
+                      getProviderBadgeStyle(cert.issuer)
                     }`}>
-                      <ShieldCheck className="w-4 h-4" />
+                      <IssuerLogo issuer={cert.issuer} size={14} className="w-3.5 h-3.5" />
+                      <span>{cert.issuer}</span>
                     </div>
                   </div>
-                  
-                  {/* Hover Overlay */}
-                  <div className="absolute inset-0 bg-black/45 backdrop-blur-[2px] opacity-0 group-hover/card:opacity-100 transition-opacity duration-250 flex items-center justify-center gap-2 text-white text-xs font-bold pointer-events-none">
-                    <div className="px-3.5 py-2 rounded-xl bg-black/75 border border-white/20 shadow-xl flex items-center gap-2 text-white">
-                      <Maximize2 className={`w-4 h-4 ${isDark ? 'text-[#FFD700]' : 'text-[#00C896]'}`} />
-                      <span>View Certificate</span>
-                    </div>
-                  </div>
-                </div>
 
-                {/* Bottom Metadata */}
-                <div className={`space-y-2 pt-1 border-t ${isDark ? 'border-white/10' : 'border-slate-200'}`}>
-                  <h4 className={`text-base font-extrabold tracking-tight leading-snug transition-colors line-clamp-2 ${
-                    isDark 
-                      ? 'text-[#F8FAFC] group-hover/card:text-[#D4AF37]' 
-                      : 'text-slate-900 group-hover/card:text-[#00A57A]'
-                  }`}>
-                    {cert.title}
-                  </h4>
-
-                  <div className="flex items-center justify-between text-xs pt-1">
-                    <div className={`flex items-center gap-1.5 font-semibold truncate ${
-                      isDark ? 'text-[#CBD5E1]' : 'text-slate-600'
+                  {/* Verified Shield Badge */}
+                  <div className="absolute top-3 right-3 z-10">
+                    <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider backdrop-blur-md ${
+                      isDark
+                        ? 'bg-black/75 text-[#34D399] border border-[#34D399]/40'
+                        : 'bg-white/90 text-[#0EB385] border border-[rgba(18,214,160,0.3)]'
                     }`}>
-                      <IssuerLogo issuer={cert.issuer || 'Google'} className="w-4 h-4" size={16} />
-                      <span className="truncate">{cert.issuer || 'Accredited Issuer'}</span>
-                    </div>
-
-                    <div className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-extrabold uppercase font-mono bg-emerald-500/15 text-emerald-500 border border-emerald-500/30">
-                      <CheckCircle2 className="w-3 h-3" />
+                      <ShieldCheck className="w-3 h-3" />
                       <span>Verified</span>
+                    </span>
+                  </div>
+
+                  {/* Hover Inspect Action Overlay */}
+                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-[2px] z-10">
+                    <span className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-2xl text-xs font-bold shadow-lg transform translate-y-2 group-hover:translate-y-0 transition-transform duration-300 ${
+                      isDark
+                        ? 'bg-gradient-to-r from-[#D4AF37] to-[#F5D06F] text-black'
+                        : 'bg-gradient-to-r from-[#12D6A0] to-[#0EB385] text-white'
+                    }`}>
+                      <Maximize2 className="w-3.5 h-3.5" />
+                      <span>Click to Zoom & Inspect</span>
+                    </span>
+                  </div>
+                </div>
+
+                {/* Card Information Body */}
+                <div className="p-5 flex flex-col flex-grow justify-between">
+                  <div>
+                    <span className={`text-[10px] font-bold uppercase tracking-wider mb-1 block ${
+                      isDark ? 'text-[#D4AF37]' : 'text-[#0EB385]'
+                    }`}>
+                      {cert.category || 'Professional Certification'}
+                    </span>
+                    <h3 className={`text-base font-extrabold tracking-tight mb-2 line-clamp-2 leading-snug transition-colors ${
+                      isDark ? 'text-[#FFFFFF] group-hover:text-[#F5D06F]' : 'text-slate-900 group-hover:text-[#12D6A0]'
+                    }`}>
+                      {cert.title}
+                    </h3>
+                  </div>
+
+                  {/* Card Bottom Meta */}
+                  <div className={`pt-3 border-t flex items-center justify-between text-xs font-bold ${
+                    isDark ? 'border-[rgba(212,175,55,0.2)]' : 'border-slate-100'
+                  }`}>
+                    <span className={`font-mono text-[11px] ${
+                      isDark ? 'text-[#A1A1AA]' : 'text-slate-500'
+                    }`}>
+                      {cert.credentialId || `CRED-0${originalIndex + 1}`}
+                    </span>
+
+                    <div className={`inline-flex items-center gap-1 transition-colors ${
+                      isDark ? 'text-[#D4AF37]' : 'text-[#12D6A0]'
+                    }`}>
+                      <span>Full View</span>
+                      <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
                     </div>
                   </div>
                 </div>
-              </motion.div>
-            ))}
-          </div>
+              </div>
+            );
+          })}
         </div>
-      )}
+      </div>
 
-      {/* Floating Fullscreen Preview Modal */}
-      {!onOpenCertificate && (
-        <CertificateModal
-          certificate={selectedCert}
-          allCertificates={certificates}
-          onClose={() => setSelectedCert(null)}
-          onSelectCertificate={(cert) => setSelectedCert(cert)}
-        />
-      )}
+      {/* Fullscreen Certificate Inspection Modal */}
+      <CertificateModal
+        certificate={selectedCert}
+        allCertificates={certificates}
+        onClose={() => {
+          setSelectedCert(null);
+          setIsPaused(false);
+        }}
+        onSelectCertificate={(c) => setSelectedCert(c)}
+      />
     </section>
   );
 };

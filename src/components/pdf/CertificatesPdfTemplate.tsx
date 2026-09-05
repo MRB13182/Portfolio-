@@ -66,12 +66,14 @@ export const CertificatesPdfTemplate: React.FC<CertificatesPdfTemplateProps> = (
                 }}
                 className="text-[9.5px] font-extrabold uppercase tracking-widest px-2.5 py-0.5 rounded-full border flex items-center gap-1.5"
               >
-                <img 
-                  src={isDark ? assets.logo.dark : assets.logo.light} 
-                  alt="Logo" 
-                  className="w-3.5 h-3.5 object-contain inline-block"
-                  onError={(e) => { e.currentTarget.style.display = 'none'; }}
-                />
+                {(isDark ? assets.logo.dark : assets.logo.light) ? (
+                  <img 
+                    src={isDark ? assets.logo.dark : assets.logo.light} 
+                    alt="Logo" 
+                    className="w-3.5 h-3.5 object-contain inline-block"
+                    onError={(e) => { e.currentTarget.style.display = 'none'; }}
+                  />
+                ) : null}
                 <span>Official Verified Credentials</span>
               </div>
               <span style={{ color: headerSubText }} className="text-[9.5px] font-mono">
@@ -129,12 +131,14 @@ export const CertificatesPdfTemplate: React.FC<CertificatesPdfTemplateProps> = (
           >
             {/* Real Certificate Image */}
             <div className="relative w-full h-[180px] rounded-xl overflow-hidden bg-slate-100 border border-slate-200 mb-2 flex items-center justify-center">
-              <img 
-                src={cert.image} 
-                alt={cert.title}
-                className="w-full h-full object-cover"
-                crossOrigin="anonymous"
-              />
+              {cert.image ? (
+                <img 
+                  src={cert.image} 
+                  alt={cert.title}
+                  className="w-full h-full object-cover"
+                  crossOrigin="anonymous"
+                />
+              ) : null}
             </div>
 
             {/* Title */}

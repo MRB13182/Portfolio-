@@ -64,11 +64,11 @@ export const Navbar: React.FC<NavbarProps> = ({
           className={`pointer-events-auto transition-all duration-300 ${
             scrolled
               ? isDark
-                ? 'w-[94%] sm:w-[90%] max-w-4xl mt-3 sm:mt-4 py-2 px-3 sm:px-4 rounded-2xl bg-[rgba(12,12,16,0.75)] backdrop-blur-2xl border border-[rgba(212,175,55,0.3)] shadow-[0_16px_40px_rgba(0,0,0,0.8),0_0_25px_rgba(124,58,237,0.22)] ring-1 ring-white/5 text-[#F8FAFC]'
-                : 'w-[94%] sm:w-[90%] max-w-4xl mt-3 sm:mt-4 py-2 px-3 sm:px-4 rounded-2xl bg-white/85 backdrop-blur-2xl border border-[rgba(0,200,150,0.25)] shadow-[0_16px_35px_rgba(0,200,150,0.12),0_4px_12px_rgba(0,0,0,0.05)] ring-1 ring-emerald-500/10 text-[#0F172A]'
+                ? 'w-[94%] sm:w-[90%] max-w-4xl mt-3 sm:mt-4 py-2 px-3.5 sm:px-5 rounded-[24px] sm:rounded-[28px] bg-[rgba(10,10,10,0.85)] backdrop-blur-2xl border border-[rgba(212,175,55,0.3)] shadow-[0_16px_40px_rgba(0,0,0,0.85),0_0_25px_rgba(123,44,255,0.22)] ring-1 ring-white/5 text-[#FFFFFF]'
+                : 'w-[94%] sm:w-[90%] max-w-4xl mt-3 sm:mt-4 py-2 px-3.5 sm:px-5 rounded-[24px] sm:rounded-[28px] bg-white/90 backdrop-blur-2xl border border-[rgba(18,214,160,0.25)] shadow-[0_16px_35px_rgba(18,214,160,0.12),0_4px_12px_rgba(0,0,0,0.04)] ring-1 ring-emerald-500/10 text-[#0F172A]'
               : isDark
-                ? 'w-full max-w-7xl mt-0 pt-4 sm:pt-6 pb-2 px-4 sm:px-6 lg:px-8 rounded-b-3xl bg-[rgba(5,5,8,0.35)] backdrop-blur-xl border-b border-[#D4AF37]/15 shadow-[0_10px_35px_rgba(0,0,0,0.5)] text-[#F8FAFC]'
-                : 'w-full max-w-7xl mt-0 pt-4 sm:pt-6 pb-2 px-4 sm:px-6 lg:px-8 rounded-b-3xl bg-white/40 backdrop-blur-xl border-b border-[rgba(0,200,150,0.15)] shadow-[0_10px_30px_rgba(0,200,150,0.06)] text-[#0F172A]'
+                ? 'w-full max-w-7xl mt-0 pt-4 sm:pt-6 pb-2 px-4 sm:px-6 lg:px-8 rounded-b-[28px] bg-[rgba(5,5,5,0.4)] backdrop-blur-xl border-b border-[#D4AF37]/15 shadow-[0_10px_35px_rgba(0,0,0,0.5)] text-[#FFFFFF]'
+                : 'w-full max-w-7xl mt-0 pt-4 sm:pt-6 pb-2 px-4 sm:px-6 lg:px-8 rounded-b-[28px] bg-[#F8FBFA]/60 backdrop-blur-xl border-b border-[rgba(18,214,160,0.15)] shadow-[0_10px_30px_rgba(18,214,160,0.06)] text-[#0F172A]'
           }`}
         >
           <div className="flex items-center justify-between gap-2 sm:gap-4">
@@ -81,18 +81,18 @@ export const Navbar: React.FC<NavbarProps> = ({
               {/* Morphing Logo Frame */}
               <motion.div
                 layout
-                className={`relative rounded-xl flex items-center justify-center transition-transform duration-300 group-hover:scale-105 ${
+                className={`relative rounded-2xl flex items-center justify-center transition-transform duration-300 group-hover:scale-105 ${
                   scrolled ? 'w-8 h-8 sm:w-9 sm:h-9' : 'w-10 h-10 sm:w-12 sm:h-12'
                 } ${
                   isDark
-                    ? 'bg-gradient-to-tr from-[#7C3AED] via-[#0D0D0D] to-[#D4AF37] p-[1.5px] shadow-[0_0_20px_rgba(124,58,237,0.35)]'
-                    : 'bg-gradient-to-tr from-[#00C896] via-white to-[#7FFFD4] p-[1.5px] shadow-[0_4px_15px_rgba(0,200,150,0.25)]'
+                    ? 'bg-gradient-to-tr from-[#7B2CFF] via-[#0A0A0A] to-[#D4AF37] p-[1.5px] shadow-[0_0_20px_rgba(123,44,255,0.35)]'
+                    : 'bg-gradient-to-tr from-[#12D6A0] via-white to-[#8EF0D1] p-[1.5px] shadow-[0_4px_15px_rgba(18,214,160,0.25)]'
                 }`}
               >
-                <div className={`w-full h-full rounded-[9px] flex items-center justify-center overflow-hidden p-1 relative ${
+                <div className={`w-full h-full rounded-[14px] flex items-center justify-center overflow-hidden p-1 relative ${
                   isDark ? 'bg-[#0A0A0A]' : 'bg-white'
                 }`}>
-                  {!logoImageError ? (
+                  {!logoImageError && currentLogo ? (
                     <img
                       key={currentLogo}
                       src={currentLogo}
@@ -105,16 +105,14 @@ export const Navbar: React.FC<NavbarProps> = ({
                       }}
                       onError={() => setLogoImageError(true)}
                     />
-                  ) : null}
-
-                  {logoImageError && (
+                  ) : (
                     <span 
                       className={`font-black tracking-tighter flex items-center justify-center w-full h-full ${
                         scrolled ? 'text-xs sm:text-sm' : 'text-sm sm:text-base'
                       } text-transparent bg-clip-text ${
                         isDark 
-                          ? 'bg-gradient-to-tr from-[#FFD700] to-[#D4AF37]' 
-                          : 'bg-gradient-to-tr from-[#00A57A] to-[#00C896]'
+                          ? 'bg-gradient-to-tr from-[#F5D06F] to-[#D4AF37]' 
+                          : 'bg-gradient-to-tr from-[#12D6A0] to-[#8EF0D1]'
                       }`}
                     >
                       MR
@@ -137,13 +135,13 @@ export const Navbar: React.FC<NavbarProps> = ({
                     >
                       <span className={`font-black text-sm sm:text-base tracking-wider text-transparent bg-clip-text ${
                         isDark 
-                          ? 'bg-gradient-to-r from-white via-[#FFD700] to-[#D4AF37]' 
-                          : 'bg-gradient-to-r from-slate-900 via-[#00A57A] to-[#00C896]'
+                          ? 'bg-gradient-to-r from-white via-[#F5D06F] to-[#D4AF37]' 
+                          : 'bg-gradient-to-r from-slate-900 via-[#12D6A0] to-[#8EF0D1]'
                       }`}>
                         MR
                       </span>
                       <span className={`w-1.5 h-1.5 rounded-full animate-pulse ${
-                        isDark ? 'bg-[#FFD700]' : 'bg-[#00C896]'
+                        isDark ? 'bg-[#F5D06F]' : 'bg-[#12D6A0]'
                       }`} />
                     </motion.div>
                   ) : (
@@ -157,16 +155,16 @@ export const Navbar: React.FC<NavbarProps> = ({
                     >
                       <div className="flex items-center gap-2">
                         <span className={`font-extrabold text-sm sm:text-base tracking-tight leading-tight truncate ${
-                          isDark ? 'text-[#F8FAFC]' : 'text-slate-900'
+                          isDark ? 'text-[#FFFFFF]' : 'text-slate-900'
                         }`}>
                           {portfolioConfig.personal.name}
                         </span>
                         <span className={`hidden sm:inline-block w-1.5 h-1.5 rounded-full ${
-                          isDark ? 'bg-[#D4AF37]' : 'bg-[#00C896]'
+                          isDark ? 'bg-[#D4AF37]' : 'bg-[#12D6A0]'
                         }`} />
                       </div>
                       <span className={`text-[11px] font-mono tracking-wider truncate uppercase ${
-                        isDark ? 'text-[#D4AF37]/90' : 'text-[#00A57A]'
+                        isDark ? 'text-[#D4AF37]/90' : 'text-[#12D6A0]'
                       }`}>
                         {portfolioConfig.personal.titles[0]}
                       </span>
@@ -182,11 +180,11 @@ export const Navbar: React.FC<NavbarProps> = ({
               className={`hidden md:flex items-center transition-all duration-300 ${
                 scrolled
                   ? isDark
-                    ? 'gap-1 p-1 rounded-xl bg-[#0B0B0F]/90 border border-[rgba(212,175,55,0.25)] shadow-inner'
-                    : 'gap-1 p-1 rounded-xl bg-slate-100/90 border border-slate-200 shadow-inner'
+                    ? 'gap-1 p-1 rounded-2xl bg-[#0A0A0A]/90 border border-[rgba(212,175,55,0.25)] shadow-inner'
+                    : 'gap-1 p-1 rounded-2xl bg-white/90 border border-[rgba(18,214,160,0.2)] shadow-inner'
                   : isDark
-                    ? 'gap-1.5 lg:gap-2 px-3 py-1.5 rounded-2xl bg-[rgba(15,15,20,0.85)] border border-[#D4AF37]/20 backdrop-blur-md shadow-sm'
-                    : 'gap-1.5 lg:gap-2 px-3 py-1.5 rounded-2xl bg-white/80 border border-slate-200/80 backdrop-blur-md shadow-sm'
+                    ? 'gap-1.5 lg:gap-2 px-3 py-1.5 rounded-2xl bg-[rgba(17,17,17,0.85)] border border-[#D4AF37]/20 backdrop-blur-md shadow-sm'
+                    : 'gap-1.5 lg:gap-2 px-3 py-1.5 rounded-2xl bg-white/85 border border-[rgba(18,214,160,0.2)] backdrop-blur-md shadow-sm'
               }`}
             >
               {navLinks.map((link) => {
@@ -198,13 +196,13 @@ export const Navbar: React.FC<NavbarProps> = ({
                     id={`nav-link-${link.name.toLowerCase()}`}
                     className={`relative font-semibold transition-all duration-200 cursor-pointer ${
                       scrolled 
-                        ? 'px-3 py-1.5 text-xs rounded-lg' 
+                        ? 'px-3.5 py-1.5 text-xs rounded-xl' 
                         : 'px-4 py-2 text-xs lg:text-sm rounded-xl'
                     } ${
                       isActive
-                        ? isDark ? 'text-[#F8FAFC]' : 'text-[#00A57A] font-bold'
+                        ? isDark ? 'text-[#FFFFFF]' : 'text-[#12D6A0] font-bold'
                         : isDark
-                          ? 'text-[#F8FAFC]/80 hover:text-[#F8FAFC] hover:bg-white/10'
+                          ? 'text-[#A1A1AA] hover:text-[#FFFFFF] hover:bg-white/10'
                           : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
                     }`}
                   >
@@ -212,10 +210,10 @@ export const Navbar: React.FC<NavbarProps> = ({
                       <motion.div
                         layoutId="active-nav-glow"
                         transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-                        className={`absolute inset-0 rounded-lg sm:rounded-xl -z-10 ${
+                        className={`absolute inset-0 rounded-xl -z-10 ${
                           isDark
-                            ? 'bg-[#7C3AED]/40 border border-[#D4AF37]/45 shadow-[0_0_15px_rgba(212,175,55,0.3)]'
-                            : 'bg-emerald-500/10 border border-[#00C896]/30 shadow-[0_2px_12px_rgba(0,200,150,0.2)]'
+                            ? 'bg-[#7B2CFF]/35 border border-[#D4AF37]/45 shadow-[0_0_15px_rgba(212,175,55,0.3)]'
+                            : 'bg-emerald-500/10 border border-[#12D6A0]/30 shadow-[0_2px_12px_rgba(18,214,160,0.2)]'
                         }`}
                       />
                     )}
@@ -233,16 +231,16 @@ export const Navbar: React.FC<NavbarProps> = ({
                 id="theme-toggle-btn"
                 aria-label={`Switch to ${isDark ? 'Light' : 'Dark'} theme`}
                 title={`Switch to ${isDark ? 'Apple Titanium Emerald Light' : 'Black Mamba Gold Dark'} Mode`}
-                className={`p-2 sm:p-2.5 rounded-xl border transition-all duration-300 cursor-pointer flex items-center justify-center ${
+                className={`p-2 sm:p-2.5 rounded-2xl border transition-all duration-300 cursor-pointer flex items-center justify-center ${
                   isDark
-                    ? 'bg-[#0B0B0F] border-[rgba(212,175,55,0.3)] text-[#FFD700] hover:bg-[#D4AF37]/20 hover:border-[#D4AF37]'
-                    : 'bg-white border-slate-200 text-[#00A57A] hover:bg-emerald-50 hover:border-[#00C896]'
+                    ? 'bg-[#0A0A0A] border-[rgba(212,175,55,0.3)] text-[#F5D06F] hover:bg-[#D4AF37]/20 hover:border-[#D4AF37]'
+                    : 'bg-white border-[rgba(18,214,160,0.25)] text-[#12D6A0] hover:bg-emerald-50 hover:border-[#12D6A0]'
                 } shadow-sm active:scale-95`}
               >
                 {isDark ? (
-                  <Sun className="w-4 h-4 text-[#FFD700]" />
+                  <Sun className="w-4 h-4 text-[#F5D06F]" />
                 ) : (
-                  <Moon className="w-4 h-4 text-[#00A57A]" />
+                  <Moon className="w-4 h-4 text-[#12D6A0]" />
                 )}
               </button>
 
@@ -251,11 +249,11 @@ export const Navbar: React.FC<NavbarProps> = ({
                 onClick={onOpenContact}
                 id="navbar-contact-btn"
                 className={`font-bold transition-all duration-300 flex items-center gap-2 cursor-pointer shadow-md active:scale-95 ${
-                  scrolled ? 'px-3 py-2 text-xs rounded-lg' : 'px-4 py-2.5 text-xs lg:text-sm rounded-xl'
+                  scrolled ? 'px-3.5 py-2 text-xs rounded-xl' : 'px-4 py-2.5 text-xs lg:text-sm rounded-2xl'
                 } ${
                   isDark
-                    ? 'bg-gradient-to-r from-[#D4AF37] to-[#FFD700] text-black hover:opacity-95 shadow-[0_0_20px_rgba(212,175,55,0.3)]'
-                    : 'bg-gradient-to-r from-[#00C896] to-[#00A57A] text-white hover:opacity-95 shadow-[0_4px_20px_rgba(0,200,150,0.35)]'
+                    ? 'bg-gradient-to-r from-[#D4AF37] to-[#F5D06F] text-black hover:opacity-95 shadow-[0_0_20px_rgba(212,175,55,0.3)]'
+                    : 'bg-gradient-to-r from-[#12D6A0] to-[#0EB385] text-white hover:opacity-95 shadow-[0_4px_20px_rgba(18,214,160,0.35)]'
                 }`}
               >
                 <Mail className={scrolled ? 'w-3.5 h-3.5' : 'w-4 h-4'} />
@@ -270,10 +268,10 @@ export const Navbar: React.FC<NavbarProps> = ({
                 onClick={toggleTheme}
                 id="mobile-theme-toggle-btn"
                 aria-label="Toggle theme"
-                className={`p-2 rounded-xl border transition-colors ${
+                className={`p-2 rounded-2xl border transition-colors ${
                   isDark
-                    ? 'bg-[#0B0B0F] border-[rgba(212,175,55,0.3)] text-[#FFD700]'
-                    : 'bg-white border-slate-200 text-[#00A57A]'
+                    ? 'bg-[#0A0A0A] border-[rgba(212,175,55,0.3)] text-[#F5D06F]'
+                    : 'bg-white border-[rgba(18,214,160,0.25)] text-[#12D6A0]'
                 }`}
               >
                 {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
@@ -283,10 +281,10 @@ export const Navbar: React.FC<NavbarProps> = ({
                 onClick={() => setMobileMenuOpen(true)}
                 id="mobile-menu-open-btn"
                 aria-label="Open navigation drawer"
-                className={`p-2 rounded-xl border transition-colors ${
+                className={`p-2 rounded-2xl border transition-colors ${
                   isDark
-                    ? 'bg-[rgba(15,15,20,0.85)] border-[#D4AF37]/30 text-[#F8FAFC]'
-                    : 'bg-white/90 border-slate-200 text-slate-800'
+                    ? 'bg-[rgba(17,17,17,0.85)] border-[#D4AF37]/30 text-[#FFFFFF]'
+                    : 'bg-white/90 border-[rgba(18,214,160,0.25)] text-slate-800'
                 }`}
               >
                 <Menu className="w-5 h-5" />
@@ -347,8 +345,8 @@ const MobileDrawer: React.FC<MobileDrawerProps> = ({
         id="mobile-slide-drawer"
         className={`relative w-4/5 max-w-sm h-full flex flex-col justify-between p-6 overflow-y-auto transition-transform duration-300 shadow-2xl backdrop-blur-2xl ${
           isDark
-            ? 'bg-[rgba(12,12,16,0.92)] border-l border-[#D4AF37]/25 text-[#F8FAFC] shadow-[0_0_50px_rgba(0,0,0,0.9)]'
-            : 'bg-white/95 border-l border-slate-200 text-slate-900 shadow-[0_0_40px_rgba(0,200,150,0.15)]'
+            ? 'bg-[rgba(10,10,10,0.95)] border-l border-[#D4AF37]/25 text-[#FFFFFF] shadow-[0_0_50px_rgba(0,0,0,0.9)]'
+            : 'bg-white/95 border-l border-[rgba(18,214,160,0.2)] text-slate-900 shadow-[0_0_40px_rgba(18,214,160,0.15)]'
         }`}
       >
         {/* Top Header */}
@@ -357,18 +355,18 @@ const MobileDrawer: React.FC<MobileDrawerProps> = ({
             isDark ? 'border-[rgba(212,175,55,0.25)]' : 'border-slate-200'
           }`}>
             <div className="flex items-center gap-3">
-              <div className={`w-9 h-9 rounded-lg flex items-center justify-center p-1 relative overflow-hidden ${
-                isDark ? 'bg-[#0B0B0F] border border-[#D4AF37]/30' : 'bg-emerald-50 border border-[#00C896]/30'
+              <div className={`w-10 h-10 rounded-2xl flex items-center justify-center p-1 relative overflow-hidden ${
+                isDark ? 'bg-[#0A0A0A] border border-[#D4AF37]/30' : 'bg-emerald-50 border border-[rgba(18,214,160,0.3)]'
               }`}>
                 <span className={`font-black text-xs items-center justify-center w-full h-full flex ${
-                  isDark ? 'text-[#D4AF37]' : 'text-[#00A57A]'
+                  isDark ? 'text-[#F5D06F]' : 'text-[#12D6A0]'
                 }`}>
                   MR
                 </span>
               </div>
               <div>
                 <h4 className="font-bold text-sm leading-tight">{portfolioConfig.personal.name}</h4>
-                <p className={`text-[11px] font-mono ${isDark ? 'text-[#F8FAFC]/70' : 'text-slate-500'}`}>
+                <p className={`text-[11px] font-mono ${isDark ? 'text-[#FFFFFF]/70' : 'text-slate-500'}`}>
                   {portfolioConfig.personal.titles[0]}
                 </p>
               </div>
@@ -377,8 +375,8 @@ const MobileDrawer: React.FC<MobileDrawerProps> = ({
               <button
                 onClick={toggleTheme}
                 aria-label="Toggle theme mode"
-                className={`p-1.5 rounded-lg transition-colors ${
-                  isDark ? 'text-[#FFD700] hover:bg-white/10' : 'text-[#00A57A] hover:bg-slate-100'
+                className={`p-2 rounded-xl transition-colors ${
+                  isDark ? 'text-[#F5D06F] hover:bg-white/10' : 'text-[#12D6A0] hover:bg-slate-100'
                 }`}
               >
                 {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
@@ -387,8 +385,8 @@ const MobileDrawer: React.FC<MobileDrawerProps> = ({
                 onClick={onClose}
                 id="mobile-drawer-close-btn"
                 aria-label="Close menu"
-                className={`p-1.5 rounded-lg cursor-pointer ${
-                  isDark ? 'text-[#F8FAFC] hover:text-[#FFD700]' : 'text-slate-600 hover:text-slate-900'
+                className={`p-2 rounded-xl cursor-pointer ${
+                  isDark ? 'text-[#FFFFFF] hover:text-[#F5D06F]' : 'text-slate-600 hover:text-slate-900'
                 }`}
               >
                 <X className="w-5 h-5" />
@@ -397,7 +395,7 @@ const MobileDrawer: React.FC<MobileDrawerProps> = ({
           </div>
 
           {/* Navigation Links: Home, Skills, Projects, Experience */}
-          <nav className="mt-6 flex flex-col gap-1.5">
+          <nav className="mt-6 flex flex-col gap-2">
             {navLinks.map((link) => {
               const isActive = location.pathname === link.path;
               return (
@@ -406,14 +404,14 @@ const MobileDrawer: React.FC<MobileDrawerProps> = ({
                   to={link.path}
                   onClick={onClose}
                   id={`mobile-link-${link.name.toLowerCase()}`}
-                  className={`flex items-center justify-between px-4 py-3 rounded-xl text-sm font-semibold transition-all ${
+                  className={`flex items-center justify-between px-4 py-3 rounded-2xl text-sm font-semibold transition-all ${
                     isActive
                       ? isDark
-                        ? 'bg-[#7C3AED]/30 text-[#D4AF37] border border-[#D4AF37]/30 shadow-[0_0_15px_rgba(212,175,55,0.15)]'
-                        : 'bg-emerald-500/10 text-[#00A57A] border border-[#00C896]/30 shadow-[0_2px_10px_rgba(0,200,150,0.1)]'
+                        ? 'bg-[#7B2CFF]/30 text-[#F5D06F] border border-[#D4AF37]/35 shadow-[0_0_15px_rgba(212,175,55,0.15)]'
+                        : 'bg-emerald-500/10 text-[#12D6A0] border border-[rgba(18,214,160,0.3)] shadow-[0_2px_10px_rgba(18,214,160,0.1)]'
                       : isDark
-                        ? 'text-[#F8FAFC] hover:bg-[#7C3AED]/20 hover:text-[#FFD700]'
-                        : 'text-slate-700 hover:bg-emerald-50 hover:text-[#00A57A]'
+                        ? 'text-[#A1A1AA] hover:bg-[#7B2CFF]/20 hover:text-[#FFFFFF]'
+                        : 'text-slate-700 hover:bg-emerald-50 hover:text-[#12D6A0]'
                   }`}
                 >
                   <span>{link.name}</span>
@@ -425,29 +423,29 @@ const MobileDrawer: React.FC<MobileDrawerProps> = ({
         </div>
 
         {/* Bottom Drawer Actions: Download Resume + Get In Touch */}
-        <div className={`pt-6 border-t flex flex-col gap-2.5 ${
+        <div className={`pt-6 border-t flex flex-col gap-3 ${
           isDark ? 'border-[rgba(212,175,55,0.25)]' : 'border-slate-200'
         }`}>
           <button
             onClick={onOpenResumeDownload}
             id="mobile-drawer-resume-btn"
-            className={`w-full py-3 px-4 rounded-xl text-xs font-bold border flex items-center justify-center gap-2 cursor-pointer transition-all ${
+            className={`w-full py-3.5 px-4 rounded-2xl text-xs font-bold border flex items-center justify-center gap-2 cursor-pointer transition-all ${
               isDark
-                ? 'bg-[rgba(15,15,20,0.85)] border-[#D4AF37]/30 text-[#F8FAFC] hover:border-[#D4AF37]'
-                : 'bg-white border-slate-200 text-slate-800 hover:border-[#00C896] hover:text-[#00A57A]'
+                ? 'bg-[rgba(17,17,17,0.85)] border-[#D4AF37]/30 text-[#FFFFFF] hover:border-[#D4AF37]'
+                : 'bg-white border-slate-200 text-slate-800 hover:border-[#12D6A0] hover:text-[#12D6A0]'
             }`}
           >
-            <FileText className={`w-4 h-4 ${isDark ? 'text-[#D4AF37]' : 'text-[#00A57A]'}`} />
+            <FileText className={`w-4 h-4 ${isDark ? 'text-[#F5D06F]' : 'text-[#12D6A0]'}`} />
             <span>Download Resume</span>
           </button>
 
           <button
             onClick={onOpenContact}
             id="mobile-drawer-contact-btn"
-            className={`w-full py-3 px-4 rounded-xl text-xs font-bold text-center flex items-center justify-center gap-2 shadow-lg cursor-pointer transition-all ${
+            className={`w-full py-3.5 px-4 rounded-2xl text-xs font-bold text-center flex items-center justify-center gap-2 shadow-lg cursor-pointer transition-all ${
               isDark
-                ? 'bg-gradient-to-r from-[#D4AF37] to-[#FFD700] text-black shadow-[0_0_20px_rgba(212,175,55,0.3)]'
-                : 'bg-gradient-to-r from-[#00C896] to-[#00A57A] text-white shadow-[0_4px_20px_rgba(0,200,150,0.3)]'
+                ? 'bg-gradient-to-r from-[#D4AF37] to-[#F5D06F] text-black shadow-[0_0_20px_rgba(212,175,55,0.3)]'
+                : 'bg-gradient-to-r from-[#12D6A0] to-[#0EB385] text-white shadow-[0_4px_20px_rgba(18,214,160,0.3)]'
             }`}
           >
             <Mail className="w-4 h-4" />

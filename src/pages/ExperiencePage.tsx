@@ -23,8 +23,8 @@ export const ExperiencePage: React.FC<ExperiencePageProps> = ({ onOpenResumeDown
       <div className="flex flex-col items-center text-center mb-16">
         <div className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-4 ${
           isDark
-            ? 'bg-[#7C3AED]/20 text-[#D4AF37] border border-[#D4AF37]/30 shadow-[0_0_20px_rgba(212,175,55,0.15)]'
-            : 'bg-emerald-500/10 text-[#00A57A] border border-emerald-500/25 shadow-[0_2px_12px_rgba(0,200,150,0.15)]'
+            ? 'bg-[#7B2CFF]/20 text-[#D4AF37] border border-[#D4AF37]/30 shadow-[0_0_20px_rgba(212,175,55,0.15)]'
+            : 'bg-emerald-500/10 text-[#12D6A0] border border-emerald-500/25 shadow-[0_2px_12px_rgba(18,214,160,0.15)]'
         }`}>
           <Briefcase className="w-4 h-4" />
           <span>Professional Timeline &amp; Track Record</span>
@@ -34,8 +34,8 @@ export const ExperiencePage: React.FC<ExperiencePageProps> = ({ onOpenResumeDown
           Career{' '}
           <span className={`text-transparent bg-clip-text ${
             isDark
-              ? 'bg-gradient-to-r from-white via-[#D4AF37] to-[#FFD700]'
-              : 'bg-gradient-to-r from-slate-900 via-[#00A57A] to-[#00C896]'
+              ? 'bg-gradient-to-r from-white via-[#D4AF37] to-[#F5D06F]'
+              : 'bg-gradient-to-r from-slate-900 via-[#12D6A0] to-[#0EB385]'
           }`}>
             Experience
           </span>
@@ -51,10 +51,10 @@ export const ExperiencePage: React.FC<ExperiencePageProps> = ({ onOpenResumeDown
           <button
             onClick={onOpenResumeDownload}
             id="experience-page-download-resume-btn"
-            className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-xl text-xs font-bold transition-all border cursor-pointer backdrop-blur-2xl ${
+            className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-2xl text-xs font-bold transition-all border cursor-pointer backdrop-blur-2xl ${
               isDark
-                ? 'bg-[rgba(12,12,16,0.45)] text-[#D4AF37] border-[#D4AF37]/40 hover:border-[#D4AF37] hover:bg-[rgba(20,20,28,0.7)] shadow-[0_0_15px_rgba(212,175,55,0.2)]'
-                : 'bg-white text-[#00A57A] border-emerald-300 hover:border-[#00C896] hover:bg-emerald-50 shadow-sm'
+                ? 'bg-[#0A0A0A] text-[#D4AF37] border-[#D4AF37]/40 hover:border-[#D4AF37] hover:bg-[#15151E] shadow-[0_0_15px_rgba(212,175,55,0.2)]'
+                : 'bg-white text-[#12D6A0] border-emerald-300 hover:border-[#12D6A0] hover:bg-emerald-50 shadow-sm'
             }`}
           >
             <FileText className="w-4 h-4" />
@@ -69,8 +69,8 @@ export const ExperiencePage: React.FC<ExperiencePageProps> = ({ onOpenResumeDown
         {/* Central Vertical Glowing Line */}
         <div className={`absolute left-4 sm:left-1/2 top-4 bottom-4 w-0.5 -translate-x-1/2 rounded-full ${
           isDark
-            ? 'bg-gradient-to-b from-[#D4AF37] via-[#A855F7] to-[#D4AF37] shadow-[0_0_15px_rgba(212,175,55,0.35)]'
-            : 'bg-gradient-to-b from-[#00C896] via-emerald-400 to-[#00A57A] shadow-[0_0_15px_rgba(0,200,150,0.35)]'
+            ? 'bg-gradient-to-b from-[#D4AF37] via-[#7B2CFF] to-[#D4AF37] shadow-[0_0_15px_rgba(212,175,55,0.35)]'
+            : 'bg-gradient-to-b from-[#12D6A0] via-[#8EF0D1] to-[#12D6A0] shadow-[0_0_15px_rgba(18,214,160,0.35)]'
         }`} />
 
         {/* Timeline Milestones */}
@@ -87,7 +87,7 @@ export const ExperiencePage: React.FC<ExperiencePageProps> = ({ onOpenResumeDown
                 <div className={`absolute left-4 sm:left-1/2 -translate-x-1/2 z-20 w-8 h-8 rounded-full flex items-center justify-center p-1 border-2 transition-transform duration-300 hover:scale-125 ${
                   isDark
                     ? 'bg-[#050505] border-[#D4AF37] text-[#D4AF37] shadow-[0_0_20px_rgba(212,175,55,0.4)]'
-                    : 'bg-white border-[#00C896] text-[#00A57A] shadow-[0_0_20px_rgba(0,200,150,0.3)]'
+                    : 'bg-white border-[#12D6A0] text-[#12D6A0] shadow-[0_0_20px_rgba(18,214,160,0.3)]'
                 }`}>
                   <Briefcase className="w-3.5 h-3.5" />
                 </div>
@@ -102,33 +102,33 @@ export const ExperiencePage: React.FC<ExperiencePageProps> = ({ onOpenResumeDown
                     isEven ? 'sm:mr-auto sm:pr-4' : 'sm:ml-auto sm:pl-4'
                   }`}
                 >
-                  <div className={`p-6 sm:p-7 rounded-3xl backdrop-blur-2xl border transition-all duration-300 hover:shadow-xl ${
+                  <div className={`p-6 sm:p-7 rounded-[32px] backdrop-blur-2xl border transition-all duration-300 hover:shadow-xl ${
                     isDark
-                      ? 'bg-[rgba(12,12,16,0.45)] border-[rgba(212,175,55,0.22)] hover:border-[#D4AF37]/60 hover:shadow-[0_0_30px_rgba(124,58,237,0.25)] text-[#F8FAFC]'
-                      : 'bg-white/85 border-[rgba(0,200,150,0.2)] hover:border-[#00C896] hover:shadow-[0_12px_30px_rgba(0,200,150,0.15)] text-slate-800 shadow-sm'
+                      ? 'bg-[#0A0A0A] border-[rgba(212,175,55,0.22)] hover:border-[#D4AF37]/60 hover:shadow-[0_0_30px_rgba(123,44,255,0.25)] text-[#FFFFFF]'
+                      : 'bg-white/85 border-[rgba(18,214,160,0.2)] hover:border-[#12D6A0] hover:shadow-[0_12px_30px_rgba(18,214,160,0.15)] text-slate-800 shadow-sm'
                   }`}>
                     
                     {/* Top Header: Duration & Position Type */}
                     <div className="flex items-center justify-between gap-2 mb-3">
                       <div className={`flex items-center gap-1.5 text-xs font-mono ${isDark ? 'text-[#A1A1AA]' : 'text-slate-500'}`}>
-                        <Calendar className={`w-3.5 h-3.5 ${isDark ? 'text-[#D4AF37]' : 'text-[#00A57A]'}`} />
+                        <Calendar className={`w-3.5 h-3.5 ${isDark ? 'text-[#D4AF37]' : 'text-[#12D6A0]'}`} />
                         <span>{item.duration}</span>
                       </div>
                       <span className={`text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full border ${
                         isDark
-                          ? 'bg-[#7C3AED]/30 text-[#D4AF37] border-[#D4AF37]/30'
-                          : 'bg-emerald-50 text-[#00A57A] border-emerald-200'
+                          ? 'bg-[#7B2CFF]/30 text-[#D4AF37] border-[#D4AF37]/30'
+                          : 'bg-emerald-50 text-[#12D6A0] border-emerald-200'
                       }`}>
                         {item.type}
                       </span>
                     </div>
 
                     {/* Position & Company */}
-                    <h3 className={`text-xl font-extrabold tracking-tight mb-1 ${isDark ? 'text-[#F8FAFC]' : 'text-slate-900'}`}>
+                    <h3 className={`text-xl font-extrabold tracking-tight mb-1 ${isDark ? 'text-[#FFFFFF]' : 'text-slate-900'}`}>
                       {item.position}
                     </h3>
                     <div className={`text-sm font-semibold mb-4 flex items-center gap-2 ${
-                      isDark ? 'text-[#D4AF37]' : 'text-[#00A57A]'
+                      isDark ? 'text-[#D4AF37]' : 'text-[#12D6A0]'
                     }`}>
                       <span>{item.company}</span>
                       <span className={`text-xs ${isDark ? 'text-[#A1A1AA]' : 'text-slate-500'}`}>• {item.location}</span>
@@ -143,7 +143,7 @@ export const ExperiencePage: React.FC<ExperiencePageProps> = ({ onOpenResumeDown
                     <div className="space-y-2 mb-5">
                       {item.achievements.map((ach, aIdx) => (
                         <div key={aIdx} className={`flex items-start gap-2 text-xs ${isDark ? 'text-[#A1A1AA]' : 'text-slate-700'}`}>
-                          <CheckCircle2 className={`w-3.5 h-3.5 shrink-0 mt-0.5 ${isDark ? 'text-[#D4AF37]' : 'text-[#00C896]'}`} />
+                          <CheckCircle2 className={`w-3.5 h-3.5 shrink-0 mt-0.5 ${isDark ? 'text-[#D4AF37]' : 'text-[#12D6A0]'}`} />
                           <span>{ach}</span>
                         </div>
                       ))}
@@ -154,9 +154,9 @@ export const ExperiencePage: React.FC<ExperiencePageProps> = ({ onOpenResumeDown
                       {item.skills.map((skill, sIdx) => (
                         <span
                           key={sIdx}
-                          className={`text-[10px] font-semibold px-2.5 py-0.5 rounded-lg border ${
+                          className={`text-[10px] font-semibold px-2.5 py-0.5 rounded-xl border ${
                             isDark
-                              ? 'bg-[#0B0B0F] border-[rgba(212,175,55,0.2)] text-[#F8FAFC]'
+                              ? 'bg-[#0B0B0F] border-[rgba(212,175,55,0.2)] text-[#FFFFFF]'
                               : 'bg-emerald-50/70 border-emerald-200/80 text-slate-700'
                           }`}
                         >

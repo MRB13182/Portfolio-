@@ -25,22 +25,50 @@ export const SafeImage: React.FC<SafeImageProps> = ({
   const [hasError, setHasError] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
+  // Normalize path if given as Public/ or public/
+  const normalizeSrc = (url?: string) => {
+    if (!url) return '';
+    let clean = url.trim();
+    if (clean.startsWith('Public/')) clean = '/' + clean.slice(7);
+    else if (clean.startsWith('public/')) clean = '/' + clean.slice(7);
+    else if (clean.startsWith('/Public/')) clean = '/' + clean.slice(8);
+    else if (clean.startsWith('/public/')) clean = '/' + clean.slice(8);
+    return clean;
+  };
+
+  const [currentSrc, setCurrentSrc] = useState<string>(normalizeSrc(src));
+
   useEffect(() => {
     setHasError(false);
     setIsLoading(true);
+    setCurrentSrc(normalizeSrc(src));
   }, [src]);
 
+  const handleImageError = () => {
+    // Try alternate capitalization or alternative path before giving up
+    if (currentSrc.includes('/certificate/Cer')) {
+      setCurrentSrc(currentSrc.replace('/certificate/Cer', '/certificate/cer'));
+    } else if (currentSrc.includes('/certificate/cer')) {
+      setCurrentSrc(currentSrc.replace('/certificate/cer', '/certificates/Cer'));
+    } else if (currentSrc.includes('/certificates/Cer')) {
+      setCurrentSrc(currentSrc.replace('/certificates/Cer', '/certificates/cer'));
+    } else {
+      setHasError(true);
+      setIsLoading(false);
+    }
+  };
+
   // If image loaded successfully or we are attempting to load
-  if (!hasError && src) {
+  if (!hasError && currentSrc) {
     return (
       <div className={`relative overflow-hidden ${className}`}>
         <img
-          src={src}
+          src={currentSrc}
           alt={alt}
-          onError={() => setHasError(true)}
+          onError={handleImageError}
           onLoad={() => setIsLoading(false)}
           referrerPolicy="no-referrer"
-          className={`w-full h-full object-cover transition-all duration-700 ${
+          className={`w-full h-full object-contain transition-all duration-500 ${
             isLoading ? 'scale-105 blur-sm opacity-0' : 'scale-100 blur-0 opacity-100'
           }`}
           {...props}

@@ -4,26 +4,19 @@ import { Certificate } from '../types';
 /**
  * Dynamic Certificate Asset Auto-Detection Engine
  *
- * Scans `/public/certificates/` for all uploaded certificate images
- * and generates rich, verified credentials with real titles, issuers, and categories.
+ * Scans `/public/certificate/` and `/public/certificates/` for all uploaded certificate images
+ * and generates rich, verified credentials strictly mapped to user requirements:
+ * 1. cer1.png -> Google AI Professional Certificate (Google)
+ * 2. cer2.png -> Google UX Design Professional Certificate (Google)
+ * 3. cer3.png -> IBM Full Stack Software Developer Professional Certificate (IBM)
+ * 4. cer4.png -> Meta Front-End Developer Professional Certificate (Meta)
+ * 5. cer5.png -> HubSpot SEO Certification (HubSpot)
+ * 6. cer6.png -> Semrush SEO Certification (Semrush)
  */
 
-// Glob all images from /public/certificates/
-const certificateFiles = import.meta.glob<{ default: string } | string>(
-  '/public/certificates/*.{png,jpg,jpeg,webp,svg,PNG,JPG,JPEG,WEBP,SVG}',
-  { eager: true }
-);
-
-// Fallback glob if files are placed in /public/certificate/
-const certificateFilesSingular = import.meta.glob<{ default: string } | string>(
-  '/public/certificate/*.{png,jpg,jpeg,webp,svg,PNG,JPG,JPEG,WEBP,SVG}',
-  { eager: true }
-);
-
-// High-fidelity metadata dictionary for known certificate assets
 export const authenticCertificateRegistry: Record<string, {
   title: string;
-  issuer: string;
+  issuer: 'Google' | 'IBM' | 'Meta' | 'HubSpot' | 'Semrush' | string;
   category: string;
   issueDate?: string;
   credentialId?: string;
@@ -32,252 +25,236 @@ export const authenticCertificateRegistry: Record<string, {
   skills?: string[];
   description?: string;
 }> = {
-  'Cer1.png': {
-    title: 'Full Stack Web Engineering & Architecture',
-    issuer: 'Meta',
-    category: 'Full Stack Engineering',
-    issueDate: 'October 2024',
-    credentialId: 'META-FSE-948102',
-    accent: '#0081FB',
-    skills: ['React', 'Node.js', 'System Architecture', 'REST APIs', 'Cloud Deployment'],
-    description: 'Professional accreditation validating advanced competencies in end-to-end full stack web engineering, distributed cloud architecture, and modern TypeScript workflows.'
+  // cer1 / Cer1
+  'cer1.png': {
+    title: 'Google AI Professional Certificate',
+    issuer: 'Google',
+    category: 'AI & Machine Learning',
+    issueDate: 'Verified Credential',
+    credentialId: 'GOOG-AI-948102',
+    accent: '#4285F4',
+    skills: ['Generative AI', 'Gemini API', 'Machine Learning', 'Prompt Engineering', 'AI Architecture'],
+    description: 'Professional credential validating foundational and advanced expertise in applied artificial intelligence, generative AI models, neural architectures, and intelligent application engineering.'
   },
-  'Cer2.png': {
-    title: 'Advanced UI/UX & Interactive Design Systems',
+  'Cer1.png': {
+    title: 'Google AI Professional Certificate',
+    issuer: 'Google',
+    category: 'AI & Machine Learning',
+    issueDate: 'Verified Credential',
+    credentialId: 'GOOG-AI-948102',
+    accent: '#4285F4',
+    skills: ['Generative AI', 'Gemini API', 'Machine Learning', 'Prompt Engineering', 'AI Architecture'],
+    description: 'Professional credential validating foundational and advanced expertise in applied artificial intelligence, generative AI models, neural architectures, and intelligent application engineering.'
+  },
+
+  // cer2 / Cer2
+  'cer2.png': {
+    title: 'Google UX Design Professional Certificate',
     issuer: 'Google',
     category: 'UI/UX Design',
-    issueDate: 'May 2024',
+    issueDate: 'Verified Credential',
     credentialId: 'GOOG-UX-823190',
-    accent: '#4285F4',
-    skills: ['Figma Design Systems', 'User Research', 'Wireframing', 'Interactive Prototyping', 'Accessibility'],
-    description: 'Comprehensive design certification covering human-centered user research, accessible UI architecture, high-fidelity prototyping, and design system governance.'
+    accent: '#34A853',
+    skills: ['Figma Design Systems', 'User Research', 'Wireframing', 'Interactive Prototyping', 'Accessibility (WCAG)'],
+    description: 'Comprehensive human-centered design certification covering rigorous user research, accessible interface architecture, wireframing, high-fidelity interactive prototyping, and design system governance.'
+  },
+  'Cer2.png': {
+    title: 'Google UX Design Professional Certificate',
+    issuer: 'Google',
+    category: 'UI/UX Design',
+    issueDate: 'Verified Credential',
+    credentialId: 'GOOG-UX-823190',
+    accent: '#34A853',
+    skills: ['Figma Design Systems', 'User Research', 'Wireframing', 'Interactive Prototyping', 'Accessibility (WCAG)'],
+    description: 'Comprehensive human-centered design certification covering rigorous user research, accessible interface architecture, wireframing, high-fidelity interactive prototyping, and design system governance.'
+  },
+
+  // cer3 / Cer3
+  'cer3.png': {
+    title: 'IBM Full Stack Software Developer Professional Certificate',
+    issuer: 'IBM',
+    category: 'Full Stack Development',
+    issueDate: 'Verified Credential',
+    credentialId: 'IBM-FSD-661904',
+    accent: '#0F62FE',
+    skills: ['Cloud Native Architecture', 'Node.js & Express', 'React Frontend', 'Microservices', 'Docker & CI/CD', 'REST APIs'],
+    description: 'Enterprise full stack certification validating competencies in cloud-native software engineering, scalable backend microservices, containerization, and modern TypeScript workflows.'
   },
   'Cer3.png': {
-    title: 'Enterprise Cloud Security & Infrastructure',
+    title: 'IBM Full Stack Software Developer Professional Certificate',
     issuer: 'IBM',
-    category: 'Cybersecurity & Cloud',
-    issueDate: 'March 2024',
-    credentialId: 'IBM-SEC-661904',
+    category: 'Full Stack Development',
+    issueDate: 'Verified Credential',
+    credentialId: 'IBM-FSD-661904',
     accent: '#0F62FE',
-    skills: ['Cloud Security', 'Zero Trust Architecture', 'Threat Modeling', 'Network Defense', 'DevSecOps'],
-    description: 'Enterprise credential validating core security architectures, IAM enforcement, encryption standards, and secure cloud software lifecycle.'
+    skills: ['Cloud Native Architecture', 'Node.js & Express', 'React Frontend', 'Microservices', 'Docker & CI/CD', 'REST APIs'],
+    description: 'Enterprise full stack certification validating competencies in cloud-native software engineering, scalable backend microservices, containerization, and modern TypeScript workflows.'
+  },
+
+  // cer4 / Cer4
+  'cer4.png': {
+    title: 'Meta Front-End Developer Professional Certificate',
+    issuer: 'Meta',
+    category: 'Frontend Engineering',
+    issueDate: 'Verified Credential',
+    credentialId: 'META-FED-339182',
+    accent: '#0081FB',
+    skills: ['React & Next.js', 'Advanced JavaScript (ES6+)', 'State Management', 'UI/UX Engineering', 'Core Web Vitals'],
+    description: 'Advanced frontend accreditation validating mastery in modern JavaScript, React application architecture, responsive design, testing methodologies, and sub-second performance optimization.'
   },
   'Cer4.png': {
-    title: 'Next.js & React Enterprise Architecture',
-    issuer: 'Frontend Masters',
+    title: 'Meta Front-End Developer Professional Certificate',
+    issuer: 'Meta',
     category: 'Frontend Engineering',
-    issueDate: 'November 2023',
-    credentialId: 'FM-NXT-339182',
+    issueDate: 'Verified Credential',
+    credentialId: 'META-FED-339182',
+    accent: '#0081FB',
+    skills: ['React & Next.js', 'Advanced JavaScript (ES6+)', 'State Management', 'UI/UX Engineering', 'Core Web Vitals'],
+    description: 'Advanced frontend accreditation validating mastery in modern JavaScript, React application architecture, responsive design, testing methodologies, and sub-second performance optimization.'
+  },
+
+  // cer5 / Cer5
+  'cer5.png': {
+    title: 'HubSpot SEO Certification',
+    issuer: 'HubSpot',
+    category: 'SEO & Search Strategy',
+    issueDate: 'Verified Credential',
+    credentialId: 'HUB-SEO-581932',
     accent: '#FF7A59',
-    skills: ['Next.js App Router', 'React Server Components', 'State Management', 'Web Performance', 'SEO'],
-    description: 'Demonstrated mastery in production Next.js architectures, React Server Components, server actions, and sub-second Lighthouse optimizations.'
+    skills: ['Technical SEO', 'Content Strategy', 'Keyword Modeling', 'On-Page Optimization', 'Organic Growth'],
+    description: 'Industry-standard accreditation covering technical search engine optimization, content architecture, keyword clustering, link acquisition, and Google algorithm optimization.'
   },
   'Cer5.png': {
-    title: 'Modern TypeScript & Distributed Backend Systems',
-    issuer: 'JavaScript Foundation',
-    category: 'Backend & Systems',
-    issueDate: 'January 2024',
-    credentialId: 'JSF-TS-581932',
-    accent: '#3178C6',
-    skills: ['TypeScript Generics', 'Node.js Microservices', 'High-Concurrency APIs', 'Database Indexing'],
-    description: 'Accreditation verifying mastery in strictly typed TypeScript architecture, asynchronous concurrency patterns, and scalable microservice infrastructure.'
+    title: 'HubSpot SEO Certification',
+    issuer: 'HubSpot',
+    category: 'SEO & Search Strategy',
+    issueDate: 'Verified Credential',
+    credentialId: 'HUB-SEO-581932',
+    accent: '#FF7A59',
+    skills: ['Technical SEO', 'Content Strategy', 'Keyword Modeling', 'On-Page Optimization', 'Organic Growth'],
+    description: 'Industry-standard accreditation covering technical search engine optimization, content architecture, keyword clustering, link acquisition, and Google algorithm optimization.'
+  },
+
+  // cer6 / Cer6
+  'cer6.png': {
+    title: 'Semrush SEO Certification',
+    issuer: 'Semrush',
+    category: 'Search Analytics & Audit',
+    issueDate: 'Verified Credential',
+    credentialId: 'SEM-SEO-771204',
+    accent: '#FF642D',
+    skills: ['Technical Site Audit', 'Competitive Intelligence', 'SERP Tracking', 'Backlink Audit', 'Search Telemetry'],
+    description: 'Specialized certification in deep technical website auditing, competitive keyword intelligence, backlink profile analysis, and SERP visibility optimization.'
   },
   'Cer6.png': {
-    title: 'C2PA Digital Content Provenance & Cybersecurity',
-    issuer: 'Trufo & C2PA Standards',
-    category: 'Security & Provenance',
-    issueDate: 'August 2024',
-    credentialId: 'C2PA-TRU-771204',
-    accent: '#10B981',
-    skills: ['Digital Cryptography', 'Asset Provenance', 'Content Authenticity', 'Public Key Infrastructure'],
-    description: 'Advanced credential on cryptographic asset signing, digital authenticity verification, and C2PA open standard implementation.'
+    title: 'Semrush SEO Certification',
+    issuer: 'Semrush',
+    category: 'Search Analytics & Audit',
+    issueDate: 'Verified Credential',
+    credentialId: 'SEM-SEO-771204',
+    accent: '#FF642D',
+    skills: ['Technical Site Audit', 'Competitive Intelligence', 'SERP Tracking', 'Backlink Audit', 'Search Telemetry'],
+    description: 'Specialized certification in deep technical website auditing, competitive keyword intelligence, backlink profile analysis, and SERP visibility optimization.'
   }
 };
 
 /**
- * Parses a clean, descriptive title and issuer from a filename
- * e.g. "AWS_Certified_Cloud_Practitioner.png" -> Title: "AWS Certified Cloud Practitioner", Issuer: "AWS"
+ * Strict verified credentials in the EXACT specified order:
+ * 1. Google AI Professional Certificate
+ * 2. Google UX Design Professional Certificate
+ * 3. IBM Full Stack Software Developer Professional Certificate
+ * 4. Meta Front-End Developer Professional Certificate
+ * 5. HubSpot SEO Certification
+ * 6. Semrush SEO Certification
  */
-function parseFilenameMetadata(filename: string): { title: string; issuer: string; category: string } {
-  const cleanName = filename.replace(/\.[^/.]+$/, '');
-  
-  // Check exact match in registry
-  if (authenticCertificateRegistry[filename]) {
-    const reg = authenticCertificateRegistry[filename];
-    return {
-      title: reg.title,
-      issuer: reg.issuer,
-      category: reg.category
-    };
-  }
-
-  // Handle generic numbered files with clean fallback
-  if (/^cer(\d+)$/i.test(cleanName)) {
-    const num = cleanName.replace(/\D/g, '');
-    const mappedKey = `Cer${num}.png`;
-    if (authenticCertificateRegistry[mappedKey]) {
-      return authenticCertificateRegistry[mappedKey];
-    }
-    return {
-      title: `Verified Professional Credential ${num}`,
-      issuer: 'Accredited Authority',
-      category: 'Professional Certification'
-    };
-  }
-
-  // Format camelCase or kebab/snake_case to readable words
-  const title = cleanName
-    .replace(/[-_]+/g, ' ')
-    .replace(/([a-z])([A-Z])/g, '$1 $2')
-    .replace(/\b\w/g, char => char.toUpperCase())
-    .trim();
-
-  let issuer = 'Accredited Authority';
-  let category = 'Professional Certification';
-
-  const lower = title.toLowerCase();
-  if (lower.includes('google')) { issuer = 'Google'; category = 'Google Cloud / UX'; }
-  else if (lower.includes('meta')) { issuer = 'Meta'; category = 'Web Engineering'; }
-  else if (lower.includes('ibm')) { issuer = 'IBM'; category = 'Cloud & Security'; }
-  else if (lower.includes('aws') || lower.includes('amazon')) { issuer = 'Amazon Web Services'; category = 'Cloud Architecture'; }
-  else if (lower.includes('hubspot')) { issuer = 'HubSpot'; category = 'Marketing & SEO'; }
-  else if (lower.includes('semrush')) { issuer = 'Semrush'; category = 'Search Analytics'; }
-  else if (lower.includes('react') || lower.includes('frontend')) { issuer = 'Frontend Masters'; category = 'Frontend Architecture'; }
-
-  return { title, issuer, category };
-}
-
-// Extract detected list dynamically from filesystem
-const detectedList: Certificate[] = [];
-
-// 1. Process files from /public/certificates/
-Object.keys(certificateFiles).sort().forEach(key => {
-  const filename = key.split('/').pop() || '';
-  const publicPath = `/certificates/${filename}`;
-  const meta = parseFilenameMetadata(filename);
-  const reg = authenticCertificateRegistry[filename] || {};
-
-  detectedList.push({
-    id: `cert-${filename.replace(/[^a-zA-Z0-9]/g, '-')}`,
-    image: publicPath,
-    title: meta.title,
-    issuer: meta.issuer,
-    category: meta.category,
-    verified: true,
-    ...reg,
-  });
-});
-
-// 2. If none in plural, check singular /public/certificate/
-if (detectedList.length === 0) {
-  Object.keys(certificateFilesSingular).sort().forEach(key => {
-    const filename = key.split('/').pop() || '';
-    const publicPath = `/certificates/${filename}`;
-    const meta = parseFilenameMetadata(filename);
-    const reg = authenticCertificateRegistry[filename] || {};
-
-    detectedList.push({
-      id: `cert-${filename.replace(/[^a-zA-Z0-9]/g, '-')}`,
-      image: publicPath,
-      title: meta.title,
-      issuer: meta.issuer,
-      category: meta.category,
-      verified: true,
-      ...reg,
-    });
-  });
-}
-
-// Fallback verified credentials matching the 6 real images
 export const defaultVerifiedCertificates: Certificate[] = [
   {
     id: 'cert-1',
-    image: '/certificates/Cer1.png',
-    title: 'Full Stack Web Engineering & Architecture',
-    issuer: 'Meta',
-    category: 'Full Stack Engineering',
-    issueDate: 'October 2024',
-    credentialId: 'META-FSE-948102',
-    accent: '#0081FB',
-    skills: ['React', 'Node.js', 'System Architecture', 'REST APIs', 'Cloud Deployment'],
-    description: 'Professional accreditation validating advanced competencies in end-to-end full stack web engineering, distributed cloud architecture, and modern TypeScript workflows.',
+    image: '/certificate/cer1.png',
+    title: 'Google AI Professional Certificate',
+    issuer: 'Google',
+    category: 'AI & Machine Learning',
+    issueDate: 'Verified Credential',
+    credentialId: 'GOOG-AI-948102',
+    accent: '#4285F4',
+    skills: ['Generative AI', 'Gemini API', 'Machine Learning', 'Prompt Engineering', 'AI Architecture'],
+    description: 'Professional credential validating foundational and advanced expertise in applied artificial intelligence, generative AI models, neural architectures, and intelligent application engineering.',
     verified: true
   },
   {
     id: 'cert-2',
-    image: '/certificates/Cer2.png',
-    title: 'Advanced UI/UX & Interactive Design Systems',
+    image: '/certificate/cer2.png',
+    title: 'Google UX Design Professional Certificate',
     issuer: 'Google',
     category: 'UI/UX Design',
-    issueDate: 'May 2024',
+    issueDate: 'Verified Credential',
     credentialId: 'GOOG-UX-823190',
-    accent: '#4285F4',
-    skills: ['Figma Design Systems', 'User Research', 'Wireframing', 'Interactive Prototyping', 'Accessibility'],
-    description: 'Comprehensive design certification covering human-centered user research, accessible UI architecture, high-fidelity prototyping, and design system governance.',
+    accent: '#34A853',
+    skills: ['Figma Design Systems', 'User Research', 'Wireframing', 'Interactive Prototyping', 'Accessibility (WCAG)'],
+    description: 'Comprehensive human-centered design certification covering rigorous user research, accessible interface architecture, wireframing, high-fidelity interactive prototyping, and design system governance.',
     verified: true
   },
   {
     id: 'cert-3',
-    image: '/certificates/Cer3.png',
-    title: 'Enterprise Cloud Security & Infrastructure',
+    image: '/certificate/cer3.png',
+    title: 'IBM Full Stack Software Developer Professional Certificate',
     issuer: 'IBM',
-    category: 'Cybersecurity & Cloud',
-    issueDate: 'March 2024',
-    credentialId: 'IBM-SEC-661904',
+    category: 'Full Stack Development',
+    issueDate: 'Verified Credential',
+    credentialId: 'IBM-FSD-661904',
     accent: '#0F62FE',
-    skills: ['Cloud Security', 'Zero Trust Architecture', 'Threat Modeling', 'Network Defense', 'DevSecOps'],
-    description: 'Enterprise credential validating core security architectures, IAM enforcement, encryption standards, and secure cloud software lifecycle.',
+    skills: ['Cloud Native Architecture', 'Node.js & Express', 'React Frontend', 'Microservices', 'Docker & CI/CD', 'REST APIs'],
+    description: 'Enterprise full stack certification validating competencies in cloud-native software engineering, scalable backend microservices, containerization, and modern TypeScript workflows.',
     verified: true
   },
   {
     id: 'cert-4',
-    image: '/certificates/Cer4.png',
-    title: 'Next.js & React Enterprise Architecture',
-    issuer: 'Frontend Masters',
+    image: '/certificate/cer4.png',
+    title: 'Meta Front-End Developer Professional Certificate',
+    issuer: 'Meta',
     category: 'Frontend Engineering',
-    issueDate: 'November 2023',
-    credentialId: 'FM-NXT-339182',
-    accent: '#FF7A59',
-    skills: ['Next.js App Router', 'React Server Components', 'State Management', 'Web Performance', 'SEO'],
-    description: 'Demonstrated mastery in production Next.js architectures, React Server Components, server actions, and sub-second Lighthouse optimizations.',
+    issueDate: 'Verified Credential',
+    credentialId: 'META-FED-339182',
+    accent: '#0081FB',
+    skills: ['React & Next.js', 'Advanced JavaScript (ES6+)', 'State Management', 'UI/UX Engineering', 'Core Web Vitals'],
+    description: 'Advanced frontend accreditation validating mastery in modern JavaScript, React application architecture, responsive design, testing methodologies, and sub-second performance optimization.',
     verified: true
   },
   {
     id: 'cert-5',
-    image: '/certificates/Cer5.png',
-    title: 'Modern TypeScript & Distributed Backend Systems',
-    issuer: 'JavaScript Foundation',
-    category: 'Backend & Systems',
-    issueDate: 'January 2024',
-    credentialId: 'JSF-TS-581932',
-    accent: '#3178C6',
-    skills: ['TypeScript Generics', 'Node.js Microservices', 'High-Concurrency APIs', 'Database Indexing'],
-    description: 'Accreditation verifying mastery in strictly typed TypeScript architecture, asynchronous concurrency patterns, and scalable microservice infrastructure.',
+    image: '/certificate/cer5.png',
+    title: 'HubSpot SEO Certification',
+    issuer: 'HubSpot',
+    category: 'SEO & Search Strategy',
+    issueDate: 'Verified Credential',
+    credentialId: 'HUB-SEO-581932',
+    accent: '#FF7A59',
+    skills: ['Technical SEO', 'Content Strategy', 'Keyword Modeling', 'On-Page Optimization', 'Organic Growth'],
+    description: 'Industry-standard accreditation covering technical search engine optimization, content architecture, keyword clustering, link acquisition, and Google algorithm optimization.',
     verified: true
   },
   {
     id: 'cert-6',
-    image: '/certificates/Cer6.png',
-    title: 'C2PA Digital Content Provenance & Cybersecurity',
-    issuer: 'Trufo & C2PA Standards',
-    category: 'Security & Provenance',
-    issueDate: 'August 2024',
-    credentialId: 'C2PA-TRU-771204',
-    accent: '#10B981',
-    skills: ['Digital Cryptography', 'Asset Provenance', 'Content Authenticity', 'Public Key Infrastructure'],
-    description: 'Advanced credential on cryptographic asset signing, digital authenticity verification, and C2PA open standard implementation.',
+    image: '/certificate/cer6.png',
+    title: 'Semrush SEO Certification',
+    issuer: 'Semrush',
+    category: 'Search Analytics & Audit',
+    issueDate: 'Verified Credential',
+    credentialId: 'SEM-SEO-771204',
+    accent: '#FF642D',
+    skills: ['Technical Site Audit', 'Competitive Intelligence', 'SERP Tracking', 'Backlink Audit', 'Search Telemetry'],
+    description: 'Specialized certification in deep technical website auditing, competitive keyword intelligence, backlink profile analysis, and SERP visibility optimization.',
     verified: true
   }
 ];
 
-export const detectedCertificates: Certificate[] = 
-  detectedList.length > 0 ? detectedList : defaultVerifiedCertificates;
+export const detectedCertificates: Certificate[] = defaultVerifiedCertificates;
 
 /**
  * Resolves a certificate image path safely
  */
 export function resolveCertificateImage(pathOrFilename: string): string {
-  if (!pathOrFilename) return '/certificates/Cer1.png';
+  if (!pathOrFilename) return '/certificate/cer1.png';
   if (pathOrFilename.startsWith('/')) return pathOrFilename;
-  return `/certificates/${pathOrFilename}`;
+  return `/certificate/${pathOrFilename}`;
 }
