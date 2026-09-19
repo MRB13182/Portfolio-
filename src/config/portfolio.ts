@@ -156,9 +156,7 @@ export const portfolioConfig: PortfolioConfig = {
         'Edge Runtime API middleware for instant model streaming',
         'PostgreSQL with pgvector for semantic retrieval & embeddings',
         'Secure token vault with AES-256 client credential encryption'
-      ],
-      liveUrl: 'https://example.com/apex-ai',
-      githubUrl: 'https://github.com/moshiur-dev/apex-ai-workspace',
+      ],,
       featured: true
     },
     {
@@ -179,9 +177,7 @@ export const portfolioConfig: PortfolioConfig = {
       architecture: [
         'TimescaleDB time-series database for ultra-fast metric lookups',
         'Node.js cluster worker pool for CPU-intensive mathematical modeling'
-      ],
-      liveUrl: 'https://example.com/quantum-fin',
-      githubUrl: 'https://github.com/moshiur-dev/quantum-financial-engine',
+      ],,
       featured: true
     },
     {
@@ -202,9 +198,7 @@ export const portfolioConfig: PortfolioConfig = {
       architecture: [
         'Headless architecture with localized edge caching',
         'Stripe webhooks with idempotency safeguards'
-      ],
-      liveUrl: 'https://example.com/luxe-commerce',
-      githubUrl: 'https://github.com/moshiur-dev/luxe-commerce-suite',
+      ],,
       featured: true
     },
     {
@@ -225,9 +219,7 @@ export const portfolioConfig: PortfolioConfig = {
       architecture: [
         'Stream ingestion pipeline processing 10k+ log events per second',
         'Columnar compression storage for long-term historical retention'
-      ],
-      liveUrl: 'https://example.com/aether-cloud',
-      githubUrl: 'https://github.com/moshiur-dev/aether-cloud-analytics',
+      ],,
       featured: false
     },
     {
@@ -248,9 +240,7 @@ export const portfolioConfig: PortfolioConfig = {
       architecture: [
         'Client-side state caching with offline PWA synchronization',
         'Vector-based SVG instruments with hardware-accelerated animations'
-      ],
-      liveUrl: 'https://example.com/velocita',
-      githubUrl: 'https://github.com/moshiur-dev/velocita-dashboard',
+      ],,
       featured: false
     },
     {
@@ -271,9 +261,7 @@ export const portfolioConfig: PortfolioConfig = {
       architecture: [
         'Web Bluetooth API integration for wearable device telemetry',
         'End-to-end encrypted biometric database schema'
-      ],
-      liveUrl: 'https://example.com/pulse-health',
-      githubUrl: 'https://github.com/moshiur-dev/pulse-health-web',
+      ],,
       featured: false
     }
   ],
