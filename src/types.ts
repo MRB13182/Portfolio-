@@ -10,22 +10,17 @@ export interface SocialLink {
   actionType?: 'link' | 'email' | 'whatsapp' | 'telegram';
 }
 
-export type SkillCategory = 
-  | 'Frontend' 
-  | 'Backend' 
-  | 'Database' 
-  | 'Cloud & DevOps' 
-  | 'UI/UX & Design' 
+export type SkillCategory =
   | 'Frontend Development'
   | 'Backend Development'
-  | 'Cloud'
-  | 'Design'
-  | string;
+  | 'Database'
+  | 'Cloud & DevOps'
+  | 'UI/UX & Design';
 
 export interface Skill {
   id: string;
   name: string;
-  category: string;
+  category: SkillCategory;
   level: number; // 0-100%
   logo?: string;
   experience?: string;
