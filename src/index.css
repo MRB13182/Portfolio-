@@ -8,6 +8,8 @@
     --surface: rgba(255, 255, 255, 0.88);
     --surface-solid: #FFFFFF;
     --primary: #12D6A0;
+    --primary-hover: #0EB385;
+    --highlight: #8EF0D1;
     --primary-dark: #0EB385;
     --secondary: #8EF0D1;
     --accent: #12D6A0;
@@ -33,9 +35,12 @@
     --royal-purple: #9D4EDD;
     --gold: #D4AF37;
     --soft-gold: #F5D06F;
+    --accent-hover: #F5D06F;
     --primary: #D4AF37;
+    --primary-hover: #B8860B;
     --primary-dark: #B8860B;
     --accent: #7B2CFF;
+    --highlight: #F5D06F;
     --text: #FFFFFF;
     --text-heading: #FFFFFF;
     --muted: #A1A1AA;
