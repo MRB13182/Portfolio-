@@ -45,17 +45,10 @@ export const SafeImage: React.FC<SafeImageProps> = ({
   }, [src]);
 
   const handleImageError = () => {
-    // Try alternate capitalization or alternative path before giving up
-    if (currentSrc.includes('/certificate/Cer')) {
-      setCurrentSrc(currentSrc.replace('/certificate/Cer', '/certificate/cer'));
-    } else if (currentSrc.includes('/certificate/cer')) {
-      setCurrentSrc(currentSrc.replace('/certificate/cer', '/certificates/Cer'));
-    } else if (currentSrc.includes('/certificates/Cer')) {
-      setCurrentSrc(currentSrc.replace('/certificates/Cer', '/certificates/cer'));
-    } else {
-      setHasError(true);
-      setIsLoading(false);
-    }
+    // Certificate assets have one canonical directory and lowercase filenames.
+    // Do not fall back to removed duplicate directories/case variants.
+    setHasError(true);
+    setIsLoading(false);
   };
 
   // If image loaded successfully or we are attempting to load
