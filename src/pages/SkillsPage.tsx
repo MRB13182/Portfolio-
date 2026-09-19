@@ -276,7 +276,8 @@ interface SkillCardProps {
 
 const SkillCard: React.FC<SkillCardProps> = ({ skill, index, isDark, onClick }) => {
   return (
-    <motion.div
+    <motion.button
+      type="button"
       initial={{ opacity: 0, y: 18 }}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
@@ -285,6 +286,7 @@ const SkillCard: React.FC<SkillCardProps> = ({ skill, index, isDark, onClick }) 
       whileTap={{ scale: 0.98 }}
       onClick={onClick}
       id={`skill-card-${skill.id}`}
+      aria-label={`Open details for ${skill.name}`}
       style={{
         backdropFilter: 'blur(20px)',
         WebkitBackdropFilter: 'blur(20px)',
@@ -342,6 +344,6 @@ const SkillCard: React.FC<SkillCardProps> = ({ skill, index, isDark, onClick }) 
       >
         <span>{skill.level}%</span>
       </div>
-    </motion.div>
+    </motion.button>
   );
 };
