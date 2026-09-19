@@ -90,7 +90,8 @@ export const Home: React.FC<HomeProps> = ({ onOpenContact, onOpenResumeDownload 
           {/* 3 Skill Cards Preview */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
             {previewSkills.map((skill, index) => (
-              <motion.div
+              <motion.button
+                type="button"
                 key={skill.id}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -99,6 +100,7 @@ export const Home: React.FC<HomeProps> = ({ onOpenContact, onOpenResumeDownload 
                 whileHover={{ y: -6, scale: 1.02 }}
                 onClick={() => setActiveSkillModal(skill)}
                 id={`home-skill-preview-${skill.id}`}
+                aria-label={`Open details for ${skill.name}`}
                 className={`p-6 rounded-[28px] backdrop-blur-2xl border transition-all duration-300 cursor-pointer overflow-hidden flex flex-col items-center justify-center text-center relative group ${
                   isDark
                     ? 'bg-[rgba(17,17,17,0.75)] border-[rgba(212,175,55,0.25)] hover:border-[#D4AF37] hover:shadow-[0_0_30px_rgba(123,44,255,0.25)] text-[#FFFFFF]'
@@ -131,7 +133,7 @@ export const Home: React.FC<HomeProps> = ({ onOpenContact, onOpenResumeDownload 
                 }`}>
                   <span>{skill.level}% Mastery</span>
                 </div>
-              </motion.div>
+              </motion.button>
             ))}
           </div>
 
@@ -192,7 +194,8 @@ export const Home: React.FC<HomeProps> = ({ onOpenContact, onOpenResumeDownload 
           {/* 3 Featured Project Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-7">
             {previewProjects.map((project, index) => (
-              <motion.div
+              <motion.button
+                type="button"
                 key={project.id}
                 initial={{ opacity: 0, y: 25 }}
                 whileInView={{ opacity: 1, y: 0 }}
@@ -201,6 +204,7 @@ export const Home: React.FC<HomeProps> = ({ onOpenContact, onOpenResumeDownload 
                 whileHover={{ y: -6 }}
                 onClick={() => setActiveProjectModal(project)}
                 id={`home-project-preview-${project.id}`}
+                aria-label={`Open case study for ${project.title}`}
                 className={`group relative rounded-[32px] backdrop-blur-2xl border overflow-hidden flex flex-col justify-between transition-all duration-300 cursor-pointer shadow-lg ${
                   isDark
                     ? 'bg-[rgba(17,17,17,0.75)] border-[rgba(212,175,55,0.25)] hover:border-[#D4AF37] hover:shadow-[0_0_30px_rgba(123,44,255,0.25)] text-[#FFFFFF]'
@@ -263,7 +267,7 @@ export const Home: React.FC<HomeProps> = ({ onOpenContact, onOpenResumeDownload 
                     </div>
                   </div>
                 </div>
-              </motion.div>
+              </motion.button>
             ))}
           </div>
 
