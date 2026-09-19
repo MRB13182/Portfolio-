@@ -1,5 +1,5 @@
 import { PortfolioConfig } from '../types';
-import { detectedCertificates, defaultVerifiedCertificates } from '../utils/certificateAssets';
+import { defaultVerifiedCertificates } from '../utils/certificateAssets';
 import { skills } from './skills';
 
 export const assets = {
@@ -60,14 +60,14 @@ export const portfolioConfig: PortfolioConfig = {
   socials: [
     {
       name: 'GitHub',
-      url: 'https://github.com',
+      url: 'https://github.com/MRB13182',
       icon: 'Github',
       color: '#24292e',
       actionType: 'link'
     },
     {
       name: 'LinkedIn',
-      url: 'https://linkedin.com',
+      url: 'https://www.linkedin.com/in/moshiur-rahman',
       icon: 'Linkedin',
       color: '#0077b5',
       actionType: 'link'
@@ -88,7 +88,7 @@ export const portfolioConfig: PortfolioConfig = {
     },
     {
       name: 'Facebook',
-      url: 'https://facebook.com',
+      url: 'https://www.facebook.com/',
       icon: 'Facebook',
       color: '#1877F2',
       actionType: 'link'
@@ -345,5 +345,5 @@ export const portfolioConfig: PortfolioConfig = {
     }
   ],
 
-  certificates: detectedCertificates.length > 0 ? detectedCertificates : defaultVerifiedCertificates
+  certificates: defaultVerifiedCertificates
 };
