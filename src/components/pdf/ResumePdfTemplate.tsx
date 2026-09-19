@@ -25,6 +25,15 @@ export const ResumePdfTemplate: React.FC<ResumePdfTemplateProps> = ({
   const isDark = theme === 'dark';
   const { personal, experience, education, certificates, socials } = portfolioConfig;
 
+  const githubUrl = socials.find((s) => s.name.toLowerCase() === 'github')?.url;
+  const linkedinUrl = socials.find((s) => s.name.toLowerCase() === 'linkedin')?.url;
+  const frontendSkills = portfolioConfig.skills.filter((skill) => skill.category === 'Frontend Development').slice(0, 6).map((skill) => skill.name);
+  const backendSkills = portfolioConfig.skills.filter((skill) => skill.category === 'Backend Development').slice(0, 6).map((skill) => skill.name);
+  const cloudDesignSkills = portfolioConfig.skills
+    .filter((skill) => skill.category === 'Cloud & DevOps' || skill.category === 'UI/UX & Design')
+    .slice(0, 6)
+    .map((skill) => skill.name);
+
   // Exact sRGB hex colors ensuring 100% standard PDF rasterization
   // Paper is ALWAYS white (#FFFFFF) for professional crisp printing
   const paperBg = '#FFFFFF';
@@ -177,11 +186,11 @@ export const ResumePdfTemplate: React.FC<ResumePdfTemplateProps> = ({
           </div>
           <div className="flex items-center gap-1 truncate">
             <Linkedin style={{ color: headerDivider }} className="w-3 h-3 shrink-0" />
-            <span className="truncate">linkedin.com/in/moshiur</span>
+            <span className="truncate">{linkedinUrl ? linkedinUrl.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '') : 'LinkedIn profile unavailable'}</span>
           </div>
           <div className="flex items-center gap-1 truncate">
             <Github style={{ color: headerDivider }} className="w-3 h-3 shrink-0" />
-            <span className="truncate">github.com/moshiur-dev</span>
+            <span className="truncate">{githubUrl ? githubUrl.replace(/^https?:\/\/(www\.)?/, '').replace(/\/$/, '') : 'GitHub profile unavailable'}</span>
           </div>
         </div>
       </div>
@@ -334,7 +343,7 @@ export const ResumePdfTemplate: React.FC<ResumePdfTemplateProps> = ({
                     Frontend Architecture
                   </div>
                   <div className="flex flex-wrap gap-1">
-                    {['React 19', 'Next.js 15', 'TypeScript', 'Tailwind CSS', 'Framer Motion', 'JavaScript'].map((s, idx) => (
+                    {frontendSkills.map((s, idx) => (
                       <span
                         key={idx}
                         style={{ 
@@ -356,7 +365,7 @@ export const ResumePdfTemplate: React.FC<ResumePdfTemplateProps> = ({
                     Backend &amp; Databases
                   </div>
                   <div className="flex flex-wrap gap-1">
-                    {['Node.js', 'Express.js', 'PostgreSQL', 'MongoDB', 'Prisma ORM', 'REST/GraphQL'].map((s, idx) => (
+                    {backendSkills.map((s, idx) => (
                       <span
                         key={idx}
                         style={{ 
@@ -378,7 +387,7 @@ export const ResumePdfTemplate: React.FC<ResumePdfTemplateProps> = ({
                     Cloud &amp; UI/UX Design
                   </div>
                   <div className="flex flex-wrap gap-1">
-                    {['Docker', 'GCP Cloud Run', 'Vercel Edge', 'Figma', 'CI/CD Pipelines'].map((s, idx) => (
+                    {cloudDesignSkills.map((s, idx) => (
                       <span
                         key={idx}
                         style={{ 
