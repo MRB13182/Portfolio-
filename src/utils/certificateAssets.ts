@@ -247,7 +247,6 @@ export const defaultVerifiedCertificates: Certificate[] = [
   }
 ];
 
-export const detectedCertificates: Certificate[] = defaultVerifiedCertificates;
 
 /**
  * Resolves a certificate image path safely
