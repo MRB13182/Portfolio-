@@ -59,21 +59,26 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.name || !formData.email || !formData.message) return;
+    if (!formData.name.trim() || !formData.email.trim() || !formData.message.trim()) return;
+
+    const recipient = portfolioConfig.personal.email;
+    const subject = formData.subject.trim() || 'Portfolio Contact Request';
+    const body = [
+      `Name: ${formData.name.trim()}`,
+      `Email: ${formData.email.trim()}`,
+      '',
+      formData.message.trim(),
+    ].join('\n');
 
     setIsSubmitting(true);
 
-    setTimeout(() => {
-      setIsSubmitting(false);
-      setIsSuccess(true);
+    // This portfolio currently has no backend/API endpoint for message delivery.
+    // Open the user's mail client instead of falsely reporting a server-side send.
+    window.location.href = `mailto:${recipient}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
-      confetti({
-        particleCount: 120,
-        spread: 90,
-        origin: { y: 0.4 },
-        colors: isDark ? ['#D4AF37', '#7C3AED', '#FFD700'] : ['#00C896', '#00A57A', '#7FFFD4']
-      });
-    }, 1000);
+    window.setTimeout(() => {
+      setIsSubmitting(false);
+    }, 500);
   };
 
   const handleCopy = (text: string, label: string) => {
