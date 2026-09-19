@@ -2,10 +2,9 @@
 import { Certificate } from '../types';
 
 /**
- * Dynamic Certificate Asset Auto-Detection Engine
+ * Canonical certificate asset registry.
  *
- * Scans `/public/certificate/` and `/public/certificates/` for all uploaded certificate images
- * and generates rich, verified credentials strictly mapped to user requirements:
+ * The portfolio uses `/public/certificate/` as the single runtime asset directory.
  * 1. cer1.png -> Google AI Professional Certificate (Google)
  * 2. cer2.png -> Google UX Design Professional Certificate (Google)
  * 3. cer3.png -> IBM Full Stack Software Developer Professional Certificate (IBM)
