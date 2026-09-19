@@ -148,7 +148,8 @@ export const ProjectsPage: React.FC = () => {
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
           {filteredProjects.map((project, index) => (
-            <motion.div
+            <motion.button
+              type="button"
               key={project.id}
               initial={{ opacity: 0, y: 25 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -157,6 +158,7 @@ export const ProjectsPage: React.FC = () => {
               whileHover={{ y: -8 }}
               onClick={() => setActiveProjectModal(project)}
               id={`project-card-${project.id}`}
+              aria-label={`Open case study for ${project.title}`}
               className={`group relative rounded-[32px] backdrop-blur-2xl border overflow-hidden flex flex-col justify-between transition-all duration-500 cursor-pointer shadow-lg ${
                 isDark
                   ? 'bg-[#0A0A0A] border-[rgba(212,175,55,0.22)] hover:border-[#D4AF37]/60 hover:shadow-[0_0_30px_rgba(123,44,255,0.25)] text-[#FFFFFF]'
@@ -277,7 +279,7 @@ export const ProjectsPage: React.FC = () => {
 
                 </div>
               </div>
-            </motion.div>
+            </motion.button>
           ))}
         </div>
       )}
