@@ -31,6 +31,18 @@ const isPlaceholderKey = (key: string) => {
 export const isSupabaseConfigured =
   Boolean(supabaseUrl) && !isPlaceholderKey(supabasePublishableKey);
 
+export const supabase = createClient(
+  supabaseUrl,
+  supabasePublishableKey || 'missing-publishable-key',
+  {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+      detectSessionInUrl: true,
+    },
+  }
+);
+
 export function isTableMissingError(error: unknown): boolean {
   if (!error) return false;
   const e = error as { code?: string; message?: string };
@@ -46,27 +58,13 @@ export function isTableMissingError(error: unknown): boolean {
           e.message.includes('Could not find the table'))
     )
   );
-}
-
-// The browser may only use the publishable/anon key. Never put a secret/service-role key here.
-export const supabase = createClient(
-  supabaseUrl,
-  supabasePublishableKey || 'missing-publishable-key',
-  {
-    auth: {
-      persistSession: true,
-      autoRefreshToken: true,
-      detectSessionInUrl: true,
-    },
-  }
-);
+};
 
 export const STORAGE_BUCKETS = {
   PROFILE_IMAGES: 'profile-images',
   PROJECT_IMAGES: 'project-images',
   PROJECT_LOGOS: 'project-logos',
   CERTIFICATES: 'certificates',
-  FOOTER_ASSETS: 'footer-assets',
   SITE_ASSETS: 'site-assets',
   RESUMES: 'resumes',
   MEDIA_LIBRARY: 'media-library',
@@ -86,21 +84,14 @@ export async function uploadFileToStorage(
         'Supabase is not configured. Add VITE_SUPABASE_PUBLISHABLE_KEY to your deployment environment.'
       );
     }
-
     const fileExt = file.name.split('.').pop()?.toLowerCase() || 'bin';
     const fileName =
       customPath ||
-      \`\${Date.now()}-\${Math.random().toString(36).slice(2, 9)}.\${fileExt}\`;
-
+      `${Date.now()}-${Math.random().toString(36).slice(2, 9)}.${fileExt}`;
     const { error: uploadError } = await supabase.storage
       .from(bucket)
-      .upload(fileName, file, {
-        cacheControl: '3600',
-        upsert: true,
-      });
-
+      .upload(fileName, file, { cacheControl: '3600', upsert: true });
     if (uploadError) throw uploadError;
-
     const { data } = supabase.storage.from(bucket).getPublicUrl(fileName);
     return { url: data.publicUrl, error: null };
   } catch (err) {
