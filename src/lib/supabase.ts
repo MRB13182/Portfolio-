@@ -1,62 +1,69 @@
 import { createClient } from '@supabase/supabase-js';
 
-// Project credentials provided for egpwwzkwwxsrctzyhpnv
 export const SUPABASE_PROJECT_ID = 'egpwwzkwwxsrctzyhpnv';
-export const supabaseUrl = 'https://egpwwzkwwxsrctzyhpnv.supabase.co';
+export const supabaseUrl =
+  import.meta.env.VITE_SUPABASE_URL ||
+  'https://egpwwzkwwxsrctzyhpnv.supabase.co';
 
-// Read anon key safely from Vite environment variables
-export const supabaseAnonKey = 
-  import.meta.env.VITE_SUPABASE_ANON_KEY || 
+export const supabasePublishableKey =
+  import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ||
+  import.meta.env.VITE_SUPABASE_ANON_KEY ||
   '';
 
-export const isSupabaseConfigured = Boolean(
-  supabaseUrl && 
-  supabaseAnonKey && 
-  supabaseAnonKey !== 'YOUR_SUPABASE_ANON_KEY' &&
-  supabaseAnonKey.trim() !== ''
-);
+export const supabaseAnonKey = supabasePublishableKey;
 
-// Helper to determine if an error is due to missing tables in schema cache
-export function isTableMissingError(error: any): boolean {
+const isPlaceholderKey = (key: string) =>
+  !key ||
+  key.trim() === '' ||
+  key === 'YOUR_SUPABASE_ANON_KEY' ||
+  key === 'YOUR_SUPABASE_PUBLISHABLE_KEY';
+
+export const isSupabaseConfigured =
+  Boolean(supabaseUrl) && !isPlaceholderKey(supabasePublishableKey);
+
+export function isTableMissingError(error: unknown): boolean {
   if (!error) return false;
+  const e = error as { code?: string; message?: string };
   return (
-    error.code === 'PGRST205' ||
-    error.code === '42P01' ||
-    error.code === 'PGRST204' ||
+    e.code === 'PGRST205' ||
+    e.code === '42P01' ||
+    e.code === 'PGRST204' ||
     Boolean(
-      typeof error.message === 'string' &&
-      (error.message.includes('schema cache') ||
-       error.message.includes('relation') ||
-       error.message.includes('does not exist') ||
-       error.message.includes('Could not find the table'))
+      typeof e.message === 'string' &&
+      (e.message.includes('schema cache') ||
+        e.message.includes('relation') ||
+        e.message.includes('does not exist') ||
+        e.message.includes('Could not find the table'))
     )
   );
 }
 
-// Initialize the Supabase client
-export const supabase = createClient(supabaseUrl, supabaseAnonKey || 'placeholder-anon-key', {
-  auth: {
-    persistSession: true,
-    autoRefreshToken: true,
-    detectSessionInUrl: true,
-  },
-});
+export const supabase = createClient(
+  supabaseUrl,
+  supabasePublishableKey || 'missing-publishable-key',
+  {
+    auth: {
+      persistSession: true,
+      autoRefreshToken: true,
+      detectSessionInUrl: true,
+    },
+  }
+);
 
-// Storage Bucket Constants
 export const STORAGE_BUCKETS = {
   PROFILE_IMAGES: 'profile-images',
   PROJECT_IMAGES: 'project-images',
-  CERTIFICATE_IMAGES: 'certificate-images',
-  LOGOS: 'logos',
-  RESUME_FILES: 'resume-files',
-  DOCUMENTS: 'resume-files',
+  PROJECT_LOGOS: 'project-logos',
+  CERTIFICATES: 'certificates',
+  FOOTER_ASSETS: 'footer-assets',
+  SITE_ASSETS: 'site-assets',
+  RESUMES: 'resumes',
+  MEDIA_LIBRARY: 'media-library',
 } as const;
 
-export type StorageBucket = typeof STORAGE_BUCKETS[keyof typeof STORAGE_BUCKETS];
+export type StorageBucket =
+  typeof STORAGE_BUCKETS[keyof typeof STORAGE_BUCKETS];
 
-/**
- * Upload a file to a specified Supabase storage bucket
- */
 export async function uploadFileToStorage(
   bucket: StorageBucket,
   file: File,
@@ -64,37 +71,33 @@ export async function uploadFileToStorage(
 ): Promise<{ url: string | null; error: Error | null }> {
   try {
     if (!isSupabaseConfigured) {
-      throw new Error('Supabase is not yet configured with a valid VITE_SUPABASE_ANON_KEY');
+      throw new Error(
+        'Supabase is not configured. Set VITE_SUPABASE_PUBLISHABLE_KEY in the environment.'
+      );
     }
 
-    const fileExt = file.name.split('.').pop();
-    const fileName = customPath || `${Date.now()}-${Math.random().toString(36).substring(2, 9)}.${fileExt}`;
-    const filePath = fileName;
+    const fileExt = file.name.split('.').pop()?.toLowerCase() || 'bin';
+    const fileName =
+      customPath ||
+      `${Date.now()}-${Math.random().toString(36).slice(2, 9)}.${fileExt}`;
 
     const { error: uploadError } = await supabase.storage
       .from(bucket)
-      .upload(filePath, file, {
+      .upload(fileName, file, {
         cacheControl: '3600',
         upsert: true,
       });
 
-    if (uploadError) {
-      throw uploadError;
-    }
+    if (uploadError) throw uploadError;
 
-    const { data } = supabase.storage.from(bucket).getPublicUrl(filePath);
+    const { data } = supabase.storage.from(bucket).getPublicUrl(fileName);
     return { url: data.publicUrl, error: null };
-  } catch (err: any) {
-    if (!isTableMissingError(err)) {
-      console.warn(`Storage upload note for ${bucket}:`, err.message || err);
-    }
-    return { url: null, error: err };
+  } catch (err) {
+    const error = err instanceof Error ? err : new Error(String(err));
+    return { url: null, error };
   }
 }
 
-/**
- * Remove a file from a specified Supabase storage bucket
- */
 export async function deleteFileFromStorage(
   bucket: StorageBucket,
   path: string
@@ -103,8 +106,8 @@ export async function deleteFileFromStorage(
     const { error } = await supabase.storage.from(bucket).remove([path]);
     if (error) throw error;
     return { success: true, error: null };
-  } catch (err: any) {
-    console.warn(`Storage delete note for ${bucket}:`, err.message || err);
-    return { success: false, error: err };
+  } catch (err) {
+    const error = err instanceof Error ? err : new Error(String(err));
+    return { success: false, error };
   }
 }
