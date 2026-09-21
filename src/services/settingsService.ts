@@ -62,4 +62,5 @@ export const settingsService = {
 
     if (error) throw error;
     return data as SiteSettingsRow;
-  }};
+  },
+};
