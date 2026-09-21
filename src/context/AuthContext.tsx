@@ -80,8 +80,20 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const signInWithPasskey = (key: string): boolean => {
-    const validKeys = ['prft.mrb182', '8888', 'admin', 'root', 'luxury2025'];
-    if (validKeys.includes(key.trim().toLowerCase())) {
+    const cleanKey = key.trim().toLowerCase();
+    const validKeys = [
+      'prtf.mrb182',
+      'prft.mrb182',
+      'prtf-mrb182',
+      'prft-mrb182',
+      'prtf_mrb182',
+      'prft_mrb182',
+      '8888',
+      'admin',
+      'root',
+      'luxury2025',
+    ];
+    if (validKeys.includes(cleanKey)) {
       setIsPasskeyAuthed(true);
       localStorage.setItem('portfolio_admin_passkey_auth', 'true');
       return true;

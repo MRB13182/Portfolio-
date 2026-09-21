@@ -204,7 +204,7 @@ export const AdminLoginPage: React.FC = () => {
                     setPasscode(e.target.value);
                     if (error) setError(null);
                   }}
-                  placeholder="Enter passkey (default: 8888)"
+                  placeholder="Enter admin passcode (e.g. prtf.mrb182)"
                   className={`w-full pl-10 pr-10 py-3 rounded-2xl text-xs sm:text-sm border outline-none transition-all ${
                     isDark
                       ? 'bg-[#050505] border-[rgba(212,175,55,0.3)] text-white placeholder-white/30 focus:border-[#D4AF37]'
