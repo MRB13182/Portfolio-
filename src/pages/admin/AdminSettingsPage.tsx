@@ -23,7 +23,7 @@ import {
   Image as ImageIcon,
   Sparkles,
 } from 'lucide-react';
-import { isSupabaseConfigured, supabaseUrl, SUPABASE_PROJECT_ID } from '../../lib/supabase';
+import { isSupabaseConfigured, supabaseUrl, SUPABASE_PROJECT_ID, supabasePublishableKey } from '../../lib/supabase';
 
 export const AdminSettingsPage: React.FC = () => {
   const { isDark } = useTheme();
@@ -64,7 +64,9 @@ export const AdminSettingsPage: React.FC = () => {
     }
   }, [settings]);
 
-  const handleSave = async (e: React.FormEvent) => {
+  const hasSupabaseKey = isSupabaseConfigured && Boolean(supabasePublishableKey);
+
+    const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSaving(true);
     try {
@@ -456,13 +458,13 @@ CREATE POLICY "Admin All Footer" ON public.footer_content FOR ALL USING (true) W
           {isSupabaseConfigured ? (
             <>
               <CheckCircle2 className="w-4 h-4 shrink-0" />
-              <span>VITE_SUPABASE_ANON_KEY is detected in environment configuration.</span>
+              <span>Supabase publishable/anon browser key is detected in environment configuration.</span>
             </>
           ) : (
             <>
               <ShieldAlert className="w-4 h-4 shrink-0" />
               <span>
-                To enable live cloud operations, set your real Supabase Anon Key in `.env` (VITE_SUPABASE_ANON_KEY).
+                To enable live cloud operations, set your Supabase Publishable Key in the deployment environment (VITE_SUPABASE_PUBLISHABLE_KEY).
               </span>
             </>
           )}
