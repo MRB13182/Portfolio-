@@ -7,7 +7,7 @@ export const educationService = {
     const { data, error } = await supabase
       .from('education')
       .select('*')
-      .order('sort_order', { ascending: true });
+      .order('display_order', { ascending: true });
 
     if (error) {
       if (isTableMissingError(error)) return [];
@@ -37,13 +37,14 @@ export const educationService = {
       .from('education')
       .insert([{
         degree: payload.degree,
+        field: payload.field ?? null,
         institution: payload.institution,
         institution_logo: payload.institution_logo ?? null,
         location: payload.location ?? null,
         duration: payload.duration ?? null,
         grade: payload.grade ?? null,
         highlights: payload.highlights ?? [],
-        sort_order: payload.sort_order ?? 0,
+        display_order: payload.display_order ?? 0,
       }])
       .select()
       .single();
@@ -58,13 +59,14 @@ export const educationService = {
       .from('education')
       .update({
         degree: payload.degree,
+        field: payload.field ?? null,
         institution: payload.institution,
         institution_logo: payload.institution_logo ?? null,
         location: payload.location ?? null,
         duration: payload.duration ?? null,
         grade: payload.grade ?? null,
         highlights: payload.highlights ?? [],
-        sort_order: payload.sort_order ?? 0,
+        display_order: payload.display_order ?? payload.sort_order ?? 0,
         updated_at: new Date().toISOString(),
       })
       .eq('id', id)
