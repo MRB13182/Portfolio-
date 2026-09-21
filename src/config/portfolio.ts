@@ -156,7 +156,7 @@ export const portfolioConfig: PortfolioConfig = {
         'Edge Runtime API middleware for instant model streaming',
         'PostgreSQL with pgvector for semantic retrieval & embeddings',
         'Secure token vault with AES-256 client credential encryption'
-      ],,
+      ],
       featured: true
     },
     {
@@ -177,7 +177,7 @@ export const portfolioConfig: PortfolioConfig = {
       architecture: [
         'TimescaleDB time-series database for ultra-fast metric lookups',
         'Node.js cluster worker pool for CPU-intensive mathematical modeling'
-      ],,
+      ],
       featured: true
     },
     {
@@ -198,7 +198,7 @@ export const portfolioConfig: PortfolioConfig = {
       architecture: [
         'Headless architecture with localized edge caching',
         'Stripe webhooks with idempotency safeguards'
-      ],,
+      ],
       featured: true
     },
     {
@@ -219,7 +219,7 @@ export const portfolioConfig: PortfolioConfig = {
       architecture: [
         'Stream ingestion pipeline processing 10k+ log events per second',
         'Columnar compression storage for long-term historical retention'
-      ],,
+      ],
       featured: false
     },
     {
@@ -240,7 +240,7 @@ export const portfolioConfig: PortfolioConfig = {
       architecture: [
         'Client-side state caching with offline PWA synchronization',
         'Vector-based SVG instruments with hardware-accelerated animations'
-      ],,
+      ],
       featured: false
     },
     {
@@ -261,7 +261,7 @@ export const portfolioConfig: PortfolioConfig = {
       architecture: [
         'Web Bluetooth API integration for wearable device telemetry',
         'End-to-end encrypted biometric database schema'
-      ],,
+      ],
       featured: false
     }
   ],
