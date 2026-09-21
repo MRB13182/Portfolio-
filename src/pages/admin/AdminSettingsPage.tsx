@@ -64,8 +64,6 @@ export const AdminSettingsPage: React.FC = () => {
     }
   }, [settings]);
 
-  const hasSupabaseKey = isSupabaseConfigured && Boolean(supabasePublishableKey);
-
     const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSaving(true);
