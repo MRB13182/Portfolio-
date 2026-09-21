@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useTheme } from '../../context/ThemeContext';
 import { portfolioConfig, assets } from '../../config/portfolio';
+import { AdminTrigger } from '../common/AdminTrigger';
 import { 
   ArrowUp, 
   Github, 
@@ -232,10 +233,15 @@ export const Footer: React.FC<FooterProps> = ({
             <span>© {new Date().getFullYear()} {portfolioConfig.personal.name}. All rights reserved.</span>
           </div>
 
-          <div className="flex items-center gap-4">
-            <span className={`font-mono text-[11px] ${isDark ? 'text-[#D4AF37]/80' : 'text-[#12D6A0]'}`}>
-              {isDark ? 'Black Mamba Luxury Dark' : 'Apple Titanium Emerald Light'}
-            </span>
+          <div className="flex flex-col sm:flex-row items-center gap-3 sm:gap-4">
+            <div className="flex flex-col sm:flex-row items-center gap-2 sm:gap-2.5">
+              <span className={`font-mono text-[11px] tracking-wide ${isDark ? 'text-[#D4AF37]/80' : 'text-[#00C8A8]'}`}>
+                {isDark ? 'Black Mamba Gold' : 'Apple Titanium Emerald Light'}
+              </span>
+
+              {/* Minimal Luxury Cyber-Security Admin Trigger */}
+              <AdminTrigger />
+            </div>
 
             <button
               onClick={scrollToTop}
