@@ -3,6 +3,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { usePortfolioData } from '../../context/DataContext';
 import { useToast } from '../../context/ToastContext';
 import { experienceService } from '../../services/experienceService';
+import { activityLogService } from '../../services/activityLogService';
 import { ExperienceRow } from '../../types/database';
 import { Plus, Trash2, Edit2, Check, X, Briefcase, MapPin, Calendar } from 'lucide-react';
 
@@ -72,8 +73,10 @@ export const AdminExperiencePage: React.FC = () => {
       const existing = experience.find((e) => e.id === editingExp.id);
       if (existing) {
         await experienceService.update(editingExp.id!, payload);
+        await activityLogService.log('Experience Updated', 'Career Timeline', `Updated ${payload.position} at ${payload.company}`);
       } else {
         await experienceService.create(payload);
+        await activityLogService.log('Experience Added', 'Career Timeline', `Added role: ${payload.position} at ${payload.company}`);
       }
 
       await refreshData();
@@ -90,6 +93,7 @@ export const AdminExperiencePage: React.FC = () => {
     if (!confirm('Are you sure you want to delete this experience record?')) return;
     try {
       await experienceService.delete(id);
+      await activityLogService.log('Experience Deleted', 'Career Timeline', `Removed experience record ID: ${id}`);
       await refreshData();
       showToast('Experience deleted', { type: 'info' });
     } catch (err: any) {

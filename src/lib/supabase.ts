@@ -49,6 +49,7 @@ export const STORAGE_BUCKETS = {
   CERTIFICATE_IMAGES: 'certificate-images',
   LOGOS: 'logos',
   RESUME_FILES: 'resume-files',
+  DOCUMENTS: 'resume-files',
 } as const;
 
 export type StorageBucket = typeof STORAGE_BUCKETS[keyof typeof STORAGE_BUCKETS];

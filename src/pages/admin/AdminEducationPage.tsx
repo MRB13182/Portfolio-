@@ -3,6 +3,7 @@ import { useTheme } from '../../context/ThemeContext';
 import { usePortfolioData } from '../../context/DataContext';
 import { useToast } from '../../context/ToastContext';
 import { educationService } from '../../services/educationService';
+import { activityLogService } from '../../services/activityLogService';
 import { EducationRow } from '../../types/database';
 import { Plus, Trash2, Edit2, Check, X, GraduationCap, MapPin } from 'lucide-react';
 
@@ -63,8 +64,10 @@ export const AdminEducationPage: React.FC = () => {
       const existing = education.find((e) => e.id === editingEdu.id);
       if (existing) {
         await educationService.update(editingEdu.id!, payload);
+        await activityLogService.log('Education Updated', 'Academic Credentials', `Updated ${payload.degree} from ${payload.institution}`);
       } else {
         await educationService.create(payload);
+        await activityLogService.log('Education Added', 'Academic Credentials', `Added ${payload.degree} from ${payload.institution}`);
       }
 
       await refreshData();
@@ -81,6 +84,7 @@ export const AdminEducationPage: React.FC = () => {
     if (!confirm('Are you sure you want to delete this education entry?')) return;
     try {
       await educationService.delete(id);
+      await activityLogService.log('Education Deleted', 'Academic Credentials', `Removed education ID: ${id}`);
       await refreshData();
       showToast('Education deleted', { type: 'info' });
     } catch (err: any) {

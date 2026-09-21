@@ -25,6 +25,7 @@ import { AdminEducationPage } from './pages/admin/AdminEducationPage';
 import { AdminCertificatesPage } from './pages/admin/AdminCertificatesPage';
 import { AdminSocialsPage } from './pages/admin/AdminSocialsPage';
 import { AdminMessagesPage } from './pages/admin/AdminMessagesPage';
+import { AdminFooterPage } from './pages/admin/AdminFooterPage';
 import { AdminSettingsPage } from './pages/admin/AdminSettingsPage';
 import { ContactModal } from './components/modals/ContactModal';
 import { DownloadCustomizationModal } from './components/modals/DownloadCustomizationModal';
@@ -74,6 +75,7 @@ function AppContent() {
             <Route path="/admin/certificates" element={<AdminCertificatesPage />} />
             <Route path="/admin/socials" element={<AdminSocialsPage />} />
             <Route path="/admin/messages" element={<AdminMessagesPage />} />
+            <Route path="/admin/footer" element={<AdminFooterPage />} />
             <Route path="/admin/settings" element={<AdminSettingsPage />} />
             <Route path="/admin/*" element={<Navigate to="/admin" replace />} />
           </Routes>

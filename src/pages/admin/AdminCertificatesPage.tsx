@@ -3,9 +3,24 @@ import { useTheme } from '../../context/ThemeContext';
 import { usePortfolioData } from '../../context/DataContext';
 import { useToast } from '../../context/ToastContext';
 import { certificateService } from '../../services/certificateService';
+import { activityLogService } from '../../services/activityLogService';
 import { uploadFileToStorage, STORAGE_BUCKETS } from '../../lib/supabase';
 import { CertificateRow } from '../../types/database';
-import { Plus, Trash2, Edit2, Check, X, Award, Upload, CheckCircle2, ExternalLink } from 'lucide-react';
+import {
+  Plus,
+  Trash2,
+  Edit2,
+  Check,
+  X,
+  Award,
+  Upload,
+  CheckCircle2,
+  ExternalLink,
+  Eye,
+  ArrowUp,
+  ArrowDown,
+  Calendar,
+} from 'lucide-react';
 
 export const AdminCertificatesPage: React.FC = () => {
   const { isDark } = useTheme();
@@ -16,6 +31,7 @@ export const AdminCertificatesPage: React.FC = () => {
   const [skillsInput, setSkillsInput] = useState('');
   const [isSaving, setIsSaving] = useState(false);
   const [uploadingImage, setUploadingImage] = useState(false);
+  const [previewingCert, setPreviewingCert] = useState<any | null>(null);
 
   const handleStartCreate = () => {
     const newId = `cert-${Date.now()}`;
@@ -25,9 +41,12 @@ export const AdminCertificatesPage: React.FC = () => {
       issuer: '',
       category: 'Cloud & Architecture',
       image: '/certificate/cer1.png',
-      issue_date: '2023',
+      issue_date: '2024',
+      credential_url: 'https://',
+      description: '',
       verified: true,
       skills: [],
+      sort_order: certificates.length + 1,
     });
     setSkillsInput('');
   };
@@ -37,17 +56,18 @@ export const AdminCertificatesPage: React.FC = () => {
       id: c.id,
       title: c.title,
       issuer: c.issuer,
-      issuer_logo: c.issuerLogo || c.issuer_logo,
-      theme: c.theme,
-      category: c.category,
-      accent: c.accent,
-      image: c.image,
-      issue_date: c.issueDate || c.issue_date,
-      expiry_date: c.expiryDate || c.expiry_date,
-      credential_id: c.credentialId || c.credential_id,
-      credential_url: c.credentialUrl || c.credential_url,
-      description: c.description,
+      issuer_logo: c.issuerLogo || c.issuer_logo || '',
+      theme: c.theme || '',
+      category: c.category || 'Cloud & Architecture',
+      accent: c.accent || '#00E5FF',
+      image: c.image || '',
+      issue_date: c.issueDate || c.issue_date || '',
+      expiry_date: c.expiryDate || c.expiry_date || '',
+      credential_id: c.credentialId || c.credential_id || '',
+      credential_url: c.credentialUrl || c.credential_url || '',
+      description: c.description || '',
       verified: c.verified !== undefined ? c.verified : true,
+      sort_order: c.sortOrder || c.sort_order || 0,
     });
     setSkillsInput((c.skills || []).join(', '));
   };
@@ -60,12 +80,30 @@ export const AdminCertificatesPage: React.FC = () => {
     try {
       const { url, error } = await uploadFileToStorage(STORAGE_BUCKETS.CERTIFICATE_IMAGES, file);
       if (error || !url) throw error || new Error('Upload failed');
-      setEditingCert((prev) => prev ? { ...prev, image: url } : null);
-      showToast('Certificate image uploaded to Supabase Storage!', { type: 'success' });
+
+      setEditingCert((prev) => (prev ? { ...prev, image: url } : null));
+      showToast('Certificate image uploaded!', { type: 'success' });
     } catch (err: any) {
       showToast('Image upload failed', { type: 'error', message: err.message });
     } finally {
       setUploadingImage(false);
+    }
+  };
+
+  const handleMoveOrder = async (index: number, direction: 'up' | 'down') => {
+    const targetIndex = direction === 'up' ? index - 1 : index + 1;
+    if (targetIndex < 0 || targetIndex >= certificates.length) return;
+
+    const currentCert = certificates[index];
+    const targetCert = certificates[targetIndex];
+
+    try {
+      await certificateService.update(currentCert.id, { sort_order: targetIndex + 1 });
+      await certificateService.update(targetCert.id, { sort_order: index + 1 });
+      await refreshData();
+      showToast('Certificate order updated', { type: 'success' });
+    } catch (err: any) {
+      showToast('Error reordering', { type: 'error', message: err.message });
     }
   };
 
@@ -78,18 +116,20 @@ export const AdminCertificatesPage: React.FC = () => {
 
     setIsSaving(true);
     try {
-      const skills = skillsInput.split(',').map((s) => s.trim()).filter(Boolean);
+      const skillsArr = skillsInput.split(',').map((s) => s.trim()).filter(Boolean);
 
       const payload: Partial<CertificateRow> = {
         ...editingCert,
-        skills,
+        skills: skillsArr,
       };
 
       const existing = certificates.find((c) => c.id === editingCert.id);
       if (existing) {
         await certificateService.update(editingCert.id!, payload);
+        await activityLogService.log('Certificate Updated', 'Certificates', `Updated credential: ${payload.title}`);
       } else {
-        await certificateService.create(payload);
+        await certificateService.create(payload as any);
+        await activityLogService.log('Certificate Uploaded', 'Certificates', `Uploaded new credential: ${payload.title} (${payload.issuer})`);
       }
 
       await refreshData();
@@ -102,282 +142,296 @@ export const AdminCertificatesPage: React.FC = () => {
     }
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this certificate?')) return;
+  const handleDelete = async (id: string, title?: string) => {
+    if (!confirm(`Are you sure you want to permanently delete certificate "${title || id}"?`)) return;
     try {
       await certificateService.delete(id);
+      await activityLogService.log('Certificate Deleted', 'Certificates', `Removed credential: ${title || id}`);
       await refreshData();
-      showToast('Certificate deleted', { type: 'info' });
+      showToast('Certificate removed', { type: 'info' });
+      if (editingCert?.id === id) setEditingCert(null);
     } catch (err: any) {
       showToast('Failed to delete certificate', { type: 'error', message: err.message });
     }
   };
 
   return (
-    <div className="space-y-8 max-w-6xl">
+    <div className="space-y-8 max-w-6xl pb-16">
+      {/* Header */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl sm:text-3xl font-black tracking-tight">Verified Certifications</h1>
+          <div className="flex items-center gap-2 mb-1">
+            <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-mono uppercase tracking-widest border ${
+              isDark ? 'bg-[#D4AF37]/10 text-[#F5D76E] border-[#D4AF37]/30' : 'bg-emerald-100/50 text-[#00A896] border-[#00E5FF]/30'
+            }`}>
+              Verified Credentials
+            </span>
+          </div>
+          <h1 className="text-2xl sm:text-3xl font-black tracking-tight">Certificates Management</h1>
           <p className={`text-xs sm:text-sm mt-1 ${isDark ? 'text-zinc-400' : 'text-slate-600'}`}>
-            Manage verified credentials, official issuing bodies, license numbers, and digital badges.
+            Upload verified certificates, badge images, verification links, and reorder credentials showcase.
           </p>
         </div>
 
         <button
           onClick={handleStartCreate}
-          className={`px-4 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer shadow-md ${
+          className={`px-4 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer shadow-lg self-start sm:self-auto ${
             isDark
-              ? 'bg-[#D4AF37] text-black hover:bg-[#F5D06F]'
-              : 'bg-[#00E5FF] text-slate-950 hover:bg-[#00C8A8]'
+              ? 'bg-gradient-to-r from-[#D4AF37] to-[#F5D06F] text-black hover:opacity-90 shadow-[0_0_20px_rgba(212,175,55,0.25)]'
+              : 'bg-gradient-to-r from-[#00E5FF] to-[#00C8A8] text-slate-950 hover:opacity-90 shadow-[0_4px_15px_rgba(0,229,255,0.3)]'
           }`}
         >
           <Plus className="w-4 h-4" />
-          <span>Add Certificate</span>
+          <span>Upload Certificate</span>
         </button>
       </div>
 
+      {/* Editor Modal / Panel */}
       {editingCert && (
-        <form
-          onSubmit={handleSave}
-          className={`p-6 sm:p-8 rounded-3xl border shadow-2xl space-y-4 ${
-            isDark ? 'bg-[#0C0C10] border-[#D4AF37]/30' : 'bg-white border-slate-300'
-          }`}
-        >
-          <div className="flex items-center justify-between pb-3 border-b border-white/10">
-            <h3 className="font-extrabold text-base">
-              {certificates.some((c) => c.id === editingCert.id) ? 'Edit Certificate' : 'Create Certificate'}
-            </h3>
-            <button
-              type="button"
-              onClick={() => setEditingCert(null)}
-              className="p-1.5 rounded-lg border border-white/10 opacity-70 hover:opacity-100"
-            >
-              <X className="w-4 h-4" />
-            </button>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div>
-              <label className="block text-xs font-semibold mb-1 opacity-80">Certification Title</label>
-              <input
-                type="text"
-                required
-                value={editingCert.title || ''}
-                onChange={(e) => setEditingCert({ ...editingCert, title: e.target.value })}
-                placeholder="AWS Certified Solutions Architect"
-                className={`w-full px-3.5 py-2.5 rounded-xl border text-xs outline-none ${
-                  isDark ? 'bg-black border-white/10' : 'bg-slate-50 border-slate-300'
-                }`}
-              />
+        <form onSubmit={handleSave} className="space-y-6">
+          <div className={`p-6 rounded-3xl border space-y-5 ${
+            isDark ? 'bg-[#0A0A0C] border-[#D4AF37]/30' : 'bg-white border-[#00C8A8]/30 shadow-md'
+          }`}>
+            <div className="flex items-center justify-between pb-3 border-b border-white/10">
+              <h3 className="font-bold text-sm tracking-wide">
+                {certificates.some((c) => c.id === editingCert.id) ? 'Edit Certificate' : 'Upload New Certificate'}
+              </h3>
+              <button
+                type="button"
+                onClick={() => setEditingCert(null)}
+                className="p-1 rounded-lg border border-white/10 opacity-70 hover:opacity-100"
+              >
+                <X className="w-4 h-4" />
+              </button>
             </div>
 
-            <div>
-              <label className="block text-xs font-semibold mb-1 opacity-80">Issuer Body</label>
-              <input
-                type="text"
-                required
-                value={editingCert.issuer || ''}
-                onChange={(e) => setEditingCert({ ...editingCert, issuer: e.target.value })}
-                placeholder="Amazon Web Services / Google Cloud"
-                className={`w-full px-3.5 py-2.5 rounded-xl border text-xs outline-none ${
-                  isDark ? 'bg-black border-white/10' : 'bg-slate-50 border-slate-300'
-                }`}
-              />
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <div>
-              <label className="block text-xs font-semibold mb-1 opacity-80">Category</label>
-              <input
-                type="text"
-                value={editingCert.category || 'Cloud & Architecture'}
-                onChange={(e) => setEditingCert({ ...editingCert, category: e.target.value })}
-                className={`w-full px-3.5 py-2.5 rounded-xl border text-xs outline-none ${
-                  isDark ? 'bg-black border-white/10' : 'bg-slate-50 border-slate-300'
-                }`}
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs font-semibold mb-1 opacity-80">Issue Date</label>
-              <input
-                type="text"
-                value={editingCert.issue_date || ''}
-                onChange={(e) => setEditingCert({ ...editingCert, issue_date: e.target.value })}
-                placeholder="November 2023"
-                className={`w-full px-3.5 py-2.5 rounded-xl border text-xs outline-none ${
-                  isDark ? 'bg-black border-white/10' : 'bg-slate-50 border-slate-300'
-                }`}
-              />
-            </div>
-
-            <div>
-              <label className="block text-xs font-semibold mb-1 opacity-80">Credential ID</label>
-              <input
-                type="text"
-                value={editingCert.credential_id || ''}
-                onChange={(e) => setEditingCert({ ...editingCert, credential_id: e.target.value })}
-                placeholder="AWS-PSA-908123"
-                className={`w-full px-3.5 py-2.5 rounded-xl border text-xs outline-none ${
-                  isDark ? 'bg-black border-white/10' : 'bg-slate-50 border-slate-300'
-                }`}
-              />
-            </div>
-          </div>
-
-          {/* Certificate Image & Storage Upload */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 items-center">
-            <div>
-              <label className="block text-xs font-semibold mb-1 opacity-80">Certificate Image URL</label>
-              <input
-                type="text"
-                value={editingCert.image || ''}
-                onChange={(e) => setEditingCert({ ...editingCert, image: e.target.value })}
-                className={`w-full px-3.5 py-2.5 rounded-xl border text-xs outline-none ${
-                  isDark ? 'bg-black border-white/10' : 'bg-slate-50 border-slate-300'
-                }`}
-              />
-            </div>
-
-            <div className="pt-5">
-              <label className="cursor-pointer px-4 py-2.5 rounded-xl border border-white/20 text-xs font-bold hover:bg-white/5 inline-flex items-center gap-2">
-                <Upload className="w-3.5 h-3.5" />
-                <span>{uploadingImage ? 'Uploading...' : 'Upload Certificate to Supabase'}</span>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-semibold mb-1.5">Certificate Title</label>
                 <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageUpload}
-                  className="hidden"
-                  disabled={uploadingImage}
+                  type="text"
+                  value={editingCert.title || ''}
+                  onChange={(e) => setEditingCert({ ...editingCert, title: e.target.value })}
+                  placeholder="e.g., AWS Certified Solutions Architect"
+                  className={`w-full px-3.5 py-2.5 rounded-xl text-xs border bg-transparent ${
+                    isDark ? 'border-white/10 focus:border-[#D4AF37]' : 'border-slate-300 focus:border-[#00C8A8]'
+                  }`}
                 />
-              </label>
-            </div>
-          </div>
+              </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-semibold mb-1.5">Issuing Organization</label>
+                <input
+                  type="text"
+                  value={editingCert.issuer || ''}
+                  onChange={(e) => setEditingCert({ ...editingCert, issuer: e.target.value })}
+                  placeholder="e.g., Amazon Web Services"
+                  className={`w-full px-3.5 py-2.5 rounded-xl text-xs border bg-transparent ${
+                    isDark ? 'border-white/10 focus:border-[#D4AF37]' : 'border-slate-300 focus:border-[#00C8A8]'
+                  }`}
+                />
+              </div>
+            </div>
+
+            {/* Certificate Image Upload & URL */}
             <div>
-              <label className="block text-xs font-semibold mb-1 opacity-80">Credential URL</label>
-              <input
-                type="url"
-                value={editingCert.credential_url || ''}
-                onChange={(e) => setEditingCert({ ...editingCert, credential_url: e.target.value })}
-                placeholder="https://credly.com/badges/..."
-                className={`w-full px-3.5 py-2.5 rounded-xl border text-xs outline-none ${
-                  isDark ? 'bg-black border-white/10' : 'bg-slate-50 border-slate-300'
+              <label className="block text-xs font-semibold mb-1.5">Certificate Image File</label>
+              <div className="flex items-center gap-3">
+                <input
+                  type="text"
+                  value={editingCert.image || ''}
+                  onChange={(e) => setEditingCert({ ...editingCert, image: e.target.value })}
+                  placeholder="https://... or upload below"
+                  className={`flex-1 px-3.5 py-2.5 rounded-xl text-xs border bg-transparent ${
+                    isDark ? 'border-white/10 focus:border-[#D4AF37]' : 'border-slate-300 focus:border-[#00C8A8]'
+                  }`}
+                />
+                <label className={`px-3.5 py-2.5 rounded-xl border text-xs font-semibold flex items-center gap-1.5 cursor-pointer transition-colors ${
+                  isDark ? 'border-white/10 hover:border-white/30 text-zinc-300' : 'border-slate-300 hover:border-slate-500 text-slate-700'
+                }`}>
+                  <Upload className="w-3.5 h-3.5" />
+                  <span>{uploadingImage ? '...' : 'Upload Image'}</span>
+                  <input type="file" accept="image/*" onChange={handleImageUpload} className="hidden" />
+                </label>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-xs font-semibold mb-1.5">Issue Date</label>
+                <input
+                  type="text"
+                  value={editingCert.issue_date || ''}
+                  onChange={(e) => setEditingCert({ ...editingCert, issue_date: e.target.value })}
+                  placeholder="e.g., 2024 or Nov 2023"
+                  className={`w-full px-3.5 py-2.5 rounded-xl text-xs border bg-transparent ${
+                    isDark ? 'border-white/10 focus:border-[#D4AF37]' : 'border-slate-300 focus:border-[#00C8A8]'
+                  }`}
+                />
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold mb-1.5">Verification URL</label>
+                <input
+                  type="text"
+                  value={editingCert.credential_url || ''}
+                  onChange={(e) => setEditingCert({ ...editingCert, credential_url: e.target.value })}
+                  placeholder="https://www.credly.com/badges/..."
+                  className={`w-full px-3.5 py-2.5 rounded-xl text-xs border bg-transparent ${
+                    isDark ? 'border-white/10 focus:border-[#D4AF37]' : 'border-slate-300 focus:border-[#00C8A8]'
+                  }`}
+                />
+              </div>
+            </div>
+
+            <div>
+              <label className="block text-xs font-semibold mb-1.5">Description</label>
+              <textarea
+                rows={2}
+                value={editingCert.description || ''}
+                onChange={(e) => setEditingCert({ ...editingCert, description: e.target.value })}
+                placeholder="Validated mastery of cloud native architectures, high availability, and container orchestration."
+                className={`w-full px-3.5 py-2.5 rounded-xl text-xs border bg-transparent resize-none ${
+                  isDark ? 'border-white/10 focus:border-[#D4AF37]' : 'border-slate-300 focus:border-[#00C8A8]'
                 }`}
               />
             </div>
 
-            <div>
-              <label className="block text-xs font-semibold mb-1 opacity-80">Associated Skills (comma-separated)</label>
-              <input
-                type="text"
-                value={skillsInput}
-                onChange={(e) => setSkillsInput(e.target.value)}
-                placeholder="Cloud Architecture, Security, Serverless"
-                className={`w-full px-3.5 py-2.5 rounded-xl border text-xs outline-none ${
-                  isDark ? 'bg-black border-white/10' : 'bg-slate-50 border-slate-300'
+            <div className="flex items-center justify-end gap-3 pt-4 border-t border-white/10">
+              <button
+                type="button"
+                onClick={() => setEditingCert(null)}
+                className="px-4 py-2 rounded-xl text-xs font-bold border border-white/10 opacity-70 hover:opacity-100 cursor-pointer"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={isSaving}
+                className={`px-5 py-2 rounded-xl text-xs font-bold cursor-pointer shadow-md ${
+                  isDark ? 'bg-gradient-to-r from-[#D4AF37] to-[#F5D06F] text-black' : 'bg-gradient-to-r from-[#00E5FF] to-[#00C8A8] text-slate-950'
                 }`}
-              />
+              >
+                {isSaving ? 'Saving...' : 'Save Certificate'}
+              </button>
             </div>
-          </div>
-
-          <div className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              id="verified-checkbox"
-              checked={Boolean(editingCert.verified)}
-              onChange={(e) => setEditingCert({ ...editingCert, verified: e.target.checked })}
-              className="w-4 h-4 rounded cursor-pointer"
-            />
-            <label htmlFor="verified-checkbox" className="text-xs font-semibold cursor-pointer">
-              Verified Credential Badge
-            </label>
-          </div>
-
-          <div className="flex justify-end gap-3 pt-3 border-t border-white/10">
-            <button
-              type="button"
-              onClick={() => setEditingCert(null)}
-              className="px-4 py-2 rounded-xl text-xs font-bold border border-white/10"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              disabled={isSaving}
-              className={`px-5 py-2 rounded-xl text-xs font-bold flex items-center gap-2 ${
-                isDark ? 'bg-[#D4AF37] text-black' : 'bg-[#00E5FF] text-slate-950'
-              }`}
-            >
-              <Check className="w-4 h-4" />
-              <span>{isSaving ? 'Saving...' : 'Save Certificate'}</span>
-            </button>
           </div>
         </form>
       )}
 
-      {/* Certificate Cards Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {certificates.map((cert) => (
-          <div
-            key={cert.id || cert.title}
-            className={`rounded-2xl border overflow-hidden flex flex-col justify-between ${
-              isDark ? 'bg-[#0A0A0C] border-white/10' : 'bg-white border-slate-200'
-            }`}
-          >
-            <div>
-              <div className="aspect-[4/3] w-full overflow-hidden bg-zinc-900 relative">
-                {cert.image ? (
-                  <img src={cert.image} alt={cert.title} className="w-full h-full object-cover" />
-                ) : (
-                  <div className="w-full h-full flex items-center justify-center opacity-40">No Image</div>
-                )}
-                {cert.verified && (
-                  <div className="absolute top-3 right-3 px-2 py-0.5 rounded-full text-[10px] font-bold bg-emerald-500 text-white flex items-center gap-1 shadow-md">
-                    <CheckCircle2 className="w-3 h-3" />
-                    <span>Verified</span>
-                  </div>
-                )}
-              </div>
+      {/* Preview Certificate Modal */}
+      {previewingCert && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md">
+          <div className={`p-6 rounded-3xl border max-w-xl w-full shadow-2xl relative ${
+            isDark ? 'bg-[#0A0A0C] border-[#D4AF37]/30 text-white' : 'bg-white border-slate-300 text-slate-900'
+          }`}>
+            <button
+              onClick={() => setPreviewingCert(null)}
+              className="absolute top-4 right-4 p-1.5 rounded-xl border border-white/10 opacity-70 hover:opacity-100"
+            >
+              <X className="w-4 h-4" />
+            </button>
 
-              <div className="p-5 space-y-1.5">
-                <h3 className="font-bold text-sm leading-snug">{cert.title}</h3>
-                <div className="flex items-center justify-between text-xs opacity-70">
-                  <span>{cert.issuer}</span>
-                  <span className="font-mono">{cert.issueDate}</span>
-                </div>
-                {cert.credentialId && (
-                  <p className="font-mono text-[10px] opacity-60">ID: {cert.credentialId}</p>
-                )}
+            <div className="flex items-center gap-3 mb-4">
+              <Award className="w-5 h-5 text-amber-400" />
+              <div>
+                <h3 className="font-extrabold text-base">{previewingCert.title}</h3>
+                <span className="text-xs opacity-60 font-mono">{previewingCert.issuer}</span>
               </div>
             </div>
 
-            <div className="p-4 border-t border-white/10 flex items-center justify-between">
-              <div>
-                {cert.credentialUrl && (
-                  <a
-                    href={cert.credentialUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-1.5 rounded-lg border border-white/10 text-inherit hover:opacity-80 inline-block"
+            <div className="h-64 rounded-2xl overflow-hidden border border-white/10 bg-black/40 mb-4 flex items-center justify-center">
+              <img src={previewingCert.image} alt={previewingCert.title} className="max-h-full object-contain" />
+            </div>
+
+            <p className="text-xs opacity-80 leading-relaxed mb-4">{previewingCert.description}</p>
+
+            <div className="flex items-center justify-between pt-3 border-t border-white/10 text-xs">
+              <span className="opacity-60">{previewingCert.issueDate || previewingCert.issue_date}</span>
+              {previewingCert.credentialUrl || previewingCert.credential_url ? (
+                <a
+                  href={previewingCert.credentialUrl || previewingCert.credential_url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-emerald-400 hover:underline flex items-center gap-1 font-bold"
+                >
+                  <ExternalLink className="w-3.5 h-3.5" />
+                  <span>Verify Credential</span>
+                </a>
+              ) : null}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Certificates List */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {certificates.map((cert, idx) => (
+          <div
+            key={cert.id}
+            className={`p-5 rounded-3xl border transition-all flex flex-col justify-between ${
+              isDark ? 'bg-[#0A0A0C] border-white/10 hover:border-white/20' : 'bg-white border-slate-200 hover:border-slate-300'
+            }`}
+          >
+            <div>
+              <div className="flex items-start justify-between gap-3 mb-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 rounded-xl overflow-hidden border border-white/10 shrink-0 bg-black/40 p-1 flex items-center justify-center">
+                    <img src={cert.image} alt="" className="max-h-full max-w-full object-contain" />
+                  </div>
+                  <div>
+                    <h3 className="font-extrabold text-sm line-clamp-1">{cert.title}</h3>
+                    <span className="text-[10px] font-mono opacity-60 block">{cert.issuer}</span>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-1">
+                  <button
+                    onClick={() => handleMoveOrder(idx, 'up')}
+                    disabled={idx === 0}
+                    className="p-1 rounded-md border border-white/10 disabled:opacity-20 cursor-pointer"
+                    title="Move Up"
                   >
-                    <ExternalLink className="w-3.5 h-3.5" />
-                  </a>
-                )}
+                    <ArrowUp className="w-3 h-3" />
+                  </button>
+                  <button
+                    onClick={() => handleMoveOrder(idx, 'down')}
+                    disabled={idx === certificates.length - 1}
+                    className="p-1 rounded-md border border-white/10 disabled:opacity-20 cursor-pointer"
+                    title="Move Down"
+                  >
+                    <ArrowDown className="w-3 h-3" />
+                  </button>
+                </div>
               </div>
 
-              <div className="flex items-center gap-2">
+              <p className={`text-xs line-clamp-2 mb-3 ${isDark ? 'text-zinc-400' : 'text-slate-600'}`}>
+                {cert.description}
+              </p>
+            </div>
+
+            <div className="pt-3 border-t border-white/10 flex items-center justify-between text-xs">
+              <span className="text-[11px] opacity-60 font-mono">{cert.issueDate || cert.issue_date}</span>
+
+              <div className="flex items-center gap-1.5">
+                <button
+                  onClick={() => setPreviewingCert(cert)}
+                  className="p-1.5 rounded-xl border border-white/10 hover:bg-white/10 text-inherit cursor-pointer"
+                  title="Preview"
+                >
+                  <Eye className="w-3.5 h-3.5" />
+                </button>
                 <button
                   onClick={() => handleStartEdit(cert)}
-                  className="p-1.5 rounded-lg border border-white/10 hover:bg-white/5 cursor-pointer text-xs"
+                  className="p-1.5 rounded-xl border border-white/10 hover:bg-white/10 text-inherit cursor-pointer"
+                  title="Edit"
                 >
                   <Edit2 className="w-3.5 h-3.5" />
                 </button>
                 <button
-                  onClick={() => cert.id && handleDelete(cert.id)}
-                  className="p-1.5 rounded-lg text-rose-400 hover:bg-rose-500/10 cursor-pointer"
+                  onClick={() => handleDelete(cert.id, cert.title)}
+                  className="p-1.5 rounded-xl border border-rose-500/20 text-rose-400 hover:bg-rose-500/10 cursor-pointer"
+                  title="Delete"
                 >
                   <Trash2 className="w-3.5 h-3.5" />
                 </button>

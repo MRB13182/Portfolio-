@@ -6,15 +6,19 @@ export interface ProfileRow {
   titles: string[];
   bio?: string;
   extended_bio?: string;
+  about?: string;
   location?: string;
   email?: string;
   phone?: string;
+  whatsapp?: string;
   whatsapp_number?: string;
+  telegram?: string;
   telegram_username?: string;
   availability_status?: string;
   resume_url?: string;
   years_of_experience?: number;
   profile_image?: string;
+  cover_image?: string;
   logo_light?: string;
   logo_dark?: string;
   created_at?: string;
@@ -24,10 +28,12 @@ export interface ProfileRow {
 export interface ProjectRow {
   id: string;
   title: string;
-  category: 'Full Stack' | 'AI & SaaS' | 'Mobile / Web' | 'UI / UX';
+  category: 'Full Stack' | 'AI & SaaS' | 'Mobile / Web' | 'UI / UX' | string;
   tagline: string;
   description: string;
   image: string;
+  logo?: string;
+  gallery_images?: string[];
   fallback_gradient?: string;
   tech_stack: string[];
   features: string[];
@@ -35,7 +41,9 @@ export interface ProjectRow {
   live_url?: string;
   github_url?: string;
   featured?: boolean;
+  status?: 'Live' | 'In Development' | 'Completed' | 'Beta' | string;
   display_order?: number;
+  sort_order?: number;
   created_at?: string;
   updated_at?: string;
 }
@@ -56,6 +64,7 @@ export interface SkillRow {
   keywords?: string[];
   accent_color?: string;
   display_order?: number;
+  sort_order?: number;
   created_at?: string;
   updated_at?: string;
 }
@@ -64,14 +73,16 @@ export interface ExperienceRow {
   id: string;
   position: string;
   company: string;
+  company_logo?: string;
   location: string;
   duration: string;
-  period: string;
-  type: 'Full-time' | 'Contract' | 'Freelance' | 'Lead';
+  period?: string;
+  type: 'Full-time' | 'Contract' | 'Freelance' | 'Lead' | string;
   description: string;
   achievements: string[];
   skills: string[];
   display_order?: number;
+  sort_order?: number;
   created_at?: string;
   updated_at?: string;
 }
@@ -79,13 +90,15 @@ export interface ExperienceRow {
 export interface EducationRow {
   id: string;
   degree: string;
-  field: string;
+  field?: string;
   institution: string;
+  institution_logo?: string;
   location: string;
   duration: string;
   grade?: string;
   highlights: string[];
   display_order?: number;
+  sort_order?: number;
   created_at?: string;
   updated_at?: string;
 }
@@ -103,10 +116,12 @@ export interface CertificateRow {
   expiry_date?: string;
   credential_id?: string;
   credential_url?: string;
+  verification_url?: string;
   skills?: string[];
   description?: string;
   verified?: boolean;
   display_order?: number;
+  sort_order?: number;
   created_at?: string;
   updated_at?: string;
 }
@@ -117,8 +132,10 @@ export interface SocialLinkRow {
   url: string;
   icon: string;
   color?: string;
-  action_type?: 'link' | 'email' | 'whatsapp' | 'telegram';
+  action_type?: 'link' | 'email' | 'whatsapp' | 'telegram' | 'modal';
+  enabled?: boolean;
   display_order?: number;
+  sort_order?: number;
   created_at?: string;
   updated_at?: string;
 }
@@ -133,14 +150,51 @@ export interface ContactMessageRow {
   created_at?: string;
 }
 
+export interface FooterSettingsRow {
+  id: string;
+  footer_logo?: string;
+  footer_description?: string;
+  copyright_text?: string;
+  email?: string;
+  phone?: string;
+  address?: string;
+  social_links?: { name: string; url: string; icon: string }[];
+  navigation_links?: { label: string; path: string }[];
+  background_image?: string;
+  banner_text?: string;
+  footer_theme?: 'emerald' | 'gold' | 'minimal' | 'luxury' | string;
+  updated_at?: string;
+}
+
 export interface SiteSettingsRow {
   id: string;
   site_title: string;
+  website_name?: string;
+  website_logo?: string;
+  dark_logo?: string;
+  light_logo?: string;
+  favicon?: string;
+  hero_banner?: string;
+  meta_title?: string;
   meta_description?: string;
+  seo_keywords?: string;
+  og_image?: string;
+  primary_color?: string;
+  secondary_color?: string;
+  accent_color?: string;
+  background_color?: string;
   contact_email?: string;
   active_theme?: string;
   show_stats?: boolean;
   maintenance_mode?: boolean;
   custom_announcement?: string;
   updated_at?: string;
+}
+
+export interface ActivityLogRow {
+  id: string;
+  action: string;
+  entity_type: string;
+  details?: string;
+  created_at: string;
 }

@@ -9,7 +9,8 @@ import {
   EducationRow, 
   CertificateRow, 
   SocialLinkRow, 
-  SiteSettingsRow 
+  SiteSettingsRow,
+  FooterSettingsRow
 } from '../types/database';
 import { profileService } from '../services/profileService';
 import { projectService } from '../services/projectService';
@@ -19,8 +20,33 @@ import { educationService } from '../services/educationService';
 import { certificateService } from '../services/certificateService';
 import { socialService } from '../services/socialService';
 import { settingsService } from '../services/settingsService';
+import { footerService } from '../services/footerService';
 import { isSupabaseConfigured } from '../lib/supabase';
 import { Project, Skill, ExperienceItem, EducationItem, Certificate, SocialLink } from '../types';
+
+const DEFAULT_FOOTER_SETTINGS: FooterSettingsRow = {
+  id: 'default',
+  footer_logo: '',
+  footer_description: 'Architecting high-performance web systems, generative AI engines, and enterprise solutions with obsessive design fidelity.',
+  copyright_text: `© ${new Date().getFullYear()} MD. Moshiur Rahman. All rights reserved.`,
+  email: portfolioConfig.personal.email,
+  phone: portfolioConfig.personal.phone,
+  address: portfolioConfig.personal.location,
+  social_links: portfolioConfig.socials.map(s => ({
+    name: s.name,
+    url: s.url,
+    icon: s.icon,
+  })),
+  navigation_links: [
+    { label: 'Overview', path: '/' },
+    { label: 'Skills & Stack', path: '/skills' },
+    { label: 'Featured Projects', path: '/projects' },
+    { label: 'Experience & Career', path: '/experience' },
+  ],
+  background_image: '',
+  banner_text: 'Available for high-impact technical leadership & full-stack architectural contracts.',
+  footer_theme: 'luxury',
+};
 
 interface DataContextType {
   loading: boolean;
@@ -34,6 +60,7 @@ interface DataContextType {
   certificates: Certificate[];
   socials: SocialLink[];
   settings: SiteSettingsRow | null;
+  footerSettings: FooterSettingsRow;
   refreshData: () => Promise<void>;
 }
 
@@ -73,6 +100,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [certificates, setCertificates] = useState<Certificate[]>(portfolioConfig.certificates);
   const [socials, setSocials] = useState<SocialLink[]>(portfolioConfig.socials);
   const [settings, setSettings] = useState<SiteSettingsRow | null>(null);
+  const [footerSettings, setFooterSettings] = useState<FooterSettingsRow>(DEFAULT_FOOTER_SETTINGS);
 
   const fetchData = useCallback(async () => {
     setLoading(true);
@@ -95,6 +123,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
         fetchedCerts,
         fetchedSocials,
         fetchedSettings,
+        fetchedFooter,
       ] = await Promise.all([
         profileService.getPrimary().catch(() => null),
         projectService.getAll().catch(() => []),
@@ -104,6 +133,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
         certificateService.getAll().catch(() => []),
         socialService.getAll().catch(() => []),
         settingsService.getById('default').catch(() => null),
+        footerService.get().catch(() => DEFAULT_FOOTER_SETTINGS),
       ]);
 
       let hasAnyDbData = false;
@@ -117,7 +147,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setProjects(fetchedProjects.map(p => ({
           id: p.id,
           title: p.title,
-          category: p.category,
+          category: p.category as any,
           tagline: p.tagline,
           description: p.description,
           image: p.image,
@@ -136,7 +166,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setSkills(fetchedSkills.map(s => ({
           id: s.id,
           name: s.name,
-          category: s.category,
+          category: s.category as any,
           level: s.level,
           logo: s.logo,
           experience: s.experience,
@@ -159,8 +189,8 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
           company: e.company,
           location: e.location,
           duration: e.duration,
-          period: e.period,
-          type: e.type,
+          period: e.period || e.duration,
+          type: e.type as any,
           description: e.description,
           achievements: e.achievements || [],
           skills: e.skills || [],
@@ -172,7 +202,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setEducation(fetchedEdu.map(ed => ({
           id: ed.id,
           degree: ed.degree,
-          field: ed.field,
+          field: ed.field || '',
           institution: ed.institution,
           location: ed.location,
           duration: ed.duration,
@@ -196,6 +226,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
           expiryDate: c.expiry_date,
           credentialId: c.credential_id,
           credentialUrl: c.credential_url,
+          verificationUrl: c.verification_url,
           skills: c.skills || [],
           description: c.description,
           verified: c.verified,
@@ -216,6 +247,10 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       if (fetchedSettings) {
         setSettings(fetchedSettings);
+      }
+
+      if (fetchedFooter) {
+        setFooterSettings(fetchedFooter);
       }
 
       setIsSupabaseLive(hasAnyDbData);
@@ -246,6 +281,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
         certificates,
         socials,
         settings,
+        footerSettings,
         refreshData: fetchData,
       }}
     >
