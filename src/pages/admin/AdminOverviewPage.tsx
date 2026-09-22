@@ -165,17 +165,16 @@ export const AdminOverviewPage: React.FC = () => {
           <div>
             <div className="flex items-center gap-2 mb-2">
               <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-mono uppercase tracking-widest border ${
-                isDark ? 'bg-[#D4AF37]/10 text-[#F5D76E] border-[#D4AF37]/30' : 'bg-emerald-100/50 text-[#00A896] border-[#00E5FF]/30'
+                isDark ? 'bg-[#00E5FF]/10 text-[#00E5FF] border-[#00E5FF]/30' : 'bg-cyan-50 text-[#0097A7] border-[#00E5FF]/30'
               }`}>
-                Live PostgreSQL CMS
+                Management Console
               </span>
-              <span className="text-xs opacity-70 font-mono">egpwwzkwwxsrctzyhpnv</span>
             </div>
             <h1 className="text-2xl sm:text-3xl font-black tracking-tight">
-              Executive Portfolio CMS
+              Portfolio Management Console
             </h1>
             <p className={`text-xs sm:text-sm mt-1 max-w-xl ${isDark ? 'text-zinc-400' : 'text-slate-600'}`}>
-              Central command center for projects, technical proficiencies, verified credentials, contact inquiries, and live footer settings.
+              Manage your projects, skills, certificates, resume, profile details, and website configuration.
             </p>
           </div>
 
@@ -185,26 +184,13 @@ export const AdminOverviewPage: React.FC = () => {
               disabled={isMigrating}
               className={`px-4 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer shadow-lg ${
                 isDark
-                  ? 'bg-gradient-to-r from-[#D4AF37] to-[#F5D06F] text-black hover:opacity-90 shadow-[0_0_20px_rgba(212,175,55,0.25)]'
-                  : 'bg-gradient-to-r from-[#00E5FF] to-[#00C8A8] text-slate-950 hover:opacity-90 shadow-[0_4px_15px_rgba(0,229,255,0.3)]'
+                  ? 'bg-gradient-to-r from-[#00E5FF] to-[#8B5CF6] text-black hover:opacity-90 shadow-[0_0_20px_rgba(0,229,255,0.25)]'
+                  : 'bg-gradient-to-r from-[#00E5FF] to-[#8B5CF6] text-black hover:opacity-90 shadow-[0_4px_15px_rgba(0,229,255,0.3)]'
               } ${isMigrating ? 'opacity-70 cursor-not-allowed' : ''}`}
             >
               <RefreshCw className={`w-3.5 h-3.5 ${isMigrating ? 'animate-spin' : ''}`} />
-              <span>{isMigrating ? 'Syncing Static Data...' : 'Sync Static Data to Supabase'}</span>
+              <span>{isMigrating ? 'Syncing Content...' : 'Sync Default Content'}</span>
             </button>
-
-            <a
-              href="https://supabase.com/dashboard/project/egpwwzkwwxsrctzyhpnv"
-              target="_blank"
-              rel="noopener noreferrer"
-              className={`px-4 py-2.5 rounded-xl text-xs font-semibold border flex items-center gap-2 transition-colors ${
-                isDark ? 'border-white/10 hover:border-white/30 text-zinc-300' : 'border-slate-200 hover:border-slate-400 text-slate-700'
-              }`}
-            >
-              <Database className="w-3.5 h-3.5" />
-              <span>Supabase Console</span>
-              <ExternalLink className="w-3 h-3 opacity-60" />
-            </a>
           </div>
         </div>
       </div>
@@ -384,37 +370,37 @@ export const AdminOverviewPage: React.FC = () => {
           </div>
         </div>
 
-        {/* Database & Storage Status (4 cols) */}
+        {/* System Status (4 cols) */}
         <div className={`lg:col-span-4 p-6 rounded-3xl border space-y-4 ${
           isDark ? 'bg-[#0A0A0C] border-white/10' : 'bg-white border-slate-200'
         }`}>
           <div className="flex items-center gap-2 mb-1">
-            <Database className={`w-4 h-4 ${isDark ? 'text-[#D4AF37]' : 'text-[#00C8A8]'}`} />
-            <h3 className="font-bold text-sm tracking-wide">Infrastructure Health</h3>
+            <CheckCircle2 className={`w-4 h-4 ${isDark ? 'text-[#00E5FF]' : 'text-[#0097A7]'}`} />
+            <h3 className="font-bold text-sm tracking-wide">CMS Configuration</h3>
           </div>
 
           <div className="space-y-3 text-xs">
             <div className="flex items-center justify-between pb-2 border-b border-white/10">
-              <span className="opacity-70">Supabase State</span>
+              <span className="opacity-70">Sync Engine</span>
               <span className="font-bold font-mono text-emerald-400 flex items-center gap-1.5">
                 <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
-                Operational
+                Active
               </span>
             </div>
 
             <div className="flex items-center justify-between pb-2 border-b border-white/10">
-              <span className="opacity-70">Storage Buckets</span>
-              <span className="font-mono font-bold">5 Buckets Configured</span>
+              <span className="opacity-70">Document Assets</span>
+              <span className="font-mono font-bold">PDF Ready</span>
             </div>
 
             <div className="flex items-center justify-between pb-2 border-b border-white/10">
-              <span className="opacity-70">Database Schema</span>
-              <span className="font-mono font-bold">11 Tables Mapped</span>
+              <span className="opacity-70">Content Modules</span>
+              <span className="font-mono font-bold">11 Categories</span>
             </div>
 
             <div className="flex items-center justify-between">
-              <span className="opacity-70">Security Protocol</span>
-              <span className="font-mono font-bold text-amber-400">RLS Enforced</span>
+              <span className="opacity-70">Access Security</span>
+              <span className="font-mono font-bold text-[#00E5FF]">Passcode Protected</span>
             </div>
           </div>
 
@@ -422,11 +408,11 @@ export const AdminOverviewPage: React.FC = () => {
             to="/admin/settings"
             className={`w-full mt-2 py-2.5 px-3 rounded-xl border text-xs font-bold text-center block transition-all ${
               isDark
-                ? 'border-white/10 hover:border-[#D4AF37]/40 hover:bg-white/5 text-white'
+                ? 'border-white/10 hover:border-[#00E5FF]/40 hover:bg-white/5 text-white'
                 : 'border-slate-200 hover:border-slate-300 hover:bg-slate-50 text-slate-800'
             }`}
           >
-            Review SQL Schema &amp; Storage
+            Website &amp; Theme Settings
           </Link>
         </div>
       </div>

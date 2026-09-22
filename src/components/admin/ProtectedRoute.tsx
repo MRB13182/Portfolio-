@@ -27,7 +27,7 @@ export const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ childr
   }
 
   if (!isAdmin) {
-    return <Navigate to="/admin/login" state={{ from: location }} replace />;
+    return <Navigate to="/" replace />;
   }
 
   return <>{children}</>;

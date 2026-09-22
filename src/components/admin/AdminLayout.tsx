@@ -55,7 +55,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
     try {
       await signOut();
       showToast('Logged out of Admin CMS', { type: 'info' });
-      navigate('/admin/login');
+      navigate('/');
     } catch (err: any) {
       showToast('Logout failed', { type: 'error', message: err.message });
     }
@@ -72,7 +72,7 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
     { label: 'Social Links', path: '/admin/socials', icon: Share2 },
     { label: 'Messages Inbox', path: '/admin/messages', icon: Mail, badge: unreadCount },
     { label: 'Footer CMS', path: '/admin/footer', icon: PanelBottom },
-    { label: 'Site Settings & DB', path: '/admin/settings', icon: Settings },
+    { label: 'Website Settings', path: '/admin/settings', icon: Settings },
   ];
 
   const filteredNavItems = navItems.filter((item) =>
@@ -162,20 +162,18 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
             </div>
           </div>
 
-          {/* Connection Status Pill */}
+          {/* Status Pill */}
           <div className="px-4 py-2 shrink-0">
-            <div className={`px-3 py-2 rounded-xl text-[11px] flex items-center justify-between border ${
-              isSupabaseConfigured
-                ? isDark
-                  ? 'bg-[#D4AF37]/10 border-[#D4AF37]/30 text-[#F5D76E]'
-                  : 'bg-emerald-50 border-[#00C8A8]/30 text-[#00C8A8]'
-                : 'bg-amber-500/10 border-amber-500/30 text-amber-500'
+            <div className={`px-3 py-1.5 rounded-xl text-[11px] flex items-center justify-between border ${
+              isDark
+                ? 'bg-white/5 border-white/10 text-slate-300'
+                : 'bg-slate-100 border-slate-200 text-slate-700'
             }`}>
               <div className="flex items-center gap-2 truncate">
-                <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
-                <span className="truncate font-mono font-semibold">Supabase PostgreSQL</span>
+                <CheckCircle2 className="w-3.5 h-3.5 shrink-0 text-[#00E5FF]" />
+                <span className="truncate font-mono font-medium">Console Active</span>
               </div>
-              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              <span className="w-2 h-2 rounded-full bg-[#00E5FF] animate-pulse" />
             </div>
           </div>
 

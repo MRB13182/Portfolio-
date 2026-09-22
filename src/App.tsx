@@ -12,8 +12,9 @@ import { Footer } from './components/layout/Footer';
 import { Home } from './pages/Home';
 import { SkillsPage } from './pages/SkillsPage';
 import { ProjectsPage } from './pages/ProjectsPage';
-import { ExperiencePage } from './pages/ExperiencePage';
-import { AdminLoginPage } from './pages/AdminLoginPage';
+import { CertificatesPage } from './pages/CertificatesPage';
+import { ContactPage } from './pages/ContactPage';
+import { PasscodeModal } from './components/common/PasscodeModal';
 import { ProtectedRoute } from './components/admin/ProtectedRoute';
 import { AdminLayout } from './components/admin/AdminLayout';
 import { AdminOverviewPage } from './pages/admin/AdminOverviewPage';
@@ -27,7 +28,6 @@ import { AdminSocialsPage } from './pages/admin/AdminSocialsPage';
 import { AdminMessagesPage } from './pages/admin/AdminMessagesPage';
 import { AdminFooterPage } from './pages/admin/AdminFooterPage';
 import { AdminSettingsPage } from './pages/admin/AdminSettingsPage';
-import { ContactModal } from './components/modals/ContactModal';
 import { DownloadCustomizationModal } from './components/modals/DownloadCustomizationModal';
 import { PdfDownloadType } from './types';
 import { AnimatePresence } from 'motion/react';
@@ -35,9 +35,9 @@ import { AnimatePresence } from 'motion/react';
 function AppContent() {
   const { isDark } = useTheme();
   const location = useLocation();
-  const isAdminDashboard = location.pathname.startsWith('/admin') && location.pathname !== '/admin/login';
+  const isAdminDashboard = location.pathname.startsWith('/admin');
 
-  const [isContactModalOpen, setIsContactModalOpen] = useState(false);
+  const [isPasscodeModalOpen, setIsPasscodeModalOpen] = useState(false);
   const [pdfDownloadModal, setPdfDownloadModal] = useState<{
     isOpen: boolean;
     type: PdfDownloadType;
@@ -60,7 +60,7 @@ function AppContent() {
     }));
   };
 
-  // If in executive Admin Dashboard, render AdminLayout and bypass public headers/footers
+  // If in executive Admin Dashboard, render AdminLayout
   if (isAdminDashboard) {
     return (
       <ProtectedRoute>
@@ -88,36 +88,38 @@ function AppContent() {
     <div className={`min-h-screen relative font-sans transition-colors duration-300 flex flex-col justify-between ${
       isDark 
         ? 'bg-[#050505] text-[#F8FAFC] selection:bg-[#7C3AED]/40' 
-        : 'bg-[#F8FAFC] text-[#0F172A] selection:bg-[#00C896]/30'
+        : 'bg-[#F8FAFC] text-[#0F172A] selection:bg-[#00E5FF]/30'
     }`}>
-      {/* Ambient Animated Luxury / Emerald Glows */}
+      {/* Ambient Animated Glows */}
       <LuxuryBackground />
 
-      {/* Sticky Glass Navbar */}
-      <Navbar
-        onOpenContact={() => setIsContactModalOpen(true)}
-        onOpenResumeDownload={() => handleOpenPdfDownload('resume')}
-      />
+      {/* Center-Aligned Sticky Glass Navbar */}
+      <Navbar onTriggerAdmin={() => setIsPasscodeModalOpen(true)} />
 
       {/* Dynamic Route View Transitions */}
-      <main className="relative z-10 flex-grow">
+      <main className="relative z-10 flex-grow pt-16 sm:pt-20">
         <AnimatePresence mode="wait">
           <Routes location={location}>
             <Route
               path="/"
               element={
-                <PageTransition key={location.pathname}>
-                  <Home 
-                    onOpenContact={() => setIsContactModalOpen(true)} 
-                    onOpenResumeDownload={() => handleOpenPdfDownload('resume')} 
-                  />
+                <PageTransition key="home-root">
+                  <Home />
+                </PageTransition>
+              }
+            />
+            <Route
+              path="/home"
+              element={
+                <PageTransition key="home-page">
+                  <Home />
                 </PageTransition>
               }
             />
             <Route
               path="/skills"
               element={
-                <PageTransition key={location.pathname}>
+                <PageTransition key="skills-page">
                   <SkillsPage />
                 </PageTransition>
               }
@@ -125,49 +127,47 @@ function AppContent() {
             <Route
               path="/projects"
               element={
-                <PageTransition key={location.pathname}>
+                <PageTransition key="projects-page">
                   <ProjectsPage />
                 </PageTransition>
               }
             />
             <Route
-              path="/experience"
+              path="/certificates"
               element={
-                <PageTransition key={location.pathname}>
-                  <ExperiencePage 
+                <PageTransition key="certificates-page">
+                  <CertificatesPage 
                     onOpenResumeDownload={() => handleOpenPdfDownload('resume')} 
                   />
                 </PageTransition>
               }
             />
             <Route
-              path="/admin/login"
+              path="/contact"
               element={
-                <PageTransition key={location.pathname}>
-                  <AdminLoginPage />
+                <PageTransition key="contact-page">
+                  <ContactPage />
                 </PageTransition>
               }
             />
-            {/* Fallback to Home */}
+            {/* Redirect old routes */}
+            <Route path="/experience" element={<Navigate to="/certificates" replace />} />
+            <Route path="/admin/login" element={<Navigate to="/" replace />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </AnimatePresence>
       </main>
 
-      {/* Persistent Multi-Page Footer */}
-      <Footer 
-        onOpenContact={() => setIsContactModalOpen(true)} 
-        onOpenResumeDownload={() => handleOpenPdfDownload('resume')}
-        onOpenCertificatesDownload={() => handleOpenPdfDownload('certificates')}
+      {/* Minimal Glass Footer displaying ONLY "© 2026 Portfolio" with hidden 3-sec admin trigger */}
+      <Footer onTriggerAdmin={() => setIsPasscodeModalOpen(true)} />
+
+      {/* Hidden Admin Passcode Modal */}
+      <PasscodeModal
+        isOpen={isPasscodeModalOpen}
+        onClose={() => setIsPasscodeModalOpen(false)}
       />
 
-      {/* Floating Global Contact Modal */}
-      <ContactModal
-        isOpen={isContactModalOpen}
-        onClose={() => setIsContactModalOpen(false)}
-      />
-
-      {/* Download Customization Modal (Resume & Verified Certificates) */}
+      {/* Download Customization Modal (Resume & Certificates) */}
       <DownloadCustomizationModal
         isOpen={pdfDownloadModal.isOpen}
         type={pdfDownloadModal.type}

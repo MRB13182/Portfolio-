@@ -1,48 +1,58 @@
 import React, { useState, useEffect } from 'react';
-import { NavLink, Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useTheme } from '../../context/ThemeContext';
 import { portfolioConfig, assets } from '../../config/portfolio';
 import { 
   Menu, 
   X, 
-  Mail, 
-  FileText,
-  ArrowRight,
-  Sun,
-  Moon
+  Sun, 
+  Moon,
+  Sparkles
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { HiddenAdminTrigger } from '../common/HiddenAdminTrigger';
 
 interface NavbarProps {
-  onOpenContact: () => void;
-  onOpenResumeDownload: () => void;
+  onTriggerAdmin?: () => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ 
-  onOpenContact, 
-  onOpenResumeDownload 
-}) => {
+export const Navbar: React.FC<NavbarProps> = ({ onTriggerAdmin }) => {
   const location = useLocation();
-  const { theme, isDark, toggleTheme } = useTheme();
+  const navigate = useNavigate();
+  const { isDark, toggleTheme } = useTheme();
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [logoImageError, setLogoImageError] = useState(false);
 
+  // Final 5-item navigation order
+  const navItems = [
+    { name: 'Home', path: '/home' },
+    { name: 'Skills', path: '/skills' },
+    { name: 'Projects', path: '/projects' },
+    { name: 'Certificates', path: '/certificates' },
+    { name: 'Contact', path: '/contact' },
+  ];
+
+  // Helper to check if route is active
+  const isItemActive = (path: string) => {
+    if (path === '/home') {
+      return location.pathname === '/' || location.pathname === '/home';
+    }
+    return location.pathname.startsWith(path);
+  };
+
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 40);
+      setScrolled(window.scrollY > 20);
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Strict User Mandate: Navbar contains ONLY Home, Skills, Projects, Experience
-  const navLinks = [
-    { name: 'Home', path: '/' },
-    { name: 'Skills', path: '/skills' },
-    { name: 'Projects', path: '/projects' },
-    { name: 'Experience', path: '/experience' },
-  ];
+  // Close mobile menu on route change
+  useEffect(() => {
+    setMobileMenuOpen(false);
+  }, [location.pathname]);
 
   const currentLogo = isDark ? assets.logo.dark : assets.logo.light;
 
@@ -52,407 +62,190 @@ export const Navbar: React.FC<NavbarProps> = ({
         id="main-navbar-wrapper"
         className="fixed top-0 left-0 right-0 z-40 flex justify-center pointer-events-none transition-all duration-300"
       >
-        <motion.div
-          id="morphing-navbar"
-          layout
-          transition={{
-            type: 'spring',
-            stiffness: 340,
-            damping: 32,
-            mass: 0.8
-          }}
+        <div
+          id="glass-navbar"
           className={`pointer-events-auto transition-all duration-300 ${
             scrolled
               ? isDark
-                ? 'w-[94%] sm:w-[90%] max-w-4xl mt-3 sm:mt-4 py-2 px-3.5 sm:px-5 rounded-[24px] sm:rounded-[28px] bg-[rgba(10,10,10,0.85)] backdrop-blur-2xl border border-[rgba(212,175,55,0.3)] shadow-[0_16px_40px_rgba(0,0,0,0.85),0_0_25px_rgba(123,44,255,0.22)] ring-1 ring-white/5 text-[#FFFFFF]'
-                : 'w-[94%] sm:w-[90%] max-w-4xl mt-3 sm:mt-4 py-2 px-3.5 sm:px-5 rounded-[24px] sm:rounded-[28px] bg-white/90 backdrop-blur-2xl border border-[rgba(18,214,160,0.25)] shadow-[0_16px_35px_rgba(18,214,160,0.12),0_4px_12px_rgba(0,0,0,0.04)] ring-1 ring-emerald-500/10 text-[#0F172A]'
+                ? 'w-[94%] max-w-4xl mt-3 py-2.5 px-5 sm:px-7 rounded-[24px] bg-[#0A0A0A]/85 backdrop-blur-2xl border border-white/12 shadow-[0_12px_40px_rgba(0,0,0,0.6),0_0_20px_rgba(0,229,255,0.12)] text-[#F8FAFC]'
+                : 'w-[94%] max-w-4xl mt-3 py-2.5 px-5 sm:px-7 rounded-[24px] bg-white/85 backdrop-blur-2xl border border-white/60 shadow-[0_12px_35px_rgba(0,229,255,0.12),0_4px_16px_rgba(0,0,0,0.04)] text-slate-900'
               : isDark
-                ? 'w-full max-w-7xl mt-0 pt-4 sm:pt-6 pb-2 px-4 sm:px-6 lg:px-8 rounded-b-[28px] bg-[rgba(5,5,5,0.4)] backdrop-blur-xl border-b border-[#D4AF37]/15 shadow-[0_10px_35px_rgba(0,0,0,0.5)] text-[#FFFFFF]'
-                : 'w-full max-w-7xl mt-0 pt-4 sm:pt-6 pb-2 px-4 sm:px-6 lg:px-8 rounded-b-[28px] bg-[#F8FBFA]/60 backdrop-blur-xl border-b border-[rgba(18,214,160,0.15)] shadow-[0_10px_30px_rgba(18,214,160,0.06)] text-[#0F172A]'
+                ? 'w-full max-w-6xl mt-2 py-4 px-6 sm:px-8 bg-transparent text-[#F8FAFC]'
+                : 'w-full max-w-6xl mt-2 py-4 px-6 sm:px-8 bg-transparent text-slate-900'
           }`}
         >
-          <div className="flex items-center justify-between gap-2 sm:gap-4">
-            {/* Left: Morphing Brand Identity (Logo + Name/Monogram + Role) */}
-            <Link
-              to="/"
-              id="nav-brand-link"
-              className="group flex items-center gap-2.5 sm:gap-3.5 focus:outline-none shrink-0"
-            >
-              {/* Morphing Logo Frame */}
-              <motion.div
-                layout
-                className={`relative rounded-2xl flex items-center justify-center transition-transform duration-300 group-hover:scale-105 ${
-                  scrolled ? 'w-8 h-8 sm:w-9 sm:h-9' : 'w-10 h-10 sm:w-12 sm:h-12'
-                } ${
-                  isDark
-                    ? 'bg-gradient-to-tr from-[#7B2CFF] via-[#0A0A0A] to-[#D4AF37] p-[1.5px] shadow-[0_0_20px_rgba(123,44,255,0.35)]'
-                    : 'bg-gradient-to-tr from-[#12D6A0] via-white to-[#8EF0D1] p-[1.5px] shadow-[0_4px_15px_rgba(18,214,160,0.25)]'
-                }`}
-              >
-                <div className={`w-full h-full rounded-[14px] flex items-center justify-center overflow-hidden p-1 relative ${
-                  isDark ? 'bg-[#0A0A0A]' : 'bg-white'
-                }`}>
+          <div className="flex items-center justify-between">
+            
+            {/* Left: Brand Identity / Hidden Admin Trigger Option */}
+            <div className="flex items-center">
+              {onTriggerAdmin ? (
+                <HiddenAdminTrigger onTrigger={onTriggerAdmin}>
+                  <Link
+                    to="/"
+                    id="navbar-brand-logo"
+                    className="flex items-center gap-2.5 group cursor-pointer"
+                  >
+                    {!logoImageError && currentLogo ? (
+                      <img
+                        src={currentLogo}
+                        alt={portfolioConfig.personal.name}
+                        onError={() => setLogoImageError(true)}
+                        className="h-8 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+                      />
+                    ) : (
+                      <div className="w-8 h-8 rounded-xl flex items-center justify-center font-black text-xs tracking-wider bg-gradient-to-r from-[#00E5FF] to-[#8B5CF6] text-black">
+                        MR
+                      </div>
+                    )}
+                    <span className="font-bold text-sm tracking-tight hidden sm:inline-block">
+                      {portfolioConfig.personal.firstName}{' '}
+                      <span className="text-[#00E5FF]">
+                        {portfolioConfig.personal.lastName}
+                      </span>
+                    </span>
+                  </Link>
+                </HiddenAdminTrigger>
+              ) : (
+                <Link
+                  to="/"
+                  id="navbar-brand-logo"
+                  className="flex items-center gap-2.5 group cursor-pointer"
+                >
                   {!logoImageError && currentLogo ? (
                     <img
-                      key={currentLogo}
                       src={currentLogo}
-                      alt={`${portfolioConfig.personal.name} Logo`}
-                      className="w-full h-full object-contain"
-                      onLoad={(e) => {
-                        if (e.currentTarget.naturalWidth < 5) {
-                          setLogoImageError(true);
-                        }
-                      }}
+                      alt={portfolioConfig.personal.name}
                       onError={() => setLogoImageError(true)}
+                      className="h-8 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
                     />
                   ) : (
-                    <span 
-                      className={`font-black tracking-tighter flex items-center justify-center w-full h-full ${
-                        scrolled ? 'text-xs sm:text-sm' : 'text-sm sm:text-base'
-                      } text-transparent bg-clip-text ${
-                        isDark 
-                          ? 'bg-gradient-to-tr from-[#F5D06F] to-[#D4AF37]' 
-                          : 'bg-gradient-to-tr from-[#12D6A0] to-[#8EF0D1]'
-                      }`}
-                    >
+                    <div className="w-8 h-8 rounded-xl flex items-center justify-center font-black text-xs tracking-wider bg-gradient-to-r from-[#00E5FF] to-[#8B5CF6] text-black">
                       MR
+                    </div>
+                  )}
+                  <span className="font-bold text-sm tracking-tight hidden sm:inline-block">
+                    {portfolioConfig.personal.firstName}{' '}
+                    <span className="text-[#00E5FF]">
+                      {portfolioConfig.personal.lastName}
                     </span>
-                  )}
-                </div>
-              </motion.div>
+                  </span>
+                </Link>
+              )}
+            </div>
 
-              {/* Brand Typography (Full Name/Title vs. Compact MR Monogram) */}
-              <div className="flex flex-col min-w-0">
-                <AnimatePresence mode="wait">
-                  {scrolled ? (
-                    <motion.div
-                      key="scrolled-brand"
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: -10 }}
-                      transition={{ duration: 0.2 }}
-                      className="flex items-center gap-1.5"
-                    >
-                      <span className={`font-black text-sm sm:text-base tracking-wider text-transparent bg-clip-text ${
-                        isDark 
-                          ? 'bg-gradient-to-r from-white via-[#F5D06F] to-[#D4AF37]' 
-                          : 'bg-gradient-to-r from-slate-900 via-[#12D6A0] to-[#8EF0D1]'
-                      }`}>
-                        MR
-                      </span>
-                      <span className={`w-1.5 h-1.5 rounded-full animate-pulse ${
-                        isDark ? 'bg-[#F5D06F]' : 'bg-[#12D6A0]'
-                      }`} />
-                    </motion.div>
-                  ) : (
-                    <motion.div
-                      key="full-brand"
-                      initial={{ opacity: 0, x: -10 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: -10 }}
-                      transition={{ duration: 0.2 }}
-                      className="flex flex-col"
-                    >
-                      <div className="flex items-center gap-2">
-                        <span className={`font-extrabold text-sm sm:text-base tracking-tight leading-tight truncate ${
-                          isDark ? 'text-[#FFFFFF]' : 'text-slate-900'
-                        }`}>
-                          {portfolioConfig.personal.name}
-                        </span>
-                        <span className={`hidden sm:inline-block w-1.5 h-1.5 rounded-full ${
-                          isDark ? 'bg-[#D4AF37]' : 'bg-[#12D6A0]'
-                        }`} />
-                      </div>
-                      <span className={`text-[11px] font-mono tracking-wider truncate uppercase ${
-                        isDark ? 'text-[#D4AF37]/90' : 'text-[#12D6A0]'
-                      }`}>
-                        {portfolioConfig.personal.titles[0]}
-                      </span>
-                    </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            </Link>
-
-            {/* Center: Spatial Luxury Navigation Switchboard (Desktop) */}
-            <nav 
-              id="desktop-nav" 
-              className={`hidden md:flex items-center transition-all duration-300 ${
-                scrolled
-                  ? isDark
-                    ? 'gap-1 p-1 rounded-2xl bg-[#0A0A0A]/90 border border-[rgba(212,175,55,0.25)] shadow-inner'
-                    : 'gap-1 p-1 rounded-2xl bg-white/90 border border-[rgba(18,214,160,0.2)] shadow-inner'
-                  : isDark
-                    ? 'gap-1.5 lg:gap-2 px-3 py-1.5 rounded-2xl bg-[rgba(17,17,17,0.85)] border border-[#D4AF37]/20 backdrop-blur-md shadow-sm'
-                    : 'gap-1.5 lg:gap-2 px-3 py-1.5 rounded-2xl bg-white/85 border border-[rgba(18,214,160,0.2)] backdrop-blur-md shadow-sm'
-              }`}
-            >
-              {navLinks.map((link) => {
-                const isActive = location.pathname === link.path;
+            {/* Center: Center-Aligned Clean Navigation Links */}
+            <nav className="hidden md:flex items-center justify-center space-x-7 lg:space-x-8">
+              {navItems.map((item) => {
+                const active = isItemActive(item.path);
                 return (
-                  <NavLink
-                    key={link.path}
-                    to={link.path}
-                    id={`nav-link-${link.name.toLowerCase()}`}
-                    className={`relative font-semibold transition-all duration-200 cursor-pointer ${
-                      scrolled 
-                        ? 'px-3.5 py-1.5 text-xs rounded-xl' 
-                        : 'px-4 py-2 text-xs lg:text-sm rounded-xl'
-                    } ${
-                      isActive
-                        ? isDark ? 'text-[#FFFFFF]' : 'text-[#12D6A0] font-bold'
+                  <Link
+                    key={item.name}
+                    to={item.path}
+                    id={`nav-link-${item.name.toLowerCase()}`}
+                    className={`relative py-1 text-xs font-semibold tracking-wide transition-colors duration-200 cursor-pointer ${
+                      active
+                        ? isDark
+                          ? 'text-white font-bold'
+                          : 'text-slate-950 font-bold'
                         : isDark
-                          ? 'text-[#A1A1AA] hover:text-[#FFFFFF] hover:bg-white/10'
-                          : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
+                          ? 'text-slate-400 hover:text-white'
+                          : 'text-slate-600 hover:text-slate-900'
                     }`}
                   >
-                    {isActive && (
+                    <span>{item.name}</span>
+
+                    {/* Thin animated underline below active item */}
+                    {active && (
                       <motion.div
-                        layoutId="active-nav-glow"
+                        layoutId="activeNavUnderline"
                         transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-                        className={`absolute inset-0 rounded-xl -z-10 ${
-                          isDark
-                            ? 'bg-[#7B2CFF]/35 border border-[#D4AF37]/45 shadow-[0_0_15px_rgba(212,175,55,0.3)]'
-                            : 'bg-emerald-500/10 border border-[#12D6A0]/30 shadow-[0_2px_12px_rgba(18,214,160,0.2)]'
-                        }`}
+                        className="absolute -bottom-1 left-0 right-0 h-[2px] rounded-full bg-gradient-to-r from-[#00E5FF] to-[#8B5CF6] shadow-[0_0_8px_rgba(0,229,255,0.7)]"
                       />
                     )}
-                    <span className="relative z-10">{link.name}</span>
-                  </NavLink>
+                  </Link>
                 );
               })}
             </nav>
 
-            {/* Right: Desktop Action Suite & Theme Toggle */}
-            <div className="hidden md:flex items-center gap-2 sm:gap-2.5 shrink-0">
-              {/* Theme Toggle Button */}
+            {/* Right: Theme Toggle & Mobile Menu Trigger */}
+            <div className="flex items-center space-x-2.5">
               <button
+                type="button"
                 onClick={toggleTheme}
-                id="theme-toggle-btn"
-                aria-label={`Switch to ${isDark ? 'Light' : 'Dark'} theme`}
-                title={`Switch to ${isDark ? 'Apple Titanium Emerald Light' : 'Black Mamba Gold Dark'} Mode`}
-                className={`p-2 sm:p-2.5 rounded-2xl border transition-all duration-300 cursor-pointer flex items-center justify-center ${
+                id="navbar-theme-toggle-btn"
+                aria-label={`Switch to ${isDark ? 'light' : 'dark'} mode`}
+                className={`p-2 rounded-xl transition-colors cursor-pointer border ${
                   isDark
-                    ? 'bg-[#0A0A0A] border-[rgba(212,175,55,0.3)] text-[#F5D06F] hover:bg-[#D4AF37]/20 hover:border-[#D4AF37]'
-                    : 'bg-white border-[rgba(18,214,160,0.25)] text-[#12D6A0] hover:bg-emerald-50 hover:border-[#12D6A0]'
-                } shadow-sm active:scale-95`}
-              >
-                {isDark ? (
-                  <Sun className="w-4 h-4 text-[#F5D06F]" />
-                ) : (
-                  <Moon className="w-4 h-4 text-[#12D6A0]" />
-                )}
-              </button>
-
-              {/* Get In Touch Contact Modal Trigger */}
-              <button
-                onClick={onOpenContact}
-                id="navbar-contact-btn"
-                className={`font-bold transition-all duration-300 flex items-center gap-2 cursor-pointer shadow-md active:scale-95 ${
-                  scrolled ? 'px-3.5 py-2 text-xs rounded-xl' : 'px-4 py-2.5 text-xs lg:text-sm rounded-2xl'
-                } ${
-                  isDark
-                    ? 'bg-gradient-to-r from-[#D4AF37] to-[#F5D06F] text-black hover:opacity-95 shadow-[0_0_20px_rgba(212,175,55,0.3)]'
-                    : 'bg-gradient-to-r from-[#12D6A0] to-[#0EB385] text-white hover:opacity-95 shadow-[0_4px_20px_rgba(18,214,160,0.35)]'
+                    ? 'bg-white/5 border-white/10 text-slate-300 hover:text-[#00E5FF] hover:border-[#00E5FF]/40'
+                    : 'bg-slate-100/80 border-slate-200 text-slate-700 hover:text-[#0097A7] hover:border-[#00E5FF]/40'
                 }`}
               >
-                <Mail className={scrolled ? 'w-3.5 h-3.5' : 'w-4 h-4'} />
-                <span>Get In Touch</span>
+                {isDark ? <Sun className="w-4 h-4 text-[#00E5FF]" /> : <Moon className="w-4 h-4 text-violet-600" />}
+              </button>
+
+              {/* Mobile Menu Hamburger */}
+              <button
+                type="button"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                id="navbar-mobile-menu-btn"
+                aria-label="Toggle navigation drawer"
+                className={`md:hidden p-2 rounded-xl border transition-colors cursor-pointer ${
+                  isDark
+                    ? 'bg-white/5 border-white/10 text-slate-300 hover:text-white'
+                    : 'bg-slate-100 border-slate-200 text-slate-700 hover:text-slate-900'
+                }`}
+              >
+                {mobileMenuOpen ? <X className="w-4 h-4" /> : <Menu className="w-4 h-4" />}
               </button>
             </div>
 
-            {/* Mobile Right Controls */}
-            <div className="flex md:hidden items-center gap-1.5">
-              {/* Mobile Theme Toggle */}
-              <button
-                onClick={toggleTheme}
-                id="mobile-theme-toggle-btn"
-                aria-label="Toggle theme"
-                className={`p-2 rounded-2xl border transition-colors ${
-                  isDark
-                    ? 'bg-[#0A0A0A] border-[rgba(212,175,55,0.3)] text-[#F5D06F]'
-                    : 'bg-white border-[rgba(18,214,160,0.25)] text-[#12D6A0]'
-                }`}
-              >
-                {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-              </button>
-
-              <button
-                onClick={() => setMobileMenuOpen(true)}
-                id="mobile-menu-open-btn"
-                aria-label="Open navigation drawer"
-                className={`p-2 rounded-2xl border transition-colors ${
-                  isDark
-                    ? 'bg-[rgba(17,17,17,0.85)] border-[#D4AF37]/30 text-[#FFFFFF]'
-                    : 'bg-white/90 border-[rgba(18,214,160,0.25)] text-slate-800'
-                }`}
-              >
-                <Menu className="w-5 h-5" />
-              </button>
-            </div>
           </div>
-        </motion.div>
+        </div>
       </header>
 
-      {/* Mobile Slide Drawer */}
-      <MobileDrawer
-        isOpen={mobileMenuOpen}
-        onClose={() => setMobileMenuOpen(false)}
-        navLinks={navLinks}
-        onOpenContact={() => {
-          setMobileMenuOpen(false);
-          onOpenContact();
-        }}
-        onOpenResumeDownload={() => {
-          setMobileMenuOpen(false);
-          onOpenResumeDownload();
-        }}
-      />
+      {/* Mobile Glass Navigation Drawer */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.2 }}
+            className={`fixed inset-x-4 top-20 z-40 md:hidden p-6 rounded-[28px] border shadow-2xl backdrop-blur-2xl ${
+              isDark
+                ? 'bg-[#0A0A0A]/95 border-white/12 text-white shadow-[0_16px_50px_rgba(0,0,0,0.8)]'
+                : 'bg-white/95 border-white/60 text-slate-900 shadow-[0_16px_40px_rgba(0,229,255,0.15)]'
+            }`}
+          >
+            <div className="flex flex-col items-center space-y-4 py-2">
+              {navItems.map((item) => {
+                const active = isItemActive(item.path);
+                return (
+                  <Link
+                    key={item.name}
+                    to={item.path}
+                    id={`mobile-nav-link-${item.name.toLowerCase()}`}
+                    className={`relative py-2 text-sm font-semibold tracking-wide transition-colors cursor-pointer ${
+                      active
+                        ? isDark
+                          ? 'text-[#00E5FF] font-bold'
+                          : 'text-[#0097A7] font-bold'
+                        : isDark
+                          ? 'text-slate-400 hover:text-white'
+                          : 'text-slate-600 hover:text-slate-900'
+                    }`}
+                  >
+                    <span>{item.name}</span>
+                    {active && (
+                      <div className="mx-auto mt-1 h-[2px] w-8 rounded-full bg-gradient-to-r from-[#00E5FF] to-[#8B5CF6]" />
+                    )}
+                  </Link>
+                );
+              })}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
-  );
-};
-
-interface MobileDrawerProps {
-  isOpen: boolean;
-  onClose: () => void;
-  navLinks: Array<{ name: string; path: string }>;
-  onOpenContact: () => void;
-  onOpenResumeDownload: () => void;
-}
-
-const MobileDrawer: React.FC<MobileDrawerProps> = ({
-  isOpen,
-  onClose,
-  navLinks,
-  onOpenContact,
-  onOpenResumeDownload,
-}) => {
-  const location = useLocation();
-  const { isDark, toggleTheme } = useTheme();
-
-  if (!isOpen) return null;
-
-  return (
-    <div className="fixed inset-0 z-50 md:hidden flex justify-end">
-      {/* Backdrop */}
-      <div
-        className="fixed inset-0 bg-black/75 backdrop-blur-md transition-opacity"
-        onClick={onClose}
-      />
-
-      {/* Drawer Panel */}
-      <div
-        id="mobile-slide-drawer"
-        className={`relative w-4/5 max-w-sm h-full flex flex-col justify-between p-6 overflow-y-auto transition-transform duration-300 shadow-2xl backdrop-blur-2xl ${
-          isDark
-            ? 'bg-[rgba(10,10,10,0.95)] border-l border-[#D4AF37]/25 text-[#FFFFFF] shadow-[0_0_50px_rgba(0,0,0,0.9)]'
-            : 'bg-white/95 border-l border-[rgba(18,214,160,0.2)] text-slate-900 shadow-[0_0_40px_rgba(18,214,160,0.15)]'
-        }`}
-      >
-        {/* Top Header */}
-        <div>
-          <div className={`flex items-center justify-between pb-6 border-b ${
-            isDark ? 'border-[rgba(212,175,55,0.25)]' : 'border-slate-200'
-          }`}>
-            <div className="flex items-center gap-3">
-              <div className={`w-10 h-10 rounded-2xl flex items-center justify-center p-1 relative overflow-hidden ${
-                isDark ? 'bg-[#0A0A0A] border border-[#D4AF37]/30' : 'bg-emerald-50 border border-[rgba(18,214,160,0.3)]'
-              }`}>
-                <span className={`font-black text-xs items-center justify-center w-full h-full flex ${
-                  isDark ? 'text-[#F5D06F]' : 'text-[#12D6A0]'
-                }`}>
-                  MR
-                </span>
-              </div>
-              <div>
-                <h4 className="font-bold text-sm leading-tight">{portfolioConfig.personal.name}</h4>
-                <p className={`text-[11px] font-mono ${isDark ? 'text-[#FFFFFF]/70' : 'text-slate-500'}`}>
-                  {portfolioConfig.personal.titles[0]}
-                </p>
-              </div>
-            </div>
-            <div className="flex items-center gap-2">
-              <button
-                onClick={toggleTheme}
-                aria-label="Toggle theme mode"
-                className={`p-2 rounded-xl transition-colors ${
-                  isDark ? 'text-[#F5D06F] hover:bg-white/10' : 'text-[#12D6A0] hover:bg-slate-100'
-                }`}
-              >
-                {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
-              </button>
-              <button
-                onClick={onClose}
-                id="mobile-drawer-close-btn"
-                aria-label="Close menu"
-                className={`p-2 rounded-xl cursor-pointer ${
-                  isDark ? 'text-[#FFFFFF] hover:text-[#F5D06F]' : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
-          </div>
-
-          {/* Navigation Links: Home, Skills, Projects, Experience */}
-          <nav className="mt-6 flex flex-col gap-2">
-            {navLinks.map((link) => {
-              const isActive = location.pathname === link.path;
-              return (
-                <NavLink
-                  key={link.path}
-                  to={link.path}
-                  onClick={onClose}
-                  id={`mobile-link-${link.name.toLowerCase()}`}
-                  className={`flex items-center justify-between px-4 py-3 rounded-2xl text-sm font-semibold transition-all ${
-                    isActive
-                      ? isDark
-                        ? 'bg-[#7B2CFF]/30 text-[#F5D06F] border border-[#D4AF37]/35 shadow-[0_0_15px_rgba(212,175,55,0.15)]'
-                        : 'bg-emerald-500/10 text-[#12D6A0] border border-[rgba(18,214,160,0.3)] shadow-[0_2px_10px_rgba(18,214,160,0.1)]'
-                      : isDark
-                        ? 'text-[#A1A1AA] hover:bg-[#7B2CFF]/20 hover:text-[#FFFFFF]'
-                        : 'text-slate-700 hover:bg-emerald-50 hover:text-[#12D6A0]'
-                  }`}
-                >
-                  <span>{link.name}</span>
-                  <ArrowRight className="w-4 h-4 opacity-50" />
-                </NavLink>
-              );
-            })}
-          </nav>
-        </div>
-
-        {/* Bottom Drawer Actions: Download Resume + Get In Touch */}
-        <div className={`pt-6 border-t flex flex-col gap-3 ${
-          isDark ? 'border-[rgba(212,175,55,0.25)]' : 'border-slate-200'
-        }`}>
-          <button
-            onClick={onOpenResumeDownload}
-            id="mobile-drawer-resume-btn"
-            className={`w-full py-3.5 px-4 rounded-2xl text-xs font-bold border flex items-center justify-center gap-2 cursor-pointer transition-all ${
-              isDark
-                ? 'bg-[rgba(17,17,17,0.85)] border-[#D4AF37]/30 text-[#FFFFFF] hover:border-[#D4AF37]'
-                : 'bg-white border-slate-200 text-slate-800 hover:border-[#12D6A0] hover:text-[#12D6A0]'
-            }`}
-          >
-            <FileText className={`w-4 h-4 ${isDark ? 'text-[#F5D06F]' : 'text-[#12D6A0]'}`} />
-            <span>Download Resume</span>
-          </button>
-
-          <button
-            onClick={onOpenContact}
-            id="mobile-drawer-contact-btn"
-            className={`w-full py-3.5 px-4 rounded-2xl text-xs font-bold text-center flex items-center justify-center gap-2 shadow-lg cursor-pointer transition-all ${
-              isDark
-                ? 'bg-gradient-to-r from-[#D4AF37] to-[#F5D06F] text-black shadow-[0_0_20px_rgba(212,175,55,0.3)]'
-                : 'bg-gradient-to-r from-[#12D6A0] to-[#0EB385] text-white shadow-[0_4px_20px_rgba(18,214,160,0.3)]'
-            }`}
-          >
-            <Mail className="w-4 h-4" />
-            <span>Get In Touch</span>
-          </button>
-        </div>
-      </div>
-    </div>
   );
 };

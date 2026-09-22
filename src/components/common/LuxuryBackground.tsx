@@ -10,39 +10,39 @@ export const LuxuryBackground: React.FC = () => {
       <div 
         className={`absolute inset-0 transition-colors duration-500 ${
           isDark 
-            ? 'bg-[#050505]' 
-            : 'bg-[#F8FBFA]'
+            ? 'bg-[#0A0A0A]' 
+            : 'bg-[#F8FAFC]'
         }`} 
       />
 
-      {/* Luxury Ambient Glows (Pure CSS, GPU-accelerated, Zero JS overhead) */}
+      {/* Luxury Ambient Glows (Cyan #00E5FF & Violet #8B5CF6 Glassmorphic Atmosphere) */}
       {isDark ? (
         <>
-          {/* Royal Purple Nebula - Top Right */}
-          <div className="absolute -top-32 -right-32 w-[550px] h-[550px] rounded-full bg-[radial-gradient(circle,rgba(123,44,255,0.22)_0%,rgba(157,78,221,0.12)_45%,transparent_70%)] blur-2xl" />
+          {/* Electric Cyan Nebula - Top Right */}
+          <div className="absolute -top-32 -right-32 w-[600px] h-[600px] rounded-full bg-[radial-gradient(circle,rgba(0,229,255,0.16)_0%,rgba(139,92,246,0.08)_45%,transparent_70%)] blur-3xl pointer-events-none" />
           
-          {/* Luxury Gold Halo - Center Left */}
-          <div className="absolute top-1/3 -left-32 w-[500px] h-[500px] rounded-full bg-[radial-gradient(circle,rgba(212,175,55,0.18)_0%,rgba(245,208,111,0.08)_45%,transparent_70%)] blur-2xl" />
+          {/* Deep Violet Halo - Center Left */}
+          <div className="absolute top-1/3 -left-32 w-[550px] h-[550px] rounded-full bg-[radial-gradient(circle,rgba(139,92,246,0.18)_0%,rgba(0,229,255,0.06)_45%,transparent_70%)] blur-3xl pointer-events-none" />
           
-          {/* Royal Purple Sub-Glow - Bottom Right */}
-          <div className="absolute -bottom-24 right-1/4 w-[520px] h-[520px] rounded-full bg-[radial-gradient(circle,rgba(123,44,255,0.18)_0%,rgba(76,29,149,0.1)_50%,transparent_70%)] blur-2xl" />
+          {/* Cyan Sub-Glow - Bottom Right */}
+          <div className="absolute -bottom-24 right-1/4 w-[520px] h-[520px] rounded-full bg-[radial-gradient(circle,rgba(0,229,255,0.14)_0%,rgba(139,92,246,0.08)_50%,transparent_70%)] blur-3xl pointer-events-none" />
 
-          {/* Center Subtle Gold Ambience */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-[radial-gradient(circle,rgba(212,175,55,0.08)_0%,rgba(123,44,255,0.06)_50%,transparent_70%)] blur-3xl" />
+          {/* Center Subtle Ambience */}
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full bg-[radial-gradient(circle,rgba(139,92,246,0.06)_0%,rgba(0,229,255,0.04)_50%,transparent_70%)] blur-3xl pointer-events-none" />
         </>
       ) : (
         <>
-          {/* Titanium Emerald Aura - Top Right */}
-          <div className="absolute -top-32 -right-32 w-[550px] h-[550px] rounded-full bg-[radial-gradient(circle,rgba(18,214,160,0.16)_0%,rgba(142,240,209,0.1)_45%,transparent_70%)] blur-2xl" />
+          {/* Soft Cyan Mist - Top Right */}
+          <div className="absolute -top-32 -right-32 w-[600px] h-[600px] rounded-full bg-[radial-gradient(circle,rgba(0,229,255,0.14)_0%,rgba(139,92,246,0.07)_45%,transparent_70%)] blur-3xl pointer-events-none" />
           
-          {/* Soft Mint Mist - Center Left */}
-          <div className="absolute top-1/3 -left-32 w-[500px] h-[500px] rounded-full bg-[radial-gradient(circle,rgba(18,214,160,0.12)_0%,rgba(142,240,209,0.06)_45%,transparent_70%)] blur-2xl" />
+          {/* Soft Violet Mist - Center Left */}
+          <div className="absolute top-1/3 -left-32 w-[550px] h-[550px] rounded-full bg-[radial-gradient(circle,rgba(139,92,246,0.12)_0%,rgba(0,229,255,0.05)_45%,transparent_70%)] blur-3xl pointer-events-none" />
           
-          {/* Emerald Bottom Accent */}
-          <div className="absolute -bottom-24 right-1/4 w-[520px] h-[520px] rounded-full bg-[radial-gradient(circle,rgba(18,214,160,0.14)_0%,rgba(230,250,244,0.1)_50%,transparent_70%)] blur-2xl" />
+          {/* Clean Cyan Accent - Bottom */}
+          <div className="absolute -bottom-24 right-1/4 w-[520px] h-[520px] rounded-full bg-[radial-gradient(circle,rgba(0,229,255,0.1)_0%,rgba(139,92,246,0.06)_50%,transparent_70%)] blur-3xl pointer-events-none" />
 
           {/* Center Clean Radiance */}
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-[radial-gradient(circle,rgba(18,214,160,0.08)_0%,rgba(142,240,209,0.04)_50%,transparent_70%)] blur-3xl" />
+          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] rounded-full bg-[radial-gradient(circle,rgba(0,229,255,0.06)_0%,rgba(139,92,246,0.04)_50%,transparent_70%)] blur-3xl pointer-events-none" />
         </>
       )}
 
@@ -51,8 +51,8 @@ export const LuxuryBackground: React.FC = () => {
         className={`absolute inset-0 ${isDark ? 'opacity-[0.035]' : 'opacity-[0.025]'}`}
         style={{
           backgroundImage: isDark 
-            ? 'radial-gradient(#D4AF37 1px, transparent 1px)' 
-            : 'radial-gradient(#12D6A0 1px, transparent 1px)',
+            ? 'radial-gradient(#00E5FF 1px, transparent 1px)' 
+            : 'radial-gradient(#8B5CF6 1px, transparent 1px)',
           backgroundSize: '32px 32px',
         }}
       />

@@ -119,18 +119,18 @@ export const AdminTrigger: React.FC<AdminTriggerProps> = ({ className = '', onNa
           scale: 0.94,
           transition: { duration: 0.15 },
         }}
-        className={`group relative w-[28px] h-[28px] rounded-[9px] flex items-center justify-center cursor-pointer transition-all duration-300 backdrop-blur-md opacity-40 hover:opacity-100 focus:outline-none ${
+        className={`group relative w-[32px] h-[32px] rounded-[10px] flex items-center justify-center cursor-pointer transition-all duration-300 backdrop-blur-md opacity-70 hover:opacity-100 focus:outline-none ${
           isDark
-            ? 'bg-[#050505]/90 border border-[#D4AF37]/30 text-[#D4AF37] hover:border-[#F5D76E]/80 hover:shadow-[0_0_15px_rgba(212,175,55,0.45)] hover:text-[#F5D76E]'
-            : 'bg-white/80 border border-[#00E5FF]/35 text-[#00C8A8] hover:border-[#00E5FF] hover:shadow-[0_0_15px_rgba(0,229,255,0.45)] hover:text-[#00E5FF]'
+            ? 'bg-[#121217]/80 border border-white/10 text-[#00E5FF] hover:border-[#00E5FF]/60 hover:shadow-[0_0_15px_rgba(0,229,255,0.4)] hover:text-[#00E5FF]'
+            : 'bg-white/80 border border-slate-200 text-[#00E5FF] hover:border-[#00E5FF] hover:shadow-[0_0_15px_rgba(0,229,255,0.3)] hover:text-[#00B8D4]'
         } ${isPressing ? 'opacity-100 scale-105' : ''}`}
       >
         {/* Subtle interior light reflection */}
         <div
-          className={`absolute inset-0 rounded-[8px] pointer-events-none transition-opacity duration-300 ${
+          className={`absolute inset-0 rounded-[9px] pointer-events-none transition-opacity duration-300 ${
             isDark
-              ? 'bg-gradient-to-tr from-[#D4AF37]/10 via-transparent to-[#F5D76E]/15 opacity-60 group-hover:opacity-100'
-              : 'bg-gradient-to-tr from-[#00C8A8]/10 via-[rgba(255,255,255,0.15)] to-[#00E5FF]/20 opacity-70 group-hover:opacity-100'
+              ? 'bg-gradient-to-tr from-[#8B5CF6]/15 via-transparent to-[#00E5FF]/20 opacity-60 group-hover:opacity-100'
+              : 'bg-gradient-to-tr from-[#8B5CF6]/10 via-[rgba(255,255,255,0.2)] to-[#00E5FF]/20 opacity-70 group-hover:opacity-100'
           }`}
         />
 
@@ -162,18 +162,18 @@ export const AdminTrigger: React.FC<AdminTriggerProps> = ({ className = '', onNa
         {/* Circular Progress Ring for Long Press (2s feedback) */}
         {isPressing && (
           <svg
-            className="absolute -inset-[2px] w-[32px] h-[32px] pointer-events-none -rotate-90 z-20"
-            viewBox="0 0 32 32"
+            className="absolute -inset-[2px] w-[36px] h-[36px] pointer-events-none -rotate-90 z-20"
+            viewBox="0 0 36 36"
           >
             <circle
-              cx="16"
-              cy="16"
-              r="14"
+              cx="18"
+              cy="18"
+              r="16"
               fill="none"
-              stroke={isDark ? '#D4AF37' : '#00E5FF'}
+              stroke="#00E5FF"
               strokeWidth="1.5"
-              strokeDasharray={88}
-              strokeDashoffset={88 - 88 * pressProgress}
+              strokeDasharray={100}
+              strokeDashoffset={100 - 100 * pressProgress}
               strokeLinecap="round"
               className="transition-all duration-75"
             />
@@ -186,8 +186,8 @@ export const AdminTrigger: React.FC<AdminTriggerProps> = ({ className = '', onNa
             initial={{ opacity: 0.3, scale: 0.9 }}
             animate={{ opacity: [0.3, 0.7, 0.3], scale: [0.95, 1.25, 0.95] }}
             transition={{ duration: 0.8, repeat: Infinity, ease: 'easeInOut' }}
-            className={`absolute inset-0 rounded-[9px] pointer-events-none ${
-              isDark ? 'bg-[#D4AF37]/25 blur-[6px]' : 'bg-[#00E5FF]/30 blur-[6px]'
+            className={`absolute inset-0 rounded-[10px] pointer-events-none ${
+              isDark ? 'bg-[#00E5FF]/25 blur-[6px]' : 'bg-[#00E5FF]/30 blur-[6px]'
             }`}
           />
         )}
