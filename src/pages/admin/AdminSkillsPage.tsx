@@ -22,7 +22,7 @@ import {
 
 export const AdminSkillsPage: React.FC = () => {
   const { isDark } = useTheme();
-  const { skills, refreshData } = usePortfolioData();
+  const { skills, addSkill, updateSkill, deleteSkill, refreshData } = usePortfolioData();
   const { showToast } = useToast();
 
   const [search, setSearch] = useState('');
@@ -85,9 +85,8 @@ export const AdminSkillsPage: React.FC = () => {
     const targetSkill = filteredSkills[targetIndex];
 
     try {
-      await skillService.update(currentSkill.id, { sort_order: targetIndex + 1 });
-      await skillService.update(targetSkill.id, { sort_order: index + 1 });
-      await refreshData();
+      await updateSkill(currentSkill.id, { sort_order: targetIndex + 1 });
+      await updateSkill(targetSkill.id, { sort_order: index + 1 });
       showToast('Skill order updated', { type: 'success' });
     } catch (err: any) {
       showToast('Error reordering', { type: 'error', message: err.message });
@@ -114,14 +113,13 @@ export const AdminSkillsPage: React.FC = () => {
 
       const existing = skills.find((s) => s.id === editingSkill.id);
       if (existing) {
-        await skillService.update(editingSkill.id!, payload);
+        await updateSkill(editingSkill.id!, payload);
         await activityLogService.log('Skill Updated', 'Skills Matrix', `Updated skill: ${payload.name}`);
       } else {
-        await skillService.create(payload as any);
+        await addSkill(payload);
         await activityLogService.log('Skill Added', 'Skills Matrix', `Added skill: ${payload.name}`);
       }
 
-      await refreshData();
       showToast('Skill saved successfully!', { type: 'success' });
       setEditingSkill(null);
     } catch (err: any) {
@@ -134,9 +132,8 @@ export const AdminSkillsPage: React.FC = () => {
   const handleDelete = async (id: string, name?: string) => {
     if (!confirm(`Are you sure you want to permanently delete skill "${name || id}"?`)) return;
     try {
-      await skillService.delete(id);
+      await deleteSkill(id);
       await activityLogService.log('Skill Deleted', 'Skills Matrix', `Removed skill: ${name || id}`);
-      await refreshData();
       showToast('Skill removed', { type: 'info' });
       if (editingSkill?.id === id) setEditingSkill(null);
     } catch (err: any) {

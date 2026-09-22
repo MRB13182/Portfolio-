@@ -94,7 +94,7 @@ function AppContent() {
       <LuxuryBackground />
 
       {/* Center-Aligned Sticky Glass Navbar */}
-      <Navbar onTriggerAdmin={() => setIsPasscodeModalOpen(true)} />
+      <Navbar />
 
       {/* Dynamic Route View Transitions */}
       <main className="relative z-10 flex-grow pt-16 sm:pt-20">

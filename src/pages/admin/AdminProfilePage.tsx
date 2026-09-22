@@ -26,7 +26,7 @@ import {
 
 export const AdminProfilePage: React.FC = () => {
   const { isDark } = useTheme();
-  const { profile, refreshData } = usePortfolioData();
+  const { profile, updateProfile, refreshData } = usePortfolioData();
   const { showToast } = useToast();
 
   const [formData, setFormData] = useState<Partial<ProfileRow>>({});
@@ -102,14 +102,8 @@ export const AdminProfilePage: React.FC = () => {
         titles,
       };
 
-      if (profile?.id && profile.id !== 'default') {
-        await profileService.update(profile.id, payload);
-      } else {
-        await profileService.create(payload);
-      }
-
+      await updateProfile(payload);
       await activityLogService.log('Profile Updated', 'Profile Management', `Updated profile bio and executive details for ${formData.name || 'Admin'}`);
-      await refreshData();
       showToast('Profile updated & synchronized live!', { type: 'success' });
     } catch (err: any) {
       showToast('Save failed', { type: 'error', message: err.message });

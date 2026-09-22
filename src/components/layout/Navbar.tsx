@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useTheme } from '../../context/ThemeContext';
+import { usePortfolioData } from '../../context/DataContext';
 import { portfolioConfig, assets } from '../../config/portfolio';
 import { 
   Menu, 
@@ -10,16 +11,16 @@ import {
   Sparkles
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import { HiddenAdminTrigger } from '../common/HiddenAdminTrigger';
 
 interface NavbarProps {
   onTriggerAdmin?: () => void;
 }
 
-export const Navbar: React.FC<NavbarProps> = ({ onTriggerAdmin }) => {
+export const Navbar: React.FC<NavbarProps> = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { isDark, toggleTheme } = useTheme();
+  const { profile, settings } = usePortfolioData();
   const [scrolled, setScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [logoImageError, setLogoImageError] = useState(false);
@@ -54,7 +55,11 @@ export const Navbar: React.FC<NavbarProps> = ({ onTriggerAdmin }) => {
     setMobileMenuOpen(false);
   }, [location.pathname]);
 
-  const currentLogo = isDark ? assets.logo.dark : assets.logo.light;
+  const currentLogo = isDark 
+    ? (settings?.dark_logo || profile?.logo_dark || assets.logo.dark)
+    : (settings?.light_logo || profile?.logo_light || assets.logo.light);
+
+  const websiteName = settings?.website_name || (profile?.first_name ? `${profile.first_name} ${profile.last_name || ''}` : portfolioConfig.personal.name);
 
   return (
     <>
@@ -76,61 +81,32 @@ export const Navbar: React.FC<NavbarProps> = ({ onTriggerAdmin }) => {
         >
           <div className="flex items-center justify-between">
             
-            {/* Left: Brand Identity / Hidden Admin Trigger Option */}
+            {/* Left: Brand Identity */}
             <div className="flex items-center">
-              {onTriggerAdmin ? (
-                <HiddenAdminTrigger onTrigger={onTriggerAdmin}>
-                  <Link
-                    to="/"
-                    id="navbar-brand-logo"
-                    className="flex items-center gap-2.5 group cursor-pointer"
-                  >
-                    {!logoImageError && currentLogo ? (
-                      <img
-                        src={currentLogo}
-                        alt={portfolioConfig.personal.name}
-                        onError={() => setLogoImageError(true)}
-                        className="h-8 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
-                      />
-                    ) : (
-                      <div className="w-8 h-8 rounded-xl flex items-center justify-center font-black text-xs tracking-wider bg-gradient-to-r from-[#00E5FF] to-[#8B5CF6] text-black">
-                        MR
-                      </div>
-                    )}
-                    <span className="font-bold text-sm tracking-tight hidden sm:inline-block">
-                      {portfolioConfig.personal.firstName}{' '}
-                      <span className="text-[#00E5FF]">
-                        {portfolioConfig.personal.lastName}
-                      </span>
-                    </span>
-                  </Link>
-                </HiddenAdminTrigger>
-              ) : (
-                <Link
-                  to="/"
-                  id="navbar-brand-logo"
-                  className="flex items-center gap-2.5 group cursor-pointer"
-                >
-                  {!logoImageError && currentLogo ? (
-                    <img
-                      src={currentLogo}
-                      alt={portfolioConfig.personal.name}
-                      onError={() => setLogoImageError(true)}
-                      className="h-8 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
-                    />
-                  ) : (
-                    <div className="w-8 h-8 rounded-xl flex items-center justify-center font-black text-xs tracking-wider bg-gradient-to-r from-[#00E5FF] to-[#8B5CF6] text-black">
-                      MR
-                    </div>
-                  )}
-                  <span className="font-bold text-sm tracking-tight hidden sm:inline-block">
-                    {portfolioConfig.personal.firstName}{' '}
-                    <span className="text-[#00E5FF]">
-                      {portfolioConfig.personal.lastName}
-                    </span>
+              <Link
+                to="/"
+                id="navbar-brand-logo"
+                className="flex items-center gap-2.5 group cursor-pointer"
+              >
+                {!logoImageError && currentLogo ? (
+                  <img
+                    src={currentLogo}
+                    alt={websiteName}
+                    onError={() => setLogoImageError(true)}
+                    className="h-8 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+                  />
+                ) : (
+                  <div className="w-8 h-8 rounded-xl flex items-center justify-center font-black text-xs tracking-wider bg-gradient-to-r from-[#00E5FF] to-[#8B5CF6] text-black">
+                    MR
+                  </div>
+                )}
+                <span className="font-bold text-sm tracking-tight hidden sm:inline-block">
+                  {profile?.first_name || portfolioConfig.personal.firstName}{' '}
+                  <span className="text-[#00E5FF]">
+                    {profile?.last_name || portfolioConfig.personal.lastName}
                   </span>
-                </Link>
-              )}
+                </span>
+              </Link>
             </div>
 
             {/* Center: Center-Aligned Clean Navigation Links */}

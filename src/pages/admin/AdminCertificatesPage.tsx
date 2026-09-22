@@ -24,7 +24,7 @@ import {
 
 export const AdminCertificatesPage: React.FC = () => {
   const { isDark } = useTheme();
-  const { certificates, refreshData } = usePortfolioData();
+  const { certificates, addCertificate, updateCertificate, deleteCertificate, refreshData } = usePortfolioData();
   const { showToast } = useToast();
 
   const [editingCert, setEditingCert] = useState<Partial<CertificateRow> | null>(null);
@@ -98,9 +98,8 @@ export const AdminCertificatesPage: React.FC = () => {
     const targetCert = certificates[targetIndex];
 
     try {
-      await certificateService.update(currentCert.id, { sort_order: targetIndex + 1 });
-      await certificateService.update(targetCert.id, { sort_order: index + 1 });
-      await refreshData();
+      await updateCertificate(currentCert.id, { sort_order: targetIndex + 1 });
+      await updateCertificate(targetCert.id, { sort_order: index + 1 });
       showToast('Certificate order updated', { type: 'success' });
     } catch (err: any) {
       showToast('Error reordering', { type: 'error', message: err.message });
@@ -125,15 +124,14 @@ export const AdminCertificatesPage: React.FC = () => {
 
       const existing = certificates.find((c) => c.id === editingCert.id);
       if (existing) {
-        await certificateService.update(editingCert.id!, payload);
+        await updateCertificate(editingCert.id!, payload);
         await activityLogService.log('Certificate Updated', 'Certificates', `Updated credential: ${payload.title}`);
       } else {
-        await certificateService.create(payload as any);
+        await addCertificate(payload);
         await activityLogService.log('Certificate Uploaded', 'Certificates', `Uploaded new credential: ${payload.title} (${payload.issuer})`);
       }
 
-      await refreshData();
-      showToast('Certificate saved in Supabase!', { type: 'success' });
+      showToast('Certificate saved successfully!', { type: 'success' });
       setEditingCert(null);
     } catch (err: any) {
       showToast('Failed to save certificate', { type: 'error', message: err.message });
@@ -145,9 +143,8 @@ export const AdminCertificatesPage: React.FC = () => {
   const handleDelete = async (id: string, title?: string) => {
     if (!confirm(`Are you sure you want to permanently delete certificate "${title || id}"?`)) return;
     try {
-      await certificateService.delete(id);
+      await deleteCertificate(id);
       await activityLogService.log('Certificate Deleted', 'Certificates', `Removed credential: ${title || id}`);
-      await refreshData();
       showToast('Certificate removed', { type: 'info' });
       if (editingCert?.id === id) setEditingCert(null);
     } catch (err: any) {

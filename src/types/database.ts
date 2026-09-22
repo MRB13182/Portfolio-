@@ -16,6 +16,10 @@ export interface ProfileRow {
   telegram_username?: string;
   availability_status?: string;
   resume_url?: string;
+  resume_file_name?: string;
+  resume_download_enabled?: boolean;
+  resume_badge_text?: string;
+  featured_skill_ids?: string[];
   years_of_experience?: number;
   profile_image?: string;
   cover_image?: string;
@@ -188,6 +192,28 @@ export interface SiteSettingsRow {
   show_stats?: boolean;
   maintenance_mode?: boolean;
   custom_announcement?: string;
+  visitor_count?: number;
+  footer_text?: string;
+  copyright_text?: string;
+  hero_greeting?: string;
+  hero_cta_text?: string;
+  hero_cta_link?: string;
+  glass_blur?: string;
+  glass_opacity?: string;
+  border_glow?: boolean;
+  updated_at?: string;
+}
+
+export interface TestimonialRow {
+  id: string;
+  name: string;
+  role: string;
+  company?: string;
+  avatar?: string;
+  content: string;
+  rating?: number;
+  featured?: boolean;
+  created_at?: string;
   updated_at?: string;
 }
 

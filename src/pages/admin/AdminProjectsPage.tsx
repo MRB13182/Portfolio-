@@ -27,7 +27,7 @@ import {
 
 export const AdminProjectsPage: React.FC = () => {
   const { isDark } = useTheme();
-  const { projects, refreshData } = usePortfolioData();
+  const { projects, addProject, updateProject, deleteProject, refreshData } = usePortfolioData();
   const { showToast } = useToast();
 
   const [editingProject, setEditingProject] = useState<Partial<ProjectRow> | null>(null);
@@ -132,9 +132,8 @@ export const AdminProjectsPage: React.FC = () => {
     e.stopPropagation();
     try {
       const updatedFeatured = !p.featured;
-      await projectService.update(p.id, { featured: updatedFeatured });
+      await updateProject(p.id, { featured: updatedFeatured });
       await activityLogService.log('Project Updated', 'Projects', `Toggled featured ${updatedFeatured ? 'ON' : 'OFF'} for ${p.title}`);
-      await refreshData();
       showToast(`Project marked as ${updatedFeatured ? 'Featured' : 'Standard'}`, { type: 'success' });
     } catch (err: any) {
       showToast('Error updating status', { type: 'error', message: err.message });
@@ -149,9 +148,8 @@ export const AdminProjectsPage: React.FC = () => {
     const targetProject = projects[targetIndex];
 
     try {
-      await projectService.update(currentProject.id, { sort_order: targetIndex + 1 });
-      await projectService.update(targetProject.id, { sort_order: index + 1 });
-      await refreshData();
+      await updateProject(currentProject.id, { sort_order: targetIndex + 1 });
+      await updateProject(targetProject.id, { sort_order: index + 1 });
       showToast('Project order updated', { type: 'success' });
     } catch (err: any) {
       showToast('Error reordering', { type: 'error', message: err.message });
@@ -182,14 +180,13 @@ export const AdminProjectsPage: React.FC = () => {
 
       const existing = projects.find((p) => p.id === editingProject.id);
       if (existing) {
-        await projectService.update(editingProject.id!, payload);
+        await updateProject(editingProject.id!, payload);
         await activityLogService.log('Project Updated', 'Projects', `Updated details for ${payload.title}`);
       } else {
-        await projectService.create(payload as any);
+        await addProject(payload);
         await activityLogService.log('Project Added', 'Projects', `Created new showcase project: ${payload.title}`);
       }
 
-      await refreshData();
       showToast('Project saved successfully!', { type: 'success' });
       setEditingProject(null);
     } catch (err: any) {
@@ -202,9 +199,8 @@ export const AdminProjectsPage: React.FC = () => {
   const handleDelete = async (id: string, title?: string) => {
     if (!confirm(`Are you sure you want to permanently delete "${title || id}"?`)) return;
     try {
-      await projectService.delete(id);
+      await deleteProject(id);
       await activityLogService.log('Project Deleted', 'Projects', `Removed project: ${title || id}`);
-      await refreshData();
       showToast('Project deleted', { type: 'info' });
       if (editingProject?.id === id) setEditingProject(null);
     } catch (err: any) {
