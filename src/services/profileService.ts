@@ -1,124 +1,118 @@
 import { supabase, isSupabaseConfigured, isTableMissingError } from '../lib/supabase';
 import { ProfileRow } from '../types/database';
+import { portfolioConfig } from '../config/portfolio';
+import { storageHelper } from './storageHelper';
+
+const getDefaultProfile = (): ProfileRow => {
+  return {
+    id: 'default',
+    name: portfolioConfig.personal.name,
+    first_name: portfolioConfig.personal.firstName,
+    last_name: portfolioConfig.personal.lastName,
+    titles: portfolioConfig.personal.titles,
+    bio: portfolioConfig.personal.bio,
+    extended_bio: portfolioConfig.personal.extendedBio,
+    about: portfolioConfig.personal.extendedBio,
+    location: portfolioConfig.personal.location,
+    email: portfolioConfig.personal.email,
+    phone: portfolioConfig.personal.phone,
+    whatsapp_number: portfolioConfig.personal.whatsappNumber,
+    whatsapp: portfolioConfig.personal.whatsappNumber,
+    telegram_username: portfolioConfig.personal.telegramUsername,
+    telegram: portfolioConfig.personal.telegramUsername,
+    availability_status: portfolioConfig.personal.availabilityStatus,
+    resume_url: portfolioConfig.personal.resumeUrl,
+    years_of_experience: portfolioConfig.personal.yearsOfExperience,
+    profile_image: portfolioConfig.assets.profileImage,
+    cover_image: '/cover-banner.webp',
+    logo_light: portfolioConfig.assets.logos.light,
+    logo_dark: portfolioConfig.assets.logos.dark,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+  };
+};
 
 export const profileService = {
   async getAll(): Promise<ProfileRow[]> {
-    if (!isSupabaseConfigured) return [];
-    try {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (error) {
-        if (isTableMissingError(error)) {
-          return [];
-        }
-        console.warn('profileService.getAll info:', error.message || error);
-        return [];
-      }
-      return (data as ProfileRow[]) || [];
-    } catch {
-      return [];
-    }
+    const primary = await this.getPrimary();
+    return primary ? [primary] : [getDefaultProfile()];
   },
 
   async getById(id: string): Promise<ProfileRow | null> {
-    if (!isSupabaseConfigured) return null;
-    try {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .eq('id', id)
-        .maybeSingle();
-
-      if (error) {
-        if (!isTableMissingError(error)) {
-          console.warn(`profileService.getById(${id}) info:`, error.message || error);
-        }
-        return null;
-      }
-      return data as ProfileRow;
-    } catch {
-      return null;
-    }
+    return this.getPrimary();
   },
 
   async getPrimary(): Promise<ProfileRow | null> {
-    if (!isSupabaseConfigured) return null;
-    try {
-      const { data, error } = await supabase
-        .from('profiles')
-        .select('*')
-        .limit(1)
-        .maybeSingle();
+    if (isSupabaseConfigured) {
+      try {
+        const { data, error } = await supabase
+          .from('profiles')
+          .select('*')
+          .limit(1)
+          .maybeSingle();
 
-      if (error) {
-        if (!isTableMissingError(error)) {
-          console.warn('profileService.getPrimary info:', error.message || error);
+        if (!error && data) {
+          const row = data as ProfileRow;
+          storageHelper.setCached('profile', row);
+          return row;
         }
-        return null;
+        if (error && !isTableMissingError(error)) {
+          console.warn('profileService.getPrimary note:', error.message || error);
+        }
+      } catch (err: any) {
+        console.warn('profileService.getPrimary network note:', err.message || err);
       }
-      return data as ProfileRow;
-    } catch {
-      return null;
     }
+
+    const cached = storageHelper.getCached<ProfileRow | null>('profile', null);
+    if (cached) {
+      return cached;
+    }
+
+    const def = getDefaultProfile();
+    storageHelper.setCached('profile', def);
+    return def;
   },
 
   async create(payload: Partial<ProfileRow>): Promise<ProfileRow> {
-    if (!isSupabaseConfigured) {
-      throw new Error('Supabase is not configured with a valid ANON key.');
-    }
-    const { data, error } = await supabase
-      .from('profiles')
-      .insert([payload])
-      .select()
-      .single();
-
-    if (error) {
-      if (isTableMissingError(error)) {
-        throw new Error('The "profiles" table does not exist yet in Supabase. Please run schema.sql in Supabase SQL Editor.');
-      }
-      throw error;
-    }
-    return data as ProfileRow;
+    return this.update('default', payload);
   },
 
   async update(id: string, payload: Partial<ProfileRow>): Promise<ProfileRow> {
-    if (!isSupabaseConfigured) {
-      throw new Error('Supabase is not configured with a valid ANON key.');
-    }
-    const { data, error } = await supabase
-      .from('profiles')
-      .update({ ...payload, updated_at: new Date().toISOString() })
-      .eq('id', id)
-      .select()
-      .single();
+    const current = (await this.getPrimary()) || getDefaultProfile();
+    const merged: ProfileRow = {
+      ...current,
+      ...payload,
+      id: current.id || 'default',
+      updated_at: new Date().toISOString(),
+    };
 
-    if (error) {
-      if (isTableMissingError(error)) {
-        throw new Error('The "profiles" table does not exist yet in Supabase. Please run schema.sql in Supabase SQL Editor.');
+    if (isSupabaseConfigured) {
+      try {
+        const { data, error } = await supabase
+          .from('profiles')
+          .upsert([{ ...merged }])
+          .select()
+          .single();
+
+        if (error) {
+          console.warn('Supabase profile update note:', error.message);
+        } else if (data) {
+          const updated = data as ProfileRow;
+          storageHelper.setCached('profile', updated);
+          return updated;
+        }
+      } catch (err: any) {
+        console.warn('Supabase profile update network note:', err.message);
       }
-      throw error;
     }
-    return data as ProfileRow;
+
+    storageHelper.setCached('profile', merged);
+    return merged;
   },
 
   async delete(id: string): Promise<boolean> {
-    if (!isSupabaseConfigured) {
-      throw new Error('Supabase is not configured with a valid ANON key.');
-    }
-    const { error } = await supabase
-      .from('profiles')
-      .delete()
-      .eq('id', id);
-
-    if (error) {
-      if (isTableMissingError(error)) {
-        throw new Error('The "profiles" table does not exist yet in Supabase.');
-      }
-      throw error;
-    }
+    storageHelper.removeCached('profile');
     return true;
   },
 };

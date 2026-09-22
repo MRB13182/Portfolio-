@@ -105,13 +105,7 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const fetchData = useCallback(async () => {
     setLoading(true);
     setError(null);
-
-    if (!isSupabaseConfigured) {
-      // Running on offline / static fallback
-      setLoading(false);
-      setIsSupabaseLive(false);
-      return;
-    }
+    setIsSupabaseLive(isSupabaseConfigured);
 
     try {
       const [

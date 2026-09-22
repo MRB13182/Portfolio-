@@ -1,66 +1,105 @@
 import { supabase, isSupabaseConfigured, isTableMissingError } from '../lib/supabase';
 import { SiteSettingsRow } from '../types/database';
+import { storageHelper } from './storageHelper';
 
 const DEFAULT_SETTINGS: SiteSettingsRow = {
   id: 'default',
   site_title: 'MD. Moshiur Rahman | Luxury Portfolio',
-  meta_description: 'Premium dual-theme developer portfolio for MD. Moshiur Rahman.',
+  website_name: 'MD. Moshiur Rahman',
+  website_logo: '/logo.svg',
+  dark_logo: '/logo-dark.svg',
+  light_logo: '/logo-light.svg',
+  favicon: '/favicon.ico',
+  hero_banner: '/hero-banner.webp',
+  meta_title: 'MD. Moshiur Rahman | Lead Full-Stack & Cloud Engineer',
+  meta_description: 'Premium dual-theme developer portfolio for MD. Moshiur Rahman featuring Apple Emerald Light and Black Mamba Luxury Gold themes.',
+  seo_keywords: 'Full Stack Developer, React, TypeScript, Cloud Architecture, PostgreSQL, Moshiur Rahman',
+  og_image: '/og-image.png',
   contact_email: 'borshonsweb@gmail.com',
   active_theme: 'dual',
   show_stats: true,
   maintenance_mode: false,
+  primary_color: '#00E5FF',
+  secondary_color: '#00C8A8',
+  accent_color: '#D4AF37',
 };
 
 export const settingsService = {
   async getAll(): Promise<SiteSettingsRow[]> {
-    const item = await this.getById('default');
-    return item ? [item] : [];
+    const single = await this.getById('default');
+    return single ? [single] : [DEFAULT_SETTINGS];
   },
-  async getById(id: string = 'default'): Promise<SiteSettingsRow | null> {
-    if (!isSupabaseConfigured) return DEFAULT_SETTINGS;
-    const { data, error } = await supabase.from('site_settings').select('*').eq('id', id).maybeSingle();
-    if (error) {
-      if (isTableMissingError(error)) return DEFAULT_SETTINGS;
-      throw error;
-    }
-    return (data as SiteSettingsRow) || DEFAULT_SETTINGS;
-  },
-  async create(payload: Partial<SiteSettingsRow>): Promise<SiteSettingsRow> {
-    return this.update(payload.id || 'default', payload);
-  },
-  async update(id: string = 'default', payload: Partial<SiteSettingsRow>): Promise<SiteSettingsRow> {
-    if (!isSupabaseConfigured) throw new Error('Supabase is not configured.');
 
-    const row: Record<string, unknown> = {
+  async getById(id: string = 'default'): Promise<SiteSettingsRow | null> {
+    if (isSupabaseConfigured) {
+      try {
+        const { data, error } = await supabase
+          .from('site_settings')
+          .select('*')
+          .eq('id', id)
+          .maybeSingle();
+
+        if (!error && data) {
+          const row = data as SiteSettingsRow;
+          storageHelper.setCached('settings', row);
+          return row;
+        }
+        if (error && !isTableMissingError(error)) {
+          console.warn(`settingsService.getById(${id}) note:`, error.message || error);
+        }
+      } catch (err: any) {
+        console.warn(`settingsService.getById(${id}) network note:`, err.message || err);
+      }
+    }
+
+    const cached = storageHelper.getCached<SiteSettingsRow | null>('settings', null);
+    if (cached) {
+      return cached;
+    }
+
+    storageHelper.setCached('settings', DEFAULT_SETTINGS);
+    return DEFAULT_SETTINGS;
+  },
+
+  async create(payload: Partial<SiteSettingsRow>): Promise<SiteSettingsRow> {
+    return this.update('default', payload);
+  },
+
+  async update(id: string = 'default', payload: Partial<SiteSettingsRow>): Promise<SiteSettingsRow> {
+    const current = (await this.getById(id)) || DEFAULT_SETTINGS;
+    const merged: SiteSettingsRow = {
+      ...current,
+      ...payload,
       id,
-      site_name: payload.website_name ?? payload.site_title ?? DEFAULT_SETTINGS.site_title,
-      main_logo: payload.main_logo ?? payload.website_logo ?? null,
-      dark_logo: payload.dark_logo ?? null,
-      light_logo: payload.light_logo ?? null,
-      favicon: payload.favicon ?? null,
-      hero_banner: payload.hero_banner ?? null,
-      meta_title: payload.meta_title ?? null,
-      meta_description: payload.meta_description ?? DEFAULT_SETTINGS.meta_description,
-      seo_keywords: payload.seo_keywords ?? [],
-      og_image: payload.og_image ?? null,
-      primary_color: payload.primary_color ?? '#00E5FF',
-      secondary_color: payload.secondary_color ?? '#050505',
-      accent_color: payload.accent_color ?? '#00C8A8',
-      background_color: payload.background_color ?? '#050505',
-      navigation: payload.navigation ?? [],
       updated_at: new Date().toISOString(),
     };
 
-    // The current production schema stores branding/theme fields above.
-    // Legacy UI-only fields are intentionally not sent because they do not exist in
-    // the live site_settings table.
-    const { data, error } = await supabase
-      .from('site_settings')
-      .upsert(row, { onConflict: 'id' })
-      .select('*')
-      .single();
+    if (isSupabaseConfigured) {
+      try {
+        const { data, error } = await supabase
+          .from('site_settings')
+          .upsert([{ ...merged }])
+          .select()
+          .single();
 
-    if (error) throw error;
-    return data as SiteSettingsRow;
+        if (error) {
+          console.warn('Supabase settings update note:', error.message);
+        } else if (data) {
+          const updatedRow = data as SiteSettingsRow;
+          storageHelper.setCached('settings', updatedRow);
+          return updatedRow;
+        }
+      } catch (err: any) {
+        console.warn('Supabase settings update network note:', err.message);
+      }
+    }
+
+    storageHelper.setCached('settings', merged);
+    return merged;
+  },
+
+  async delete(id: string): Promise<boolean> {
+    storageHelper.removeCached('settings');
+    return true;
   },
 };

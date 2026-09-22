@@ -23,7 +23,7 @@ import {
   Image as ImageIcon,
   Sparkles,
 } from 'lucide-react';
-import { isSupabaseConfigured, supabaseUrl, SUPABASE_PROJECT_ID, supabasePublishableKey } from '../../lib/supabase';
+import { isSupabaseConfigured, supabaseUrl, SUPABASE_PROJECT_ID, supabaseAnonKey, savePublishableKey } from '../../lib/supabase';
 
 export const AdminSettingsPage: React.FC = () => {
   const { isDark } = useTheme();
@@ -33,6 +33,7 @@ export const AdminSettingsPage: React.FC = () => {
   const [formData, setFormData] = useState<Partial<SiteSettingsRow>>({});
   const [isSaving, setIsSaving] = useState(false);
   const [copiedSchema, setCopiedSchema] = useState(false);
+  const [inputKey, setInputKey] = useState(supabaseAnonKey || '');
 
   useEffect(() => {
     if (settings) {
@@ -64,7 +65,7 @@ export const AdminSettingsPage: React.FC = () => {
     }
   }, [settings]);
 
-    const handleSave = async (e: React.FormEvent) => {
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSaving(true);
     try {
@@ -448,24 +449,77 @@ CREATE POLICY "Admin All Footer" ON public.footer_content FOR ALL USING (true) W
           </div>
         </div>
 
-        <div className={`p-3 rounded-xl border text-xs flex items-center gap-2 ${
+        {/* Status Indicator */}
+        <div className={`p-3.5 rounded-xl border text-xs flex items-center justify-between gap-3 ${
           isSupabaseConfigured
             ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
             : 'bg-amber-500/10 border-amber-500/20 text-amber-400'
         }`}>
-          {isSupabaseConfigured ? (
-            <>
-              <CheckCircle2 className="w-4 h-4 shrink-0" />
-              <span>Supabase publishable/anon browser key is detected in environment configuration.</span>
-            </>
-          ) : (
-            <>
-              <ShieldAlert className="w-4 h-4 shrink-0" />
-              <span>
-                To enable live cloud operations, set your Supabase Publishable Key in the deployment environment (VITE_SUPABASE_PUBLISHABLE_KEY).
-              </span>
-            </>
-          )}
+          <div className="flex items-center gap-2">
+            {isSupabaseConfigured ? (
+              <>
+                <CheckCircle2 className="w-4 h-4 shrink-0 text-emerald-400" />
+                <span>Supabase Live Sync is <strong>Active</strong>. All changes synchronize to cloud and local cache.</span>
+              </>
+            ) : (
+              <>
+                <ShieldAlert className="w-4 h-4 shrink-0 text-amber-400" />
+                <span>Operating in <strong>Local Resilient Mode</strong>. All edits save locally and instantly update your portfolio.</span>
+              </>
+            )}
+          </div>
+        </div>
+
+        {/* Live Key Setup / Override Form */}
+        <div className="pt-2 border-t border-white/10 space-y-2">
+          <label className="block text-xs font-bold">
+            Connect Supabase Key (VITE_SUPABASE_PUBLISHABLE_KEY or ANON KEY)
+          </label>
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
+            <input
+              type="password"
+              value={inputKey}
+              onChange={(e) => setInputKey(e.target.value)}
+              placeholder="Paste your Supabase Publishable / Anon Key here"
+              className={`flex-1 px-3.5 py-2.5 rounded-xl text-xs border outline-none font-mono transition-all ${
+                isDark
+                  ? 'bg-white/5 border-white/10 text-white placeholder-zinc-500 focus:border-[#00E5FF]'
+                  : 'bg-slate-50 border-slate-300 text-slate-900 placeholder-slate-400 focus:border-[#00E5FF]'
+              }`}
+            />
+            <button
+              type="button"
+              onClick={() => {
+                if (!inputKey.trim()) {
+                  showToast('Please enter a valid key', { type: 'error' });
+                  return;
+                }
+                savePublishableKey(inputKey);
+                showToast('Key saved! Reconnecting to Supabase...', { type: 'success' });
+              }}
+              className="px-4 py-2.5 rounded-xl text-xs font-bold bg-[#00E5FF] text-black hover:bg-[#00E5FF]/80 transition-all cursor-pointer whitespace-nowrap"
+            >
+              Save &amp; Connect Key
+            </button>
+            {isSupabaseConfigured && (
+              <button
+                type="button"
+                onClick={() => {
+                  savePublishableKey('');
+                  setInputKey('');
+                  showToast('Cleared custom key.', { type: 'info' });
+                }}
+                className={`px-3 py-2.5 rounded-xl text-xs font-semibold border transition-all cursor-pointer whitespace-nowrap ${
+                  isDark ? 'border-white/10 hover:border-white/30 text-zinc-400' : 'border-slate-300 hover:border-slate-500 text-slate-600'
+                }`}
+              >
+                Disconnect
+              </button>
+            )}
+          </div>
+          <p className="text-[11px] opacity-60">
+            Tip: When deploying to Netlify or Vercel, you can set <code>VITE_SUPABASE_PUBLISHABLE_KEY</code> in your host's Environment Variables, or paste it here to activate cloud sync instantly.
+          </p>
         </div>
       </div>
 
