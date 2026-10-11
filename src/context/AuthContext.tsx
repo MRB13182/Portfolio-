@@ -75,10 +75,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, nextSession) => {
-      // Do not trust localStorage flags. The session is rechecked with Auth and the database.
-      void verifySession(nextSession).finally(() => {
-        if (active) setLoading(false);
-      });
+      // Defer SDK calls until the auth callback has returned; Supabase warns that nested Auth
+      // API calls inside this callback can deadlock. The session is checked with Auth and RLS.
+      window.setTimeout(() => {
+        void verifySession(nextSession).finally(() => {
+          if (active) setLoading(false);
+        });
+      }, 0);
     });
 
     void supabase.auth.getSession().then(async ({ data, error }) => {
