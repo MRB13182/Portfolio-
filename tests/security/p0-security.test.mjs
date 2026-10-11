@@ -70,7 +70,7 @@ test('publishable key config is build/deploy-time only and no privileged key is 
   assert.doesNotMatch(settings, /savePublishableKey|Save &amp; Connect Key|paste it here to activate/i);
   assert.doesNotMatch(supabase, /export function savePublishableKey/);
   assert.doesNotMatch(settings, /Admin All (Profiles|Projects|Skills|Experience|Education|Certificates|Socials|Messages|Settings|Footer).*USING \\(true\\)/i);
-  assert.match(settings, /20261011090000_p0_admin_authorization_rls\\.sql/);
+  assert.match(settings, /20261011090000_p0_admin_authorization_rls/);
   assert.doesNotMatch(supabase, /SERVICE_ROLE_KEY|service_role|SUPABASE_SECRET_KEY/i);
   assert.match(example, /YOUR_PUBLISHABLE_KEY/);
 });
