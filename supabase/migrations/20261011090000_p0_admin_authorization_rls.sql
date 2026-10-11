@@ -98,7 +98,7 @@ declare
   table_name text;
   managed_tables text[] := array[
     'profiles', 'projects', 'skills', 'experience', 'education', 'certificates',
-    'social_links', 'site_settings', 'footer_content', 'testimonials', 'activity_logs'
+    'social_links', 'site_settings', 'footer_content', 'footer_settings', 'testimonials', 'activity_logs'
   ];
 begin
   foreach table_name in array managed_tables loop
