@@ -101,7 +101,8 @@ begin
   foreach table_name in array managed_tables loop
     if to_regclass(format('public.%I', table_name)) is not null then
       execute format(
-        'create policy p0_admin_manage_%1$I on public.%1$I for all to authenticated using ((select public.is_portfolio_admin())) with check ((select public.is_portfolio_admin()))',
+        'create policy %I on public.%I for all to authenticated using ((select public.is_portfolio_admin())) with check ((select public.is_portfolio_admin()))',
+        'p0_admin_manage_' || table_name,
         table_name
       );
     end if;
