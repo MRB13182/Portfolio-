@@ -46,10 +46,20 @@ test('reviewed SQL migration has database-side admin checks and removes permissi
   assert.match(migration, /admin\.user_id = \(select auth\.uid\(\)\)/);
   assert.match(migration, /drop policy if exists/);
   assert.match(migration, /p0_admin_contact_read/);
+  assert.match(migration, /public\\.footer_settings/);
   assert.match(migration, /p0_public_contact_insert/);
   assert.match(migration, /bucket_id in \('profile-images', 'project-images', 'certificate-images', 'logos', 'resume-files'\)/);
   assert.doesNotMatch(migration, /for all to authenticated using \(true\) with check \(true\)/i);
   assert.doesNotMatch(migration, /create policy [^;]+on storage\.objects for select[^;]+using \(true\)/i);
+});
+
+test('contact message writes fail closed instead of claiming localStorage persistence is server delivery', async () => {
+  const messages = await read('src/services/messageService.ts');
+  assert.match(messages, /if \\(!isSupabaseConfigured\\)/);
+  assert.match(messages, /Message delivery failed/);
+  assert.match(messages, /if \\(error \\|\\| !data\\) throw/);
+  assert.doesNotMatch(messages, /saveLocalMessages|portfolio_local_messages.*setItem/s);
+  assert.doesNotMatch(messages, /const combined = \\[...remote/);
 });
 
 test('publishable key config is build/deploy-time only and no privileged key is referenced', async () => {
@@ -58,6 +68,8 @@ test('publishable key config is build/deploy-time only and no privileged key is 
   const example = await read('.env.example');
   assert.doesNotMatch(supabase, /localStorage\.getItem\(['"]supabase_(publishable|anon)_key/);
   assert.doesNotMatch(settings, /savePublishableKey|Save &amp; Connect Key|paste it here to activate/i);
+  assert.doesNotMatch(settings, /Admin All (Profiles|Projects|Skills|Experience|Education|Certificates|Socials|Messages|Settings|Footer).*USING \\(true\\)/i);
+  assert.match(settings, /20261011090000_p0_admin_authorization_rls\\.sql/);
   assert.doesNotMatch(supabase, /SERVICE_ROLE_KEY|service_role|SUPABASE_SECRET_KEY/i);
   assert.match(example, /YOUR_PUBLISHABLE_KEY/);
 });
