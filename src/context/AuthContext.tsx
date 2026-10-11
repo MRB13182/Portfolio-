@@ -25,7 +25,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
-  const [authRevision, setAuthRevision] = useState(0);
 
   const verifySession = useCallback(async (candidate: Session | null) => {
     if (!isSupabaseConfigured || !candidate) {
@@ -65,7 +64,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setIsAdmin(false);
       setAuthError(asError(error).message);
     }
-  }, [authRevision]);
+  }, []);
 
   useEffect(() => {
     let active = true;
@@ -133,8 +132,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return { error: error ?? new Error('Sign-in failed.') };
       }
 
-      // Revalidate this session and run the database authorization check once. Increment a
-      // revision so callbacks revalidate against the newest context revision.
+      // Verify the identity at Supabase Auth and check database-side admin authorization.
       const { data: userData, error: userError } = await supabase.auth.getUser(data.session.access_token);
       const { data: authorization, error: authorizationError } = userError || !userData.user
         ? { data: false, error: userError ?? new Error('User identity could not be verified.') }
@@ -156,7 +154,6 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setSession(data.session);
       setAuthError(null);
       setIsAdmin(true);
-      setAuthRevision((revision) => revision + 1);
       setLoading(false);
       return { error: null };
     } catch (error) {
