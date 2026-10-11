@@ -19,7 +19,7 @@ const DUMMY_KEYS = [
 export const isSupabaseConfigured = Boolean(
   supabaseUrl &&
   supabaseAnonKey &&
-  !DUMMY_KEYS.includes(supabaseAnonKey.trim()) &&
+  !DUMMY_KEYS.includes(supabaseAnonKey.trim())
 );
 
 // Helper to determine if an error is due to missing tables in schema cache.
