@@ -59,7 +59,7 @@ test('contact message writes fail closed instead of claiming localStorage persis
   assert.match(messages, /Message delivery failed/);
   assert.match(messages, /if \(error \|\| !data\) throw/);
   assert.doesNotMatch(messages, /saveLocalMessages|portfolio_local_messages.*setItem/s);
-  assert.doesNotMatch(messages, /const combined = \\[...remote/);
+  assert.doesNotMatch(messages, /const combined =/);
 });
 
 test('publishable key config is build/deploy-time only and no privileged key is referenced', async () => {
