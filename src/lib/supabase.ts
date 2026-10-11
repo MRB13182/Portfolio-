@@ -1,25 +1,12 @@
 import { createClient } from '@supabase/supabase-js';
 
-// Project credentials provided for egpwwzkwwxsrctzyhpnv
+// Project identifiers and publishable keys are public configuration, not privileged secrets.
 export const SUPABASE_PROJECT_ID = 'egpwwzkwwxsrctzyhpnv';
-export const supabaseUrl = 'https://egpwwzkwwxsrctzyhpnv.supabase.co';
-
-// Read publishable / anon key safely from Vite environment variables or localStorage
-const getInitialKey = (): string => {
-  if (typeof window !== 'undefined') {
-    const saved = localStorage.getItem('supabase_publishable_key') || localStorage.getItem('supabase_anon_key');
-    if (saved && saved.trim() && !saved.includes('YOUR_')) {
-      return saved.trim();
-    }
-  }
-  return (
-    import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ||
-    import.meta.env.VITE_SUPABASE_ANON_KEY || 
-    ''
-  );
-};
-
-export const supabaseAnonKey = getInitialKey();
+export const supabaseUrl = import.meta.env.VITE_SUPABASE_URL || 'https://egpwwzkwwxsrctzyhpnv.supabase.co';
+export const supabaseAnonKey =
+  import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ||
+  import.meta.env.VITE_SUPABASE_ANON_KEY ||
+  '';
 
 const DUMMY_KEYS = [
   'YOUR_PUBLISHABLE_KEY',
@@ -30,43 +17,34 @@ const DUMMY_KEYS = [
 ];
 
 export const isSupabaseConfigured = Boolean(
-  supabaseUrl && 
-  supabaseAnonKey && 
-  !DUMMY_KEYS.includes(supabaseAnonKey.trim())
+  supabaseUrl &&
+  supabaseAnonKey &&
+  !DUMMY_KEYS.includes(supabaseAnonKey.trim()) &&
 );
 
-export function savePublishableKey(key: string): void {
-  if (typeof window !== 'undefined') {
-    if (key.trim()) {
-      localStorage.setItem('supabase_publishable_key', key.trim());
-      localStorage.setItem('supabase_anon_key', key.trim());
-    } else {
-      localStorage.removeItem('supabase_publishable_key');
-      localStorage.removeItem('supabase_anon_key');
-    }
-    window.location.reload();
-  }
+export function savePublishableKey(_key: string): void {
+  // Runtime key overrides stored in localStorage make deployment configuration mutable and
+  // can silently redirect the browser to a different backend. Configure keys at build/deploy time.
+  throw new Error('Supabase keys must be configured through VITE_SUPABASE_PUBLISHABLE_KEY or VITE_SUPABASE_ANON_KEY.');
 }
 
-// Helper to determine if an error is due to missing tables in schema cache
-export function isTableMissingError(error: any): boolean {
-  if (!error) return false;
+// Helper to determine if an error is due to missing tables in schema cache.
+export function isTableMissingError(error: unknown): boolean {
+  if (!error || typeof error !== 'object') return false;
+  const candidate = error as { code?: unknown; message?: unknown };
   return (
-    error.code === 'PGRST205' ||
-    error.code === '42P01' ||
-    error.code === 'PGRST204' ||
-    Boolean(
-      typeof error.message === 'string' &&
-      (error.message.includes('schema cache') ||
-       error.message.includes('relation') ||
-       error.message.includes('does not exist') ||
-       error.message.includes('Could not find the table'))
-    )
+    candidate.code === 'PGRST205' ||
+    candidate.code === '42P01' ||
+    candidate.code === 'PGRST204' ||
+    (typeof candidate.message === 'string' &&
+      (candidate.message.includes('schema cache') ||
+        candidate.message.includes('relation') ||
+        candidate.message.includes('does not exist') ||
+        candidate.message.includes('Could not find the table')))
   );
 }
 
-// Initialize the Supabase client
-export const supabase = createClient(supabaseUrl, supabaseAnonKey || 'placeholder-anon-key', {
+export const supabase = createClient(supabaseUrl || 'https://placeholder.supabase.co', supabaseAnonKey || 'placeholder-anon-key', {
   auth: {
     persistSession: true,
     autoRefreshToken: true,
@@ -74,7 +52,6 @@ export const supabase = createClient(supabaseUrl, supabaseAnonKey || 'placeholde
   },
 });
 
-// Storage Bucket Constants
 export const STORAGE_BUCKETS = {
   PROFILE_IMAGES: 'profile-images',
   PROJECT_IMAGES: 'project-images',
@@ -86,73 +63,82 @@ export const STORAGE_BUCKETS = {
 
 export type StorageBucket = typeof STORAGE_BUCKETS[keyof typeof STORAGE_BUCKETS];
 
-/**
- * Convert any file to a Base64 data URL for instant local storage persistence and offline preview
- */
-export function fileToDataUrl(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result as string);
-    reader.onerror = (error) => reject(error);
-    reader.readAsDataURL(file);
-  });
+const MAX_IMAGE_BYTES = 5 * 1024 * 1024;
+const MAX_RESUME_BYTES = 10 * 1024 * 1024;
+const IMAGE_TYPES = new Set(['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/avif']);
+const DOCUMENT_TYPES = new Set(['application/pdf']);
+
+function validateUpload(bucket: StorageBucket, file: File): Error | null {
+  if (!(file instanceof File)) return new Error('Choose a valid file.');
+  if (bucket === STORAGE_BUCKETS.RESUME_FILES) {
+    if (!DOCUMENT_TYPES.has(file.type)) return new Error('Resume files must be PDF documents.');
+    if (file.size <= 0 || file.size > MAX_RESUME_BYTES) return new Error('PDF files must be between 1 byte and 10 MB.');
+    return null;
+  }
+
+  if (!IMAGE_TYPES.has(file.type)) return new Error('Upload a JPEG, PNG, WebP, GIF, or AVIF image.');
+  if (file.size <= 0 || file.size > MAX_IMAGE_BYTES) return new Error('Images must be between 1 byte and 5 MB.');
+  return null;
 }
 
 /**
- * Upload a file to a specified Supabase storage bucket with automatic base64 local fallback
+ * Uploads an asset to Supabase Storage. No local Base64 fallback is used: an upload failure
+ * must be visible to the operator instead of reporting a non-persistent file as successfully saved.
  */
 export async function uploadFileToStorage(
   bucket: StorageBucket,
   file: File,
-  customPath?: string
+  customPath?: string,
 ): Promise<{ url: string | null; error: Error | null }> {
+  if (!isSupabaseConfigured) {
+    return { url: null, error: new Error('Supabase is not configured; the file was not uploaded.') };
+  }
+
+  const validationError = validateUpload(bucket, file);
+  if (validationError) return { url: null, error: validationError };
+
+  const extension = file.name.split('.').pop()?.toLowerCase();
+  if (!extension || !/^[a-z0-9]{1,8}$/.test(extension)) {
+    return { url: null, error: new Error('The file extension is invalid.') };
+  }
+
+  const safeCustomPath = customPath?.trim();
+  if (safeCustomPath && (!/^[a-zA-Z0-9/_-]+\.[a-zA-Z0-9]{1,8}$/.test(safeCustomPath) || safeCustomPath.includes('..'))) {
+    return { url: null, error: new Error('The requested storage path is invalid.') };
+  }
+
+  const fileName = safeCustomPath || `${crypto.randomUUID()}.${extension}`;
   try {
-    if (isSupabaseConfigured) {
-      const fileExt = file.name.split('.').pop();
-      const fileName = customPath || `${Date.now()}-${Math.random().toString(36).substring(2, 9)}.${fileExt}`;
-      const filePath = fileName;
+    const { error: uploadError } = await supabase.storage.from(bucket).upload(fileName, file, {
+      cacheControl: '3600',
+      upsert: false,
+      contentType: file.type,
+    });
+    if (uploadError) return { url: null, error: new Error(uploadError.message || 'Storage upload failed.') };
 
-      const { error: uploadError } = await supabase.storage
-        .from(bucket)
-        .upload(filePath, file, {
-          cacheControl: '3600',
-          upsert: true,
-        });
-
-      if (!uploadError) {
-        const { data } = supabase.storage.from(bucket).getPublicUrl(filePath);
-        if (data?.publicUrl) {
-          return { url: data.publicUrl, error: null };
-        }
-      }
-    }
-
-    // High-fidelity local fallback using Base64 Data URL
-    const localDataUrl = await fileToDataUrl(file);
-    return { url: localDataUrl, error: null };
-  } catch (err: any) {
-    try {
-      const localDataUrl = await fileToDataUrl(file);
-      return { url: localDataUrl, error: null };
-    } catch (fallbackErr: any) {
-      return { url: null, error: fallbackErr };
-    }
+    const { data } = supabase.storage.from(bucket).getPublicUrl(fileName);
+    if (!data?.publicUrl) return { url: null, error: new Error('Upload completed but a public asset URL could not be generated.') };
+    return { url: data.publicUrl, error: null };
+  } catch {
+    return { url: null, error: new Error('Storage upload failed. Check your connection and administrator access, then retry.') };
   }
 }
 
-/**
- * Remove a file from a specified Supabase storage bucket
- */
+/** Remove an object only when Storage RLS authorizes the signed-in administrator. */
 export async function deleteFileFromStorage(
   bucket: StorageBucket,
-  path: string
+  path: string,
 ): Promise<{ success: boolean; error: Error | null }> {
+  if (!isSupabaseConfigured) return { success: false, error: new Error('Supabase is not configured.') };
+  if (!path || path.includes('..') || path.startsWith('/')) {
+    return { success: false, error: new Error('The storage path is invalid.') };
+  }
+
   try {
     const { error } = await supabase.storage.from(bucket).remove([path]);
-    if (error) throw error;
+    if (error) return { success: false, error: new Error(error.message || 'Storage delete failed.') };
     return { success: true, error: null };
-  } catch (err: any) {
-    console.warn(`Storage delete note for ${bucket}:`, err.message || err);
-    return { success: false, error: err };
+  } catch {
+    return { success: false, error: new Error('Storage delete failed. Check administrator access and retry.') };
   }
 }
