@@ -62,8 +62,8 @@ test('P0 Auth/RLS/Storage integration: allow intended roles and deny all others'
   const uploadedByAdmin = `p0-security-test/${randomUUID()}.png`;
   let createdProject = false;
   let createdMessage = false;
-  let createdStorage = false;
   let createdAdminStorage = false;
+  let messageId = null;
 
   try {
     // Anonymous users cannot perform protected CMS writes.
@@ -115,7 +115,7 @@ test('P0 Auth/RLS/Storage integration: allow intended roles and deny all others'
     assert.ifError(publicMessage.error);
     assert.ok(publicMessage.data?.id);
     createdMessage = true;
-    const messageId = publicMessage.data.id;
+    messageId = publicMessage.data.id;
 
     const anonReadMessages = await anon.from('contact_messages').select('id').eq('id', messageId);
     assert.ifError(anonReadMessages.error);
@@ -199,14 +199,21 @@ test('P0 Auth/RLS/Storage integration: allow intended roles and deny all others'
     assert.equal(afterLogout.data, false, 'cleared session must not retain admin authorization');
   } finally {
     // Cleanup is restricted to generated fixture IDs/paths only.
-    if (createdMessage) {
-      const { data: row } = await anon.from('contact_messages').select('id').like('subject', 'P0 security fixture %').limit(20);
-      const rowIds = (row || []).map((item) => item.id);
-      if (rowIds.length) await admin.from('contact_messages').delete().in('id', rowIds);
+    // The assertions above test local logout, so acquire a fresh dedicated cleanup session.
+    // Cleanup queries are scoped only to UUID-derived fixtures created in this run.
+    const cleanupAdmin = createClient(env.P0_TEST_SUPABASE_URL, env.P0_TEST_SUPABASE_ANON_KEY, {
+      auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false },
+    });
+    const cleanupLogin = await cleanupAdmin.auth.signInWithPassword({
+      email: env.P0_TEST_ADMIN_EMAIL,
+      password: env.P0_TEST_ADMIN_PASSWORD,
+    });
+    if (!cleanupLogin.error) {
+      if (createdMessage && messageId) await cleanupAdmin.from('contact_messages').delete().eq('id', messageId);
+      if (createdAdminStorage) await cleanupAdmin.storage.from('project-images').remove([uploadedByAdmin]);
+      if (createdProject) await cleanupAdmin.from('projects').delete().eq('id', id);
+      await cleanupAdmin.auth.signOut({ scope: 'local' });
     }
-    if (createdAdminStorage) await admin.storage.from('project-images').remove([uploadedByAdmin]);
-    if (createdStorage) await admin.storage.from('project-images').remove([storagePath]);
-    if (createdProject) await admin.from('projects').delete().eq('id', id);
     await nonAdmin.auth.signOut({ scope: 'local' });
     await anon.auth.signOut({ scope: 'local' });
   }
