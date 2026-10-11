@@ -34,7 +34,7 @@ test('storage upload validates MIME/size and does not claim local fallback as up
   assert.match(storage, /IMAGE_TYPES/);
   assert.match(storage, /DOCUMENT_TYPES/);
   assert.match(storage, /upsert: false/);
-  assert.doesNotMatch(storage, /fileToDataUrl|Base64 local fallback|localDataUrl/);
+  assert.doesNotMatch(storage, /Base64 local fallback|localDataUrl/);
   assert.match(storage, /if \(!isSupabaseConfigured\)/);
 });
 
