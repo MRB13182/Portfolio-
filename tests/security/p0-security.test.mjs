@@ -46,7 +46,7 @@ test('reviewed SQL migration has database-side admin checks and removes permissi
   assert.match(migration, /admin\.user_id = \(select auth\.uid\(\)\)/);
   assert.match(migration, /drop policy if exists/);
   assert.match(migration, /p0_admin_contact_read/);
-  assert.match(migration, /public\\.footer_settings/);
+  assert.match(migration, /public\.footer_settings/);
   assert.match(migration, /p0_public_contact_insert/);
   assert.match(migration, /bucket_id in \('profile-images', 'project-images', 'certificate-images', 'logos', 'resume-files'\)/);
   assert.doesNotMatch(migration, /for all to authenticated using \(true\) with check \(true\)/i);
