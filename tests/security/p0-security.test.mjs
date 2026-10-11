@@ -68,6 +68,7 @@ test('publishable key config is build/deploy-time only and no privileged key is 
   const example = await read('.env.example');
   assert.doesNotMatch(supabase, /localStorage\.getItem\(['"]supabase_(publishable|anon)_key/);
   assert.doesNotMatch(settings, /savePublishableKey|Save &amp; Connect Key|paste it here to activate/i);
+  assert.doesNotMatch(supabase, /export function savePublishableKey/);
   assert.doesNotMatch(settings, /Admin All (Profiles|Projects|Skills|Experience|Education|Certificates|Socials|Messages|Settings|Footer).*USING \\(true\\)/i);
   assert.match(settings, /20261011090000_p0_admin_authorization_rls\\.sql/);
   assert.doesNotMatch(supabase, /SERVICE_ROLE_KEY|service_role|SUPABASE_SECRET_KEY/i);
