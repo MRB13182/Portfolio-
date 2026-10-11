@@ -10,6 +10,7 @@ interface AuthContextType {
   authError: string | null;
   signIn: (email: string, password: string) => Promise<{ error: AuthError | Error | null }>;
   signOut: () => Promise<void>;
+  refreshAuthorization: () => Promise<void>;
   isConfigured: boolean;
 }
 
@@ -112,6 +113,30 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     };
   }, [verifySession]);
 
+  const refreshAuthorization = useCallback(async (): Promise<void> => {
+    if (!isSupabaseConfigured) {
+      setUser(null);
+      setSession(null);
+      setIsAdmin(false);
+      setAuthError('Supabase is not configured. Administrator access is unavailable.');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      const { data, error } = await supabase.auth.getSession();
+      if (error) throw error;
+      await verifySession(data.session);
+    } catch {
+      setUser(null);
+      setSession(null);
+      setIsAdmin(false);
+      setAuthError('Unable to verify the current session. Please sign in again.');
+    } finally {
+      setLoading(false);
+    }
+  }, [verifySession]);
+
   const signIn = async (email: string, password: string): Promise<{ error: AuthError | Error | null }> => {
     if (!isSupabaseConfigured) {
       const error = new Error('Supabase is not configured. No insecure local authentication fallback is available.');
@@ -195,6 +220,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       authError,
       signIn,
       signOut,
+      refreshAuthorization,
       isConfigured: isSupabaseConfigured,
     }}>
       {children}
