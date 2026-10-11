@@ -156,6 +156,19 @@ begin
 end;
 $block$;
 
+-- Apply Storage-side MIME/size limits as a second layer behind client validation.
+-- Bucket visibility is intentionally left unchanged for compatibility with current public URLs.
+insert into storage.buckets (id, name, public, file_size_limit, allowed_mime_types)
+values
+  ('profile-images', 'profile-images', true, 5242880, array['image/jpeg','image/png','image/webp','image/gif','image/avif']),
+  ('project-images', 'project-images', true, 5242880, array['image/jpeg','image/png','image/webp','image/gif','image/avif']),
+  ('certificate-images', 'certificate-images', true, 5242880, array['image/jpeg','image/png','image/webp','image/gif','image/avif']),
+  ('logos', 'logos', true, 5242880, array['image/jpeg','image/png','image/webp','image/gif','image/avif']),
+  ('resume-files', 'resume-files', true, 10485760, array['application/pdf'])
+on conflict (id) do update
+set file_size_limit = excluded.file_size_limit,
+    allowed_mime_types = excluded.allowed_mime_types;
+
 -- Keep the existing buckets and public URLs. These five buckets currently serve portfolio assets;
 -- portfolio resume downloads are treated as intentionally public for compatibility. Do not place
 -- private/sensitive documents in resume-files. To privatize that bucket, first migrate URL consumers
