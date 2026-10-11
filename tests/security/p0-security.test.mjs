@@ -57,7 +57,7 @@ test('contact message writes fail closed instead of claiming localStorage persis
   const messages = await read('src/services/messageService.ts');
   assert.match(messages, /if \\(!isSupabaseConfigured\\)/);
   assert.match(messages, /Message delivery failed/);
-  assert.match(messages, /if \\(error \\|\\| !data\\) throw/);
+  assert.match(messages, /if \(error \|\| !data\) throw/);
   assert.doesNotMatch(messages, /saveLocalMessages|portfolio_local_messages.*setItem/s);
   assert.doesNotMatch(messages, /const combined = \\[...remote/);
 });
