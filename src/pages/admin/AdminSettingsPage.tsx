@@ -475,7 +475,6 @@ CREATE POLICY "Admin All Footer" ON public.footer_content FOR ALL USING (true) W
             Configure <code>VITE_SUPABASE_PUBLISHABLE_KEY</code> (or the legacy anon key variable) in your deployment environment and rebuild the app. Runtime key overrides are disabled so the browser cannot silently change the configured backend.
           </p>
         </div>
-        </div>
       </div>
 
       {/* SQL Schema Copy Card */}
