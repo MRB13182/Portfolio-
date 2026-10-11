@@ -1,144 +1,107 @@
-import { supabase, isSupabaseConfigured, isTableMissingError } from '../lib/supabase';
-import { ContactMessageRow } from '../types/database';
-import { activityLogService } from './activityLogService';
+import { supabase, isSupabaseConfigured } from '../lib/supabase';
+import type { ContactMessageRow } from '../types/database';
 
 const LOCAL_STORAGE_KEY = 'portfolio_local_messages';
 
 function getLocalMessages(): ContactMessageRow[] {
   try {
     const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
-    if (raw) return JSON.parse(raw);
-  } catch {}
-  return [];
+    if (!raw) return [];
+    const parsed: unknown = JSON.parse(raw);
+    return Array.isArray(parsed) ? parsed as ContactMessageRow[] : [];
+  } catch {
+    return [];
+  }
 }
 
-function saveLocalMessages(msgs: ContactMessageRow[]) {
-  try {
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(msgs));
-  } catch {}
-}
-
+/**
+ * Contact messages are persisted to the trusted database only. When Supabase is configured,
+ * localStorage must not be merged into the admin inbox or used to pretend a write succeeded.
+ */
 export const messageService = {
   async getAll(): Promise<ContactMessageRow[]> {
-    const local = getLocalMessages();
-    if (!isSupabaseConfigured) return local;
-
-    try {
-      const { data, error } = await supabase
-        .from('contact_messages')
-        .select('*')
-        .order('created_at', { ascending: false });
-
-      if (error) {
-        if (!isTableMissingError(error)) {
-          console.warn('messageService.getAll info:', error.message || error);
-        }
-        return local;
-      }
-      const remote = (data as ContactMessageRow[]) || [];
-      const remoteIds = new Set(remote.map(r => r.id));
-      const combined = [...remote, ...local.filter(l => !remoteIds.has(l.id))];
-      return combined.sort((a, b) => new Date(b.created_at || '').getTime() - new Date(a.created_at || '').getTime());
-    } catch {
-      return local;
+    if (!isSupabaseConfigured) {
+      // Only supports legacy local-only/demo data. Admin routing is disabled without verified
+      // Supabase Auth, so this data is never treated as a secured production inbox.
+      return getLocalMessages();
     }
+
+    const { data, error } = await supabase
+      .from('contact_messages')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) throw new Error('Could not load server contact messages. Verify admin access and retry.');
+    return (data as ContactMessageRow[]) || [];
   },
 
   async getById(id: string): Promise<ContactMessageRow | null> {
-    const local = getLocalMessages().find(m => m.id === id);
-    if (!isSupabaseConfigured) return local || null;
-
-    try {
-      const { data, error } = await supabase
-        .from('contact_messages')
-        .select('*')
-        .eq('id', id)
-        .maybeSingle();
-
-      if (error) {
-        return local || null;
-      }
-      return (data as ContactMessageRow) || local || null;
-    } catch {
-      return local || null;
+    if (!isSupabaseConfigured) {
+      return getLocalMessages().find((message) => message.id === id) || null;
     }
+
+    const { data, error } = await supabase
+      .from('contact_messages')
+      .select('*')
+      .eq('id', id)
+      .maybeSingle();
+
+    if (error) throw new Error('Could not load this server message. Verify admin access and retry.');
+    return (data as ContactMessageRow) || null;
   },
 
-  async create(payload: Omit<ContactMessageRow, 'id' | 'created_at' | 'status'> & { status?: 'unread' | 'read' | 'archived' }): Promise<ContactMessageRow> {
-    const newMsg: ContactMessageRow = {
-      id: `msg-${Date.now()}-${Math.random().toString(36).substring(2, 7)}`,
-      name: payload.name,
-      email: payload.email,
-      subject: payload.subject,
-      message: payload.message,
-      status: payload.status || 'unread',
-      created_at: new Date().toISOString(),
-    };
-
-    if (isSupabaseConfigured) {
-      try {
-        const { data, error } = await supabase
-          .from('contact_messages')
-          .insert([{
-            name: newMsg.name,
-            email: newMsg.email,
-            subject: newMsg.subject,
-            message: newMsg.message,
-            status: newMsg.status,
-          }])
-          .select()
-          .single();
-
-        if (!error && data) {
-          await activityLogService.log('New Inquiry Received', 'Contact Messages', `From ${payload.name} (${payload.email})`);
-          return data as ContactMessageRow;
-        }
-      } catch {}
+  async create(
+    payload: Omit<ContactMessageRow, 'id' | 'created_at' | 'status'> & {
+      status?: 'unread' | 'read' | 'archived';
+    },
+  ): Promise<ContactMessageRow> {
+    if (!isSupabaseConfigured) {
+      throw new Error('Supabase is not configured; the message was not delivered. Please use the direct email link.');
     }
 
-    // Offline / fallback storage
-    const current = getLocalMessages();
-    saveLocalMessages([newMsg, ...current]);
-    await activityLogService.log('New Inquiry Received', 'Contact Messages', `From ${payload.name} (${payload.email})`);
-    return newMsg;
+    const name = payload.name.trim();
+    const email = payload.email.trim();
+    const subject = (payload.subject || 'Portfolio Inquiry').trim();
+    const message = payload.message.trim();
+
+    if (name.length < 1 || name.length > 120) throw new Error('Name must be 1–120 characters.');
+    if (email.length < 3 || email.length > 254 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      throw new Error('Enter a valid email address.');
+    }
+    if (subject.length < 1 || subject.length > 200) throw new Error('Subject must be 1–200 characters.');
+    if (message.length < 1 || message.length > 5000) throw new Error('Message must be 1–5000 characters.');
+
+    const { data, error } = await supabase
+      .from('contact_messages')
+      .insert([{ name, email, subject, message, status: 'unread' }])
+      .select('*')
+      .single();
+
+    if (error || !data) {
+      throw new Error('Message delivery failed. Nothing was confirmed as received; please use the direct email link.');
+    }
+    return data as ContactMessageRow;
   },
 
   async update(id: string, payload: Partial<ContactMessageRow>): Promise<ContactMessageRow> {
-    // Update local cache if present
-    const local = getLocalMessages();
-    const idx = local.findIndex(m => m.id === id);
-    if (idx !== -1) {
-      local[idx] = { ...local[idx], ...payload };
-      saveLocalMessages(local);
-    }
+    if (!isSupabaseConfigured) throw new Error('Supabase is not configured; server messages cannot be updated.');
 
-    if (isSupabaseConfigured) {
-      try {
-        const { data, error } = await supabase
-          .from('contact_messages')
-          .update(payload)
-          .eq('id', id)
-          .select()
-          .maybeSingle();
-
-        if (!error && data) {
-          return data as ContactMessageRow;
-        }
-      } catch {}
+    // Permit only the intended status field. IDs and content must not be mutable through inbox controls.
+    if (payload.status && !['unread', 'read', 'archived'].includes(payload.status)) {
+      throw new Error('Invalid message status.');
     }
+    const update = payload.status ? { status: payload.status } : {};
+    if (Object.keys(update).length === 0) throw new Error('No supported message changes were supplied.');
 
-    if (idx !== -1) {
-      return local[idx];
-    }
-    return {
-      id,
-      name: '',
-      email: '',
-      subject: '',
-      message: '',
-      status: payload.status || 'read',
-      ...payload,
-    };
+    const { data, error } = await supabase
+      .from('contact_messages')
+      .update(update)
+      .eq('id', id)
+      .select('*')
+      .maybeSingle();
+
+    if (error || !data) throw new Error('Message update failed or the record is not accessible.');
+    return data as ContactMessageRow;
   },
 
   async markAsRead(id: string): Promise<ContactMessageRow> {
@@ -150,17 +113,16 @@ export const messageService = {
   },
 
   async delete(id: string): Promise<boolean> {
-    const local = getLocalMessages();
-    saveLocalMessages(local.filter(m => m.id !== id));
+    if (!isSupabaseConfigured) throw new Error('Supabase is not configured; server messages cannot be deleted.');
 
-    if (isSupabaseConfigured) {
-      try {
-        await supabase
-          .from('contact_messages')
-          .delete()
-          .eq('id', id);
-      } catch {}
-    }
+    const { data, error } = await supabase
+      .from('contact_messages')
+      .delete()
+      .eq('id', id)
+      .select('id')
+      .maybeSingle();
+
+    if (error || !data) throw new Error('Message deletion failed or the record is not accessible.');
     return true;
   },
 };
