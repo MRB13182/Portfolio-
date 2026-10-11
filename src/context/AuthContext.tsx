@@ -25,12 +25,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [loading, setLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
   const [authError, setAuthError] = useState<string | null>(null);
+  const [authRevision, setAuthRevision] = useState(0);
 
   const verifySession = useCallback(async (candidate: Session | null) => {
     if (!isSupabaseConfigured || !candidate) {
       setSession(null);
       setUser(null);
       setIsAdmin(false);
+      setAuthError(null);
       return;
     }
 
@@ -63,7 +65,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       setIsAdmin(false);
       setAuthError(asError(error).message);
     }
-  }, []);
+  }, [authRevision]);
 
   useEffect(() => {
     let active = true;
@@ -131,10 +133,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return { error: error ?? new Error('Sign-in failed.') };
       }
 
-      await verifySession(data.session);
-      // If the database authorization check fails, fail closed and clear this session.
-      const { data: authorization, error: authorizationError } = await supabase.rpc('is_portfolio_admin');
-      if (authorizationError || authorization !== true) {
+      // Revalidate this session and run the database authorization check once. Increment a
+      // revision so callbacks revalidate against the newest context revision.
+      const { data: userData, error: userError } = await supabase.auth.getUser(data.session.access_token);
+      const { data: authorization, error: authorizationError } = userError || !userData.user
+        ? { data: false, error: userError ?? new Error('User identity could not be verified.') }
+        : await supabase.rpc('is_portfolio_admin');
+      if (userError || !userData.user || authorizationError || authorization !== true) {
         await supabase.auth.signOut({ scope: 'local' });
         setIsAdmin(false);
         setUser(null);
@@ -147,8 +152,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return { error: accessError };
       }
 
+      setUser(userData.user);
+      setSession(data.session);
       setAuthError(null);
       setIsAdmin(true);
+      setAuthRevision((revision) => revision + 1);
       setLoading(false);
       return { error: null };
     } catch (error) {
