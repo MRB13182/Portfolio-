@@ -44,12 +44,31 @@ Check exactly one row was updated before relying on it. Do not run this until th
 | P1 | Admin passcode change/reset only updated localStorage | Removed those controls; security page now reports real Supabase Auth/session state | Implemented |
 | P1 | Supabase sign-in session alone was treated as administrator status | Context calls `auth.getUser()` and `rpc('is_portfolio_admin')`; authorization errors fail closed | Implemented; runtime verification blocked |
 
-## Verification not yet completed
+## Verification status
 
-No local build, TypeScript check, lint, browser test, integration test, RLS role test, or live advisor re-run was possible through the read/write connectors alone. GitHub Actions had no recorded runs during the earlier audit. A clean migration execution and tests against an isolated restored database remain required before production-security claims.
+- Static security regression tests, TypeScript check (`tsc --noEmit`), and production build passed in GitHub Actions on the audited branch.
+- `tests/security/p0-rls.integration.test.mjs` is an opt-in live integration suite. It is skipped unless the documented test-only environment variables are provided; it must run only against an isolated test project with dedicated admin and non-admin accounts and known test schema.
+- The portfolio Supabase project was INACTIVE, so live Auth, RLS, storage, contact-workflow, and advisor verification could not be performed. The migration has not been applied.
+- Repository-history/deployment secret scanning and browser-level end-to-end regression tests have not been completed.
+
+A clean migration execution and passing role-based integration tests against an isolated restored database remain required before production-security claims.
 
 ## Rollback considerations
 
 - Do not blindly reverse this migration after user data has been written. Policy rollback must restore an audited, captured baseline, not the insecure `USING (true)` policies.
 - Before deployment, export existing policy definitions and schema; retain them as a rollback record in a secure admin workspace, not with secrets in Git.
 - If app sign-in cannot verify `is_portfolio_admin()`, the app will deny admin access. Do not reintroduce a local passcode fallback; diagnose migration/provisioning instead.
+
+
+## Isolated integration-test environment
+
+The opt-in test suite in `tests/security/p0-rls.integration.test.mjs` expects all of these environment variables in a separate test-only environment:
+
+- `P0_TEST_SUPABASE_URL`
+- `P0_TEST_SUPABASE_ANON_KEY`
+- `P0_TEST_ADMIN_EMAIL`
+- `P0_TEST_ADMIN_PASSWORD`
+- `P0_TEST_NON_ADMIN_EMAIL`
+- `P0_TEST_NON_ADMIN_PASSWORD`
+
+The admin account must be explicitly provisioned in that isolated project's `admin_users.user_id` allowlist; the non-admin account must not be provisioned. The suite creates only UUID-scoped fixtures and cleans only the returned message ID, generated project ID, and generated storage path. Do not point these credentials at production.
