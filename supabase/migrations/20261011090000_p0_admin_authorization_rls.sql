@@ -49,7 +49,7 @@ declare
   managed_tables text[] := array[
     'profiles', 'projects', 'skills', 'experience', 'education', 'certificates',
     'social_links', 'site_settings', 'admin_users', 'contact_messages',
-    'footer_content', 'testimonials', 'activity_logs'
+    'footer_content', 'footer_settings', 'testimonials', 'activity_logs'
   ];
 begin
   foreach table_name in array managed_tables loop
@@ -82,6 +82,9 @@ do $block$
 begin
   if to_regclass('public.footer_content') is not null then
     execute 'create policy p0_public_read_footer_content on public.footer_content for select to anon, authenticated using (true)';
+  end if;
+  if to_regclass('public.footer_settings') is not null then
+    execute 'create policy p0_public_read_footer_settings on public.footer_settings for select to anon, authenticated using (true)';
   end if;
   if to_regclass('public.testimonials') is not null then
     execute 'create policy p0_public_read_testimonials on public.testimonials for select to anon, authenticated using (true)';
