@@ -18,6 +18,7 @@ alter table public.admin_users
 
 alter table public.admin_users enable row level security;
 revoke all on table public.admin_users from anon, authenticated;
+-- No client role may mutate admin_users; table/sequence privileges remain owner-only.
 
 -- This SECURITY DEFINER predicate avoids circular RLS checks when other table policies
 -- consult the allowlist. Its fixed search_path and fully-qualified names avoid object shadowing.
