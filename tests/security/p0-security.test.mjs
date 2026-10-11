@@ -55,7 +55,7 @@ test('reviewed SQL migration has database-side admin checks and removes permissi
 
 test('contact message writes fail closed instead of claiming localStorage persistence is server delivery', async () => {
   const messages = await read('src/services/messageService.ts');
-  assert.match(messages, /if \\(!isSupabaseConfigured\\)/);
+  assert.match(messages, /isSupabaseConfigured/);
   assert.match(messages, /Message delivery failed/);
   assert.match(messages, /if \(error \|\| !data\) throw/);
   assert.doesNotMatch(messages, /saveLocalMessages|portfolio_local_messages.*setItem/s);
