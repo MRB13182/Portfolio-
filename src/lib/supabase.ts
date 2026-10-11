@@ -22,12 +22,6 @@ export const isSupabaseConfigured = Boolean(
   !DUMMY_KEYS.includes(supabaseAnonKey.trim()) &&
 );
 
-export function savePublishableKey(_key: string): void {
-  // Runtime key overrides stored in localStorage make deployment configuration mutable and
-  // can silently redirect the browser to a different backend. Configure keys at build/deploy time.
-  throw new Error('Supabase keys must be configured through VITE_SUPABASE_PUBLISHABLE_KEY or VITE_SUPABASE_ANON_KEY.');
-}
-
 // Helper to determine if an error is due to missing tables in schema cache.
 export function isTableMissingError(error: unknown): boolean {
   if (!error || typeof error !== 'object') return false;
