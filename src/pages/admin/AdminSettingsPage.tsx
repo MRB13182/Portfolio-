@@ -23,7 +23,7 @@ import {
   Image as ImageIcon,
   Sparkles,
 } from 'lucide-react';
-import { isSupabaseConfigured, supabaseUrl, SUPABASE_PROJECT_ID, supabaseAnonKey, savePublishableKey } from '../../lib/supabase';
+import { isSupabaseConfigured, supabaseUrl, SUPABASE_PROJECT_ID } from '../../lib/supabase';
 
 export const AdminSettingsPage: React.FC = () => {
   const { isDark } = useTheme();
@@ -33,7 +33,6 @@ export const AdminSettingsPage: React.FC = () => {
   const [formData, setFormData] = useState<Partial<SiteSettingsRow>>({});
   const [isSaving, setIsSaving] = useState(false);
   const [copiedSchema, setCopiedSchema] = useState(false);
-  const [inputKey, setInputKey] = useState(supabaseAnonKey || '');
 
   useEffect(() => {
     if (settings) {
@@ -126,247 +125,28 @@ export const AdminSettingsPage: React.FC = () => {
     reader.readAsText(file);
   };
 
-  const copySqlSchema = () => {
-    const sqlContent = `-- Run this in Supabase SQL Editor (Project ID: ${SUPABASE_PROJECT_ID})
--- Enable UUID extension
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
-
--- 1. Profiles
-CREATE TABLE IF NOT EXISTS public.profiles (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  name TEXT NOT NULL,
-  first_name TEXT,
-  last_name TEXT,
-  titles TEXT[] DEFAULT '{}',
-  bio TEXT,
-  extended_bio TEXT,
-  location TEXT,
-  email TEXT,
-  phone TEXT,
-  whatsapp_number TEXT,
-  telegram_username TEXT,
-  availability_status TEXT DEFAULT 'Open for Opportunities',
-  resume_url TEXT,
-  years_of_experience NUMERIC DEFAULT 4.5,
-  profile_image TEXT,
-  logo_light TEXT,
-  logo_dark TEXT,
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  updated_at TIMESTAMPTZ DEFAULT NOW()
-);
-
--- 2. Projects
-CREATE TABLE IF NOT EXISTS public.projects (
-  id TEXT PRIMARY KEY,
-  title TEXT NOT NULL,
-  category TEXT NOT NULL,
-  tagline TEXT,
-  description TEXT,
-  image TEXT,
-  logo TEXT,
-  gallery_images TEXT[] DEFAULT '{}',
-  fallback_gradient TEXT,
-  tech_stack TEXT[] DEFAULT '{}',
-  features TEXT[] DEFAULT '{}',
-  architecture TEXT[] DEFAULT '{}',
-  live_url TEXT,
-  github_url TEXT,
-  status TEXT DEFAULT 'Live & Operational',
-  featured BOOLEAN DEFAULT false,
-  sort_order INT DEFAULT 0,
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  updated_at TIMESTAMPTZ DEFAULT NOW()
-);
-
--- 3. Skills
-CREATE TABLE IF NOT EXISTS public.skills (
-  id TEXT PRIMARY KEY,
-  name TEXT NOT NULL,
-  category TEXT NOT NULL,
-  level INT NOT NULL,
-  logo TEXT,
-  icon_name TEXT,
-  accent_color TEXT DEFAULT '#00E5FF',
-  experience TEXT DEFAULT '4+ Years',
-  experience_duration TEXT DEFAULT '4+ Years',
-  proficiency_highlights TEXT[] DEFAULT '{}',
-  related_projects TEXT[] DEFAULT '{}',
-  description TEXT,
-  sort_order INT DEFAULT 0,
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  updated_at TIMESTAMPTZ DEFAULT NOW()
-);
-
--- 4. Experience
-CREATE TABLE IF NOT EXISTS public.experience (
-  id TEXT PRIMARY KEY,
-  role TEXT NOT NULL,
-  company TEXT NOT NULL,
-  company_url TEXT,
-  logo TEXT,
-  location TEXT,
-  period TEXT,
-  start_date TEXT,
-  end_date TEXT,
-  is_current BOOLEAN DEFAULT false,
-  type TEXT,
-  description TEXT,
-  responsibilities TEXT[] DEFAULT '{}',
-  technologies TEXT[] DEFAULT '{}',
-  achievements TEXT[] DEFAULT '{}',
-  sort_order INT DEFAULT 0,
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  updated_at TIMESTAMPTZ DEFAULT NOW()
-);
-
--- 5. Education
-CREATE TABLE IF NOT EXISTS public.education (
-  id TEXT PRIMARY KEY,
-  degree TEXT NOT NULL,
-  field_of_study TEXT,
-  institution TEXT NOT NULL,
-  location TEXT,
-  period TEXT,
-  start_year TEXT,
-  end_year TEXT,
-  grade TEXT,
-  description TEXT,
-  coursework TEXT[] DEFAULT '{}',
-  achievements TEXT[] DEFAULT '{}',
-  logo TEXT,
-  sort_order INT DEFAULT 0,
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  updated_at TIMESTAMPTZ DEFAULT NOW()
-);
-
--- 6. Certificates
-CREATE TABLE IF NOT EXISTS public.certificates (
-  id TEXT PRIMARY KEY,
-  title TEXT NOT NULL,
-  issuer TEXT NOT NULL,
-  issuer_logo TEXT,
-  theme TEXT,
-  category TEXT,
-  accent TEXT,
-  image TEXT,
-  issue_date TEXT,
-  expiry_date TEXT,
-  credential_id TEXT,
-  credential_url TEXT,
-  description TEXT,
-  verified BOOLEAN DEFAULT true,
-  skills TEXT[] DEFAULT '{}',
-  sort_order INT DEFAULT 0,
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  updated_at TIMESTAMPTZ DEFAULT NOW()
-);
-
--- 7. Social Links
-CREATE TABLE IF NOT EXISTS public.social_links (
-  id TEXT PRIMARY KEY,
-  name TEXT NOT NULL,
-  url TEXT NOT NULL,
-  icon TEXT,
-  color TEXT,
-  action_type TEXT DEFAULT 'link',
-  enabled BOOLEAN DEFAULT true,
-  sort_order INT DEFAULT 0,
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  updated_at TIMESTAMPTZ DEFAULT NOW()
-);
-
--- 8. Contact Messages
-CREATE TABLE IF NOT EXISTS public.contact_messages (
-  id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  name TEXT NOT NULL,
-  email TEXT NOT NULL,
-  subject TEXT NOT NULL,
-  message TEXT NOT NULL,
-  status TEXT DEFAULT 'unread',
-  reply_text TEXT,
-  replied_at TIMESTAMPTZ,
-  created_at TIMESTAMPTZ DEFAULT NOW()
-);
-
--- 9. Site Settings
-CREATE TABLE IF NOT EXISTS public.site_settings (
-  id TEXT PRIMARY KEY,
-  site_title TEXT,
-  site_name TEXT,
-  website_logo TEXT,
-  dark_logo TEXT,
-  light_logo TEXT,
-  favicon_url TEXT,
-  hero_banner TEXT,
-  meta_title TEXT,
-  meta_description TEXT,
-  seo_keywords TEXT[] DEFAULT '{}',
-  opengraph_image TEXT,
-  contact_email TEXT,
-  active_theme TEXT DEFAULT 'dual',
-  show_stats BOOLEAN DEFAULT true,
-  maintenance_mode BOOLEAN DEFAULT false,
-  theme_colors JSONB,
-  updated_at TIMESTAMPTZ DEFAULT NOW()
-);
-
--- 10. Footer Content
-CREATE TABLE IF NOT EXISTS public.footer_content (
-  id TEXT PRIMARY KEY DEFAULT 'default',
-  brand_name TEXT DEFAULT 'MD. MOSHIUR RAHMAN',
-  tagline TEXT DEFAULT 'Lead Full-Stack Architect & Cloud System Engineer.',
-  copyright_text TEXT DEFAULT 'All Rights Reserved.',
-  status_badge_text TEXT DEFAULT 'Available for High-Impact Roles',
-  status_badge_subtext TEXT DEFAULT 'Worldwide Remote & Hybrid',
-  quick_links JSONB DEFAULT '[]',
-  legal_links JSONB DEFAULT '[]',
-  show_system_metrics BOOLEAN DEFAULT true,
-  updated_at TIMESTAMPTZ DEFAULT NOW()
-);
-
--- Row Level Security (RLS) Configuration
-ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.projects ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.skills ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.experience ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.education ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.certificates ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.social_links ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.contact_messages ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.site_settings ENABLE ROW LEVEL SECURITY;
-ALTER TABLE public.footer_content ENABLE ROW LEVEL SECURITY;
-
--- Public READ-ONLY access for portfolio visitors
-CREATE POLICY "Public Read Profiles" ON public.profiles FOR SELECT USING (true);
-CREATE POLICY "Public Read Projects" ON public.projects FOR SELECT USING (true);
-CREATE POLICY "Public Read Skills" ON public.skills FOR SELECT USING (true);
-CREATE POLICY "Public Read Experience" ON public.experience FOR SELECT USING (true);
-CREATE POLICY "Public Read Education" ON public.education FOR SELECT USING (true);
-CREATE POLICY "Public Read Certificates" ON public.certificates FOR SELECT USING (true);
-CREATE POLICY "Public Read Socials" ON public.social_links FOR SELECT USING (true);
-CREATE POLICY "Public Read Settings" ON public.site_settings FOR SELECT USING (true);
-CREATE POLICY "Public Read Footer" ON public.footer_content FOR SELECT USING (true);
-
--- Public INSERT for contact messages
-CREATE POLICY "Public Insert Messages" ON public.contact_messages FOR INSERT WITH CHECK (true);
-
--- Admin FULL ACCESS (ALL operations) for authenticated users or service role
-CREATE POLICY "Admin All Profiles" ON public.profiles FOR ALL USING (true) WITH CHECK (true);
-CREATE POLICY "Admin All Projects" ON public.projects FOR ALL USING (true) WITH CHECK (true);
-CREATE POLICY "Admin All Skills" ON public.skills FOR ALL USING (true) WITH CHECK (true);
-CREATE POLICY "Admin All Experience" ON public.experience FOR ALL USING (true) WITH CHECK (true);
-CREATE POLICY "Admin All Education" ON public.education FOR ALL USING (true) WITH CHECK (true);
-CREATE POLICY "Admin All Certificates" ON public.certificates FOR ALL USING (true) WITH CHECK (true);
-CREATE POLICY "Admin All Socials" ON public.social_links FOR ALL USING (true) WITH CHECK (true);
-CREATE POLICY "Admin All Messages" ON public.contact_messages FOR ALL USING (true) WITH CHECK (true);
-CREATE POLICY "Admin All Settings" ON public.site_settings FOR ALL USING (true) WITH CHECK (true);
-CREATE POLICY "Admin All Footer" ON public.footer_content FOR ALL USING (true) WITH CHECK (true);
+  const copySqlSchema = async () => {
+    const sqlContent = `-- P0 SECURITY NOTICE
+-- The historical SQL bundle included permissive policies that could let any authenticated
+-- user mutate portfolio data and contact messages. Do not apply that legacy bundle.
+--
+-- Review the versioned remediation file from the repository branch:
+-- supabase/migrations/20261011090000_p0_admin_authorization_rls.sql
+--
+-- The remediation has not been applied to production because the associated Supabase project
+-- was reported INACTIVE. Restore the project, inspect live schema/policies/storage consumers,
+-- back up definitions, review the migration, provision a verified admin identity, and test
+-- anon/non-admin/admin access in an isolated environment before applying it.
 `;
 
-    navigator.clipboard.writeText(sqlContent);
-    setCopiedSchema(true);
-    showToast('SQL DDL and RLS schema copied to clipboard!', { type: 'success' });
-    setTimeout(() => setCopiedSchema(false), 3000);
+    try {
+      await navigator.clipboard.writeText(sqlContent);
+      setCopiedSchema(true);
+      showToast('Security migration notice copied. Review the versioned migration before applying SQL.', { type: 'info' });
+      window.setTimeout(() => setCopiedSchema(false), 3000);
+    } catch {
+      showToast('Clipboard access failed. Open docs/security/P0-REMEDIATION.md in the repository.', { type: 'error' });
+    }
   };
 
   return (
@@ -470,55 +250,10 @@ CREATE POLICY "Admin All Footer" ON public.footer_content FOR ALL USING (true) W
           </div>
         </div>
 
-        {/* Live Key Setup / Override Form */}
         <div className="pt-2 border-t border-white/10 space-y-2">
-          <label className="block text-xs font-bold">
-            Connect Supabase Key (VITE_SUPABASE_PUBLISHABLE_KEY or ANON KEY)
-          </label>
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
-            <input
-              type="password"
-              value={inputKey}
-              onChange={(e) => setInputKey(e.target.value)}
-              placeholder="Paste your Supabase Publishable / Anon Key here"
-              className={`flex-1 px-3.5 py-2.5 rounded-xl text-xs border outline-none font-mono transition-all ${
-                isDark
-                  ? 'bg-white/5 border-white/10 text-white placeholder-zinc-500 focus:border-[#00E5FF]'
-                  : 'bg-slate-50 border-slate-300 text-slate-900 placeholder-slate-400 focus:border-[#00E5FF]'
-              }`}
-            />
-            <button
-              type="button"
-              onClick={() => {
-                if (!inputKey.trim()) {
-                  showToast('Please enter a valid key', { type: 'error' });
-                  return;
-                }
-                savePublishableKey(inputKey);
-                showToast('Key saved! Reconnecting to Supabase...', { type: 'success' });
-              }}
-              className="px-4 py-2.5 rounded-xl text-xs font-bold bg-[#00E5FF] text-black hover:bg-[#00E5FF]/80 transition-all cursor-pointer whitespace-nowrap"
-            >
-              Save &amp; Connect Key
-            </button>
-            {isSupabaseConfigured && (
-              <button
-                type="button"
-                onClick={() => {
-                  savePublishableKey('');
-                  setInputKey('');
-                  showToast('Cleared custom key.', { type: 'info' });
-                }}
-                className={`px-3 py-2.5 rounded-xl text-xs font-semibold border transition-all cursor-pointer whitespace-nowrap ${
-                  isDark ? 'border-white/10 hover:border-white/30 text-zinc-400' : 'border-slate-300 hover:border-slate-500 text-slate-600'
-                }`}
-              >
-                Disconnect
-              </button>
-            )}
-          </div>
-          <p className="text-[11px] opacity-60">
-            Tip: When deploying to Netlify or Vercel, you can set <code>VITE_SUPABASE_PUBLISHABLE_KEY</code> in your host's Environment Variables, or paste it here to activate cloud sync instantly.
+          <label className="block text-xs font-bold">Supabase publishable key configuration</label>
+          <p className="text-[11px] opacity-70 leading-relaxed">
+            Configure <code>VITE_SUPABASE_PUBLISHABLE_KEY</code> (or the legacy anon key variable) in your deployment environment and rebuild the app. Runtime key overrides are disabled so the browser cannot silently change the configured backend.
           </p>
         </div>
       </div>
@@ -534,7 +269,7 @@ CREATE POLICY "Admin All Footer" ON public.footer_content FOR ALL USING (true) W
             </div>
             <div>
               <h3 className="font-bold text-sm">PostgreSQL Schema &amp; Row Level Security (RLS)</h3>
-              <p className="text-xs opacity-60">Complete SQL DDL to set up all 10 tables, RLS policies, and storage</p>
+              <p className="text-xs opacity-60">Safe deployment notice for the reviewed P0 migration; legacy SQL is intentionally not copied.</p>
             </div>
           </div>
 
@@ -549,7 +284,7 @@ CREATE POLICY "Admin All Footer" ON public.footer_content FOR ALL USING (true) W
             }`}
           >
             {copiedSchema ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
-            <span>{copiedSchema ? 'Copied SQL Script!' : 'Copy Schema.sql'}</span>
+            <span>{copiedSchema ? 'Copied Security Notice!' : 'Copy Migration Notice'}</span>
           </button>
         </div>
 
