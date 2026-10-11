@@ -1,12 +1,17 @@
-import React from 'react';
-import { Navigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Navigate, useLocation } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import { Shield, AlertTriangle } from 'lucide-react';
 
 export const ProtectedRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { isAdmin, loading, authError } = useAuth();
+  const { isAdmin, loading, authError, refreshAuthorization } = useAuth();
   const { isDark } = useTheme();
+  const location = useLocation();
+
+  useEffect(() => {
+    void refreshAuthorization();
+  }, [location.pathname, refreshAuthorization]);
 
   if (loading) {
     return (
