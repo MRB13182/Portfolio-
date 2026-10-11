@@ -89,6 +89,7 @@ export interface Certificate {
   expiryDate?: string;
   credentialId?: string;
   credentialUrl?: string;
+  verificationUrl?: string;
   skills?: string[];
   description?: string;
   verified?: boolean;
