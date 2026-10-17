@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { User, Session, AuthError } from '@supabase/supabase-js';
 import { supabase, isSupabaseConfigured } from '../lib/supabase';
 
@@ -7,10 +7,9 @@ interface AuthContextType {
   session: Session | null;
   loading: boolean;
   isAdmin: boolean;
-  isPasskeyAuthed: boolean;
   signIn: (email: string, password: string) => Promise<{ error: AuthError | Error | null }>;
-  signInWithPasskey: (key: string) => boolean;
   signOut: () => Promise<void>;
+  updatePassword: (newPassword: string) => Promise<{ error: AuthError | Error | null }>;
   isConfigured: boolean;
 }
 
@@ -20,102 +19,142 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const [user, setUser] = useState<User | null>(null);
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
-  const [isPasskeyAuthed, setIsPasskeyAuthed] = useState<boolean>(() => {
-    return localStorage.getItem('portfolio_admin_passkey_auth') === 'true';
-  });
+
+  // Proactively purge any obsolete client-side bypass flags from prior versions
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        localStorage.removeItem('portfolio_admin_passkey_auth');
+        localStorage.removeItem('portfolio_admin_custom_passcode');
+        localStorage.removeItem('supabase_publishable_key');
+        localStorage.removeItem('supabase_anon_key');
+      } catch {
+        // ignore
+      }
+    }
+  }, []);
 
   useEffect(() => {
+    let isMounted = true;
+
     if (!isSupabaseConfigured) {
       setLoading(false);
       return;
     }
 
-    // Fetch initial session
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setSession(session);
-      setUser(session?.user ?? null);
-      setLoading(false);
-    }).catch((err) => {
-      console.error('Error fetching Supabase session:', err);
-      setLoading(false);
-    });
+    // Server-verified session initialization
+    supabase.auth
+      .getSession()
+      .then(({ data: { session }, error }) => {
+        if (!isMounted) return;
+        if (error) {
+          console.warn('Supabase session fetch notice:', error.message);
+          setSession(null);
+          setUser(null);
+        } else {
+          setSession(session);
+          setUser(session?.user ?? null);
+        }
+        setLoading(false);
+      })
+      .catch((err) => {
+        if (!isMounted) return;
+        console.error('Unexpected error fetching Supabase session:', err);
+        setSession(null);
+        setUser(null);
+        setLoading(false);
+      });
 
-    // Listen for auth state changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange((_event, session) => {
-      setSession(session);
-      setUser(session?.user ?? null);
+    // Listen to cryptographically validated server-side auth state events
+    const {
+      data: { subscription },
+    } = supabase.auth.onAuthStateChange((_event, newSession) => {
+      if (!isMounted) return;
+      setSession(newSession);
+      setUser(newSession?.user ?? null);
       setLoading(false);
     });
 
     return () => {
+      isMounted = false;
       subscription.unsubscribe();
     };
   }, []);
 
-  const signIn = async (email: string, password: string) => {
-    if (!isSupabaseConfigured) {
-      return { 
-        error: new Error('Supabase is not configured yet. Please provide your VITE_SUPABASE_ANON_KEY in .env.') 
-      };
-    }
-
-    try {
-      const { data, error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-
-      if (error) {
-        return { error };
+  const signIn = useCallback(
+    async (email: string, password: string): Promise<{ error: AuthError | Error | null }> => {
+      if (!isSupabaseConfigured) {
+        return {
+          error: new Error(
+            'Supabase is not configured yet. Please configure VITE_SUPABASE_ANON_KEY in your environment variables.'
+          ),
+        };
       }
 
-      setUser(data.user);
-      setSession(data.session);
-      setIsPasskeyAuthed(true);
-      localStorage.setItem('portfolio_admin_passkey_auth', 'true');
-      return { error: null };
-    } catch (err: any) {
-      return { error: err };
-    }
-  };
+      const cleanEmail = email.trim();
+      if (!cleanEmail || !password) {
+        return { error: new Error('Please enter both email and password.') };
+      }
 
-  const signInWithPasskey = (key: string): boolean => {
-    const cleanKey = key.trim().toLowerCase();
-    const validKeys = [
-      'prtf.mrb182',
-      'prft.mrb182',
-      'prtf-mrb182',
-      'prft-mrb182',
-      'prtf_mrb182',
-      'prft_mrb182',
-      '8888',
-      'admin',
-      'root',
-      'luxury2025',
-    ];
-    if (validKeys.includes(cleanKey)) {
-      setIsPasskeyAuthed(true);
-      localStorage.setItem('portfolio_admin_passkey_auth', 'true');
-      return true;
-    }
-    return false;
-  };
+      try {
+        const { data, error } = await supabase.auth.signInWithPassword({
+          email: cleanEmail,
+          password,
+        });
 
-  const signOut = async () => {
+        if (error) {
+          return { error };
+        }
+
+        setUser(data.user);
+        setSession(data.session);
+        return { error: null };
+      } catch (err: any) {
+        return { error: err instanceof Error ? err : new Error(String(err)) };
+      }
+    },
+    []
+  );
+
+  const signOut = useCallback(async () => {
     if (isSupabaseConfigured) {
       try {
         await supabase.auth.signOut();
       } catch (e) {
-        // ignore
+        console.warn('Sign out notice:', e);
       }
     }
     setUser(null);
     setSession(null);
-    setIsPasskeyAuthed(false);
-    localStorage.removeItem('portfolio_admin_passkey_auth');
-  };
+  }, []);
 
-  const isAdmin = Boolean(user) || isPasskeyAuthed;
+  const updatePassword = useCallback(
+    async (newPassword: string): Promise<{ error: AuthError | Error | null }> => {
+      if (!isSupabaseConfigured) {
+        return { error: new Error('Supabase is not configured.') };
+      }
+      if (!session || !user) {
+        return { error: new Error('Active authenticated session required.') };
+      }
+      if (!newPassword || newPassword.length < 8) {
+        return { error: new Error('Password must be at least 8 characters long.') };
+      }
+
+      try {
+        const { error } = await supabase.auth.updateUser({ password: newPassword });
+        if (error) {
+          return { error };
+        }
+        return { error: null };
+      } catch (err: any) {
+        return { error: err instanceof Error ? err : new Error(String(err)) };
+      }
+    },
+    [session, user]
+  );
+
+  // Administrative authority is strictly granted ONLY when a valid server-verified Supabase session exists
+  const isAdmin = Boolean(user && session);
 
   return (
     <AuthContext.Provider
@@ -124,10 +163,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         session,
         loading,
         isAdmin,
-        isPasskeyAuthed,
         signIn,
-        signInWithPasskey,
         signOut,
+        updatePassword,
         isConfigured: isSupabaseConfigured,
       }}
     >

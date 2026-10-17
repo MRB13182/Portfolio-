@@ -119,7 +119,7 @@ export const AdminSeoPage: React.FC = () => {
             <div>
               <div className="flex justify-between items-center mb-1.5">
                 <label className="text-xs font-mono font-medium opacity-80">
-                  Meta Title (<title>)
+                  Meta Title (&lt;title&gt;)
                 </label>
                 <span className={`text-[10px] font-mono ${metaTitle.length > 60 ? 'text-amber-400' : 'opacity-60'}`}>
                   {metaTitle.length} / 60 chars

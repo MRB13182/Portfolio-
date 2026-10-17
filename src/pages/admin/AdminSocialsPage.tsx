@@ -41,7 +41,7 @@ const SOCIAL_PRESETS = [
 
 export const AdminSocialsPage: React.FC = () => {
   const { isDark } = useTheme();
-  const { socials, refreshData } = usePortfolioData();
+  const { socials, addSocial, updateSocial, deleteSocial } = usePortfolioData();
   const { showToast } = useToast();
 
   const [editingSocial, setEditingSocial] = useState<Partial<SocialLinkRow> | null>(null);
@@ -78,9 +78,8 @@ export const AdminSocialsPage: React.FC = () => {
     e.stopPropagation();
     try {
       const updated = s.enabled === false ? true : false;
-      await socialService.update(s.id, { enabled: updated });
+      await updateSocial(s.id, { enabled: updated });
       await activityLogService.log('Social Updated', 'Social Links', `Toggled ${s.name} ${updated ? 'ON' : 'OFF'}`);
-      await refreshData();
       showToast(`${s.name} is now ${updated ? 'Enabled' : 'Disabled'}`, { type: 'success' });
     } catch (err: any) {
       showToast('Error updating link', { type: 'error', message: err.message });
@@ -102,15 +101,14 @@ export const AdminSocialsPage: React.FC = () => {
 
       const existing = socials.find((s) => s.id === editingSocial.id || s.name.toLowerCase() === editingSocial.name?.toLowerCase());
       if (existing) {
-        await socialService.update(existing.id, payload);
+        await updateSocial(existing.id || editingSocial.id!, payload);
         await activityLogService.log('Social Updated', 'Social Links', `Updated ${payload.name}`);
       } else {
-        await socialService.create(payload as any);
+        await addSocial(payload);
         await activityLogService.log('Social Added', 'Social Links', `Added ${payload.name}`);
       }
 
-      await refreshData();
-      showToast('Social channel saved in Supabase!', { type: 'success' });
+      showToast('Social channel saved successfully!', { type: 'success' });
       setEditingSocial(null);
     } catch (err: any) {
       showToast('Failed to save social link', { type: 'error', message: err.message });
@@ -122,9 +120,8 @@ export const AdminSocialsPage: React.FC = () => {
   const handleDelete = async (id: string, name?: string) => {
     if (!confirm(`Are you sure you want to delete ${name || 'this link'}?`)) return;
     try {
-      await socialService.delete(id);
+      await deleteSocial(id);
       await activityLogService.log('Social Deleted', 'Social Links', `Deleted ${name || id}`);
-      await refreshData();
       showToast('Social link removed', { type: 'info' });
       if (editingSocial?.id === id) setEditingSocial(null);
     } catch (err: any) {
@@ -171,9 +168,9 @@ export const AdminSocialsPage: React.FC = () => {
           Quick Preset Connectors
         </span>
         <div className="flex flex-wrap gap-2">
-          {SOCIAL_PRESETS.map((preset) => (
+          {SOCIAL_PRESETS.map((preset, idx) => (
             <button
-              key={preset.name}
+              key={`${preset.name}-${idx}`}
               onClick={() => handleStartCreate(preset)}
               className={`px-3 py-1.5 rounded-xl text-xs font-semibold border flex items-center gap-1.5 transition-all cursor-pointer ${
                 isDark
@@ -321,11 +318,11 @@ export const AdminSocialsPage: React.FC = () => {
 
       {/* Social Links List */}
       <div className="space-y-3">
-        {socials.map((link) => {
+        {socials.map((link, idx) => {
           const isEnabled = link.enabled !== false;
           return (
             <div
-              key={link.id || link.name}
+              key={link.id ? `${link.id}-${idx}` : `${link.name || 'social'}-${idx}`}
               className={`p-4 rounded-2xl border transition-all flex items-center justify-between gap-4 ${
                 isDark
                   ? 'bg-[#0A0A0C] border-white/10 hover:border-white/20'

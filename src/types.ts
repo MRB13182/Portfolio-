@@ -3,11 +3,15 @@ export type PdfThemeMode = 'light' | 'dark';
 export type PdfDownloadType = 'resume' | 'certificates';
 
 export interface SocialLink {
+  id?: string;
   name: string;
+  platform?: string;
   url: string;
   icon: string;
   color?: string;
   actionType?: 'link' | 'email' | 'whatsapp' | 'telegram';
+  enabled?: boolean;
+  is_active?: boolean;
 }
 
 export type SkillCategory =
@@ -89,6 +93,7 @@ export interface Certificate {
   expiryDate?: string;
   credentialId?: string;
   credentialUrl?: string;
+  verificationUrl?: string;
   skills?: string[];
   description?: string;
   verified?: boolean;

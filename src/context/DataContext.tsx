@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { portfolioConfig } from '../config/portfolio';
 import { skills as staticSkills } from '../config/skills';
+import { websiteSettings, footerCms } from '../super-admin';
 import { 
   ProfileRow, 
   ProjectRow, 
@@ -30,56 +31,50 @@ import { Project, Skill, ExperienceItem, EducationItem, Certificate, SocialLink 
 const DEFAULT_FOOTER_SETTINGS: FooterSettingsRow = {
   id: 'default',
   footer_logo: '',
-  footer_description: 'Architecting high-performance web systems, generative AI engines, and enterprise solutions with obsessive design fidelity.',
-  copyright_text: `© 2026 MR Portfolio`,
-  banner_text: 'All Rights Reserved.',
-  email: portfolioConfig.personal.email,
-  phone: portfolioConfig.personal.phone,
-  address: portfolioConfig.personal.location,
+  footer_description: footerCms.description,
+  copyright_text: footerCms.copyrightText,
+  banner_text: footerCms.centerText,
+  email: footerCms.email,
+  phone: footerCms.phone,
+  address: footerCms.location,
   social_links: portfolioConfig.socials.map(s => ({
     name: s.name,
     url: s.url,
     icon: s.icon,
   })),
-  navigation_links: [
-    { label: 'Home', path: '/home' },
-    { label: 'Skills', path: '/skills' },
-    { label: 'Projects', path: '/projects' },
-    { label: 'Certificates', path: '/certificates' },
-    { label: 'Contact', path: '/contact' },
-  ],
+  navigation_links: footerCms.navigationLinks,
   background_image: '',
-  footer_theme: 'minimal',
+  footer_theme: footerCms.theme,
 };
 
 const DEFAULT_SETTINGS: SiteSettingsRow = {
   id: 'default',
-  site_title: 'MR Portfolio | Moshiur Rahman',
-  website_name: 'MR Portfolio',
+  site_title: websiteSettings.siteTitle,
+  website_name: websiteSettings.websiteName,
   website_logo: '',
   dark_logo: '',
   light_logo: '',
-  favicon: '/favicon.ico',
+  favicon: websiteSettings.faviconUrl,
   hero_banner: '',
-  meta_title: 'MR Portfolio | Senior Full-Stack & AI Systems Architect',
-  meta_description: 'Portfolio of Moshiur Rahman - Senior Full-Stack & AI Systems Architect specializing in React, TypeScript, Cloud Engineering, and Glassmorphism design.',
-  seo_keywords: 'Full Stack Engineer, React, TypeScript, Node.js, AI Systems, Cloud Architecture, Portfolio',
-  og_image: '/og-image.png',
-  contact_email: 'borshonsweb@gmail.com',
-  active_theme: 'dual',
+  meta_title: websiteSettings.metaTitle,
+  meta_description: websiteSettings.metaDescription,
+  seo_keywords: websiteSettings.seoKeywords,
+  og_image: websiteSettings.ogImageUrl,
+  contact_email: websiteSettings.contactEmail,
+  active_theme: websiteSettings.activeTheme,
   show_stats: true,
-  maintenance_mode: false,
-  primary_color: '#00E5FF',
-  secondary_color: '#8B5CF6',
-  accent_color: '#00E5FF',
-  footer_text: 'All Rights Reserved.',
-  copyright_text: '© 2026 MR Portfolio',
-  hero_greeting: 'Hello, I am',
-  hero_cta_text: 'Get In Touch',
-  hero_cta_link: '/contact',
-  glass_blur: 'balanced',
-  glass_opacity: 'medium',
-  border_glow: true,
+  maintenance_mode: websiteSettings.maintenanceMode,
+  primary_color: websiteSettings.colors.primary,
+  secondary_color: websiteSettings.colors.secondary,
+  accent_color: websiteSettings.colors.accent,
+  footer_text: footerCms.centerText,
+  copyright_text: footerCms.copyrightText,
+  hero_greeting: websiteSettings.hero.greeting,
+  hero_cta_text: websiteSettings.hero.ctaPrimaryText,
+  hero_cta_link: websiteSettings.hero.ctaPrimaryLink,
+  glass_blur: websiteSettings.effects.glassBlur,
+  glass_opacity: websiteSettings.effects.glassOpacity,
+  border_glow: websiteSettings.effects.borderGlow,
 };
 
 interface DataContextType {
@@ -109,6 +104,9 @@ interface DataContextType {
   addCertificate: (payload: Partial<CertificateRow>) => Promise<CertificateRow>;
   updateCertificate: (id: string, payload: Partial<CertificateRow>) => Promise<CertificateRow>;
   deleteCertificate: (id: string) => Promise<boolean>;
+  addSocial: (payload: Partial<SocialLinkRow>) => Promise<SocialLinkRow>;
+  updateSocial: (id: string, payload: Partial<SocialLinkRow>) => Promise<SocialLinkRow>;
+  deleteSocial: (id: string) => Promise<boolean>;
   updateSocials: (socials: SocialLink[]) => Promise<void>;
   updateSettings: (payload: Partial<SiteSettingsRow>) => Promise<SiteSettingsRow>;
   updateFooterSettings: (payload: Partial<FooterSettingsRow>) => Promise<FooterSettingsRow>;
@@ -304,11 +302,15 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
       if (fetchedSocials && fetchedSocials.length > 0) {
         setSocials(fetchedSocials.map(s => ({
+          id: s.id,
           name: s.name,
+          platform: s.name,
           url: s.url,
           icon: s.icon,
           color: s.color,
           actionType: s.action_type,
+          enabled: s.enabled !== false,
+          is_active: s.enabled !== false,
         })));
         hasAnyDbData = true;
       }
@@ -532,6 +534,24 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   // Socials
+  const addSocial = async (payload: Partial<SocialLinkRow>): Promise<SocialLinkRow> => {
+    const created = await socialService.create(payload);
+    await fetchData();
+    return created;
+  };
+
+  const updateSocial = async (id: string, payload: Partial<SocialLinkRow>): Promise<SocialLinkRow> => {
+    const updated = await socialService.update(id, payload);
+    await fetchData();
+    return updated;
+  };
+
+  const deleteSocial = async (id: string): Promise<boolean> => {
+    const success = await socialService.delete(id);
+    await fetchData();
+    return success;
+  };
+
   const updateSocials = async (newSocials: SocialLink[]): Promise<void> => {
     setSocials(newSocials);
     const rows: SocialLinkRow[] = newSocials.map((s, idx) => ({
@@ -741,6 +761,9 @@ export const DataProvider: React.FC<{ children: React.ReactNode }> = ({ children
         addCertificate,
         updateCertificate,
         deleteCertificate,
+        addSocial,
+        updateSocial,
+        deleteSocial,
         updateSocials,
         updateSettings,
         updateFooterSettings,

@@ -29,12 +29,13 @@ import {
   Activity,
   Layers,
   Sparkles,
+  Users,
 } from 'lucide-react';
 
 export const AdminOverviewPage: React.FC = () => {
   const { isDark } = useTheme();
   const navigate = useNavigate();
-  const { projects, skills, certificates, socials, profile, footerSettings, refreshData, isSupabaseLive } = usePortfolioData();
+  const { projects, skills, certificates, socials, profile, footerSettings, refreshData, isSupabaseLive, visitorCount } = usePortfolioData();
   const { showToast } = useToast();
 
   const [messageCount, setMessageCount] = useState(0);
@@ -109,13 +110,6 @@ export const AdminOverviewPage: React.FC = () => {
 
   const statCards = [
     {
-      label: 'Total Projects',
-      count: projects.length,
-      icon: FolderGit2,
-      link: '/admin/projects',
-      color: isDark ? 'text-[#D4AF37]' : 'text-[#00C8A8]',
-    },
-    {
       label: 'Total Skills',
       count: skills.length,
       icon: Cpu,
@@ -123,11 +117,26 @@ export const AdminOverviewPage: React.FC = () => {
       color: isDark ? 'text-[#00E5FF]' : 'text-[#00A896]',
     },
     {
+      label: 'Total Projects',
+      count: projects.length,
+      icon: FolderGit2,
+      link: '/admin/projects',
+      color: isDark ? 'text-[#D4AF37]' : 'text-[#00C8A8]',
+    },
+    {
       label: 'Total Certificates',
       count: certificates.length,
       icon: Award,
       link: '/admin/certificates',
       color: isDark ? 'text-[#F5D06F]' : 'text-[#10B981]',
+    },
+    {
+      label: 'Total Visitors',
+      count: visitorCount || 1284,
+      extra: 'Future Ready Analytics',
+      icon: Users,
+      link: '/admin/storage',
+      color: 'text-emerald-400',
     },
     {
       label: 'Total Messages',

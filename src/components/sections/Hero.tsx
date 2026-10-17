@@ -162,7 +162,7 @@ export const Hero: React.FC = () => {
                     const levelNum = typeof skill.level === 'number' ? skill.level : 90;
                     return (
                       <div
-                        key={skill.name || idx}
+                        key={`${skill.id || skill.name || 'skill'}-${idx}`}
                         className={`p-3 rounded-2xl border backdrop-blur-xl transition-all duration-300 hover:-translate-y-0.5 ${
                           isDark
                             ? 'bg-[#121217]/60 border-white/10 hover:border-[#00E5FF]/50 hover:shadow-[0_0_15px_rgba(0,229,255,0.2)]'

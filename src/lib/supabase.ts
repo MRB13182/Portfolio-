@@ -4,19 +4,13 @@ import { createClient } from '@supabase/supabase-js';
 export const SUPABASE_PROJECT_ID = 'egpwwzkwwxsrctzyhpnv';
 export const supabaseUrl = 'https://egpwwzkwwxsrctzyhpnv.supabase.co';
 
-// Read publishable / anon key safely from Vite environment variables or localStorage
+// Read publishable / anon key strictly from Vite environment variables
 const getInitialKey = (): string => {
-  if (typeof window !== 'undefined') {
-    const saved = localStorage.getItem('supabase_publishable_key') || localStorage.getItem('supabase_anon_key');
-    if (saved && saved.trim() && !saved.includes('YOUR_')) {
-      return saved.trim();
-    }
-  }
   return (
     import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY ||
     import.meta.env.VITE_SUPABASE_ANON_KEY || 
     ''
-  );
+  ).trim();
 };
 
 export const supabaseAnonKey = getInitialKey();
@@ -32,21 +26,8 @@ const DUMMY_KEYS = [
 export const isSupabaseConfigured = Boolean(
   supabaseUrl && 
   supabaseAnonKey && 
-  !DUMMY_KEYS.includes(supabaseAnonKey.trim())
+  !DUMMY_KEYS.includes(supabaseAnonKey)
 );
-
-export function savePublishableKey(key: string): void {
-  if (typeof window !== 'undefined') {
-    if (key.trim()) {
-      localStorage.setItem('supabase_publishable_key', key.trim());
-      localStorage.setItem('supabase_anon_key', key.trim());
-    } else {
-      localStorage.removeItem('supabase_publishable_key');
-      localStorage.removeItem('supabase_anon_key');
-    }
-    window.location.reload();
-  }
-}
 
 // Helper to determine if an error is due to missing tables in schema cache
 export function isTableMissingError(error: any): boolean {

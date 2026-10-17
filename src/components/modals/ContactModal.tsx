@@ -383,11 +383,11 @@ export const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) =
                     Instant Social Connect
                   </h4>
                   <div className="grid grid-cols-2 gap-2.5">
-                    {portfolioConfig.socials.map((social) => {
+                    {portfolioConfig.socials.map((social, idx) => {
                       const Icon = getSocialIcon(social.icon);
                       return (
                         <a
-                          key={social.name}
+                          key={`${social.name}-${idx}`}
                           href={social.url}
                           target="_blank"
                           rel="noopener noreferrer"

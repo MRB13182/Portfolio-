@@ -3,7 +3,6 @@ import { useTheme } from '../../context/ThemeContext';
 import { portfolioConfig } from '../../config/portfolio';
 import { usePortfolioData } from '../../context/DataContext';
 import { SafeImage } from '../common/SafeImage';
-import { AdminTrigger } from '../common/AdminTrigger';
 import { 
   Sparkles, 
   Cpu, 
@@ -91,15 +90,6 @@ export const About: React.FC = () => {
                 : 'bg-white/85 border-white/60 shadow-[0_12px_35px_rgba(0,229,255,0.08)] text-slate-800'
             }`}
           >
-            {/* Tastefully Integrated Minimal Admin Icon (Displayed ONLY here once) */}
-            <div className="absolute top-6 right-6 z-20 flex items-center gap-2">
-              <span className={`text-[10px] font-mono tracking-widest uppercase opacity-40 ${
-                isDark ? 'text-[#94A3B8]' : 'text-slate-400'
-              }`}>
-                SEC
-              </span>
-              <AdminTrigger />
-            </div>
 
             <div>
               {/* Member Profile Image */}

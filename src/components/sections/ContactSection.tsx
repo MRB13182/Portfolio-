@@ -240,9 +240,9 @@ export const ContactSection: React.FC = () => {
               </span>
 
               <div className="flex flex-wrap gap-2.5">
-                {socialLinks.map((s: any) => (
+                {socialLinks.map((s: any, idx: number) => (
                   <a
-                    key={s.platform || s.url}
+                    key={`${s.platform || s.url || 'social'}-${idx}`}
                     href={s.url}
                     target="_blank"
                     rel="noopener noreferrer"

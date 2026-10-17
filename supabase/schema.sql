@@ -182,7 +182,7 @@ CREATE TABLE IF NOT EXISTS public.site_settings (
 );
 
 -- -----------------------------------------------------------------------------
--- 10. ADMIN USERS TABLE
+-- 10. ADMIN USERS TABLE & HELPER FUNCTIONS
 -- -----------------------------------------------------------------------------
 CREATE TABLE IF NOT EXISTS public.admin_users (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
@@ -190,6 +190,26 @@ CREATE TABLE IF NOT EXISTS public.admin_users (
   role TEXT DEFAULT 'admin',
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
+
+-- Seed verified administrator email
+INSERT INTO public.admin_users (email, role)
+VALUES ('borshonsweb@gmail.com', 'admin')
+ON CONFLICT (email) DO NOTHING;
+
+-- Secure helper function to verify administrator authority
+CREATE OR REPLACE FUNCTION public.is_admin()
+RETURNS BOOLEAN
+LANGUAGE sql
+SECURITY DEFINER
+SET search_path = public
+STABLE
+AS $$
+  SELECT EXISTS (
+    SELECT 1 FROM public.admin_users
+    WHERE LOWER(email) = LOWER(auth.jwt() ->> 'email')
+       OR id = auth.uid()
+  );
+$$;
 
 -- -----------------------------------------------------------------------------
 -- ROW LEVEL SECURITY (RLS) POLICIES
@@ -217,22 +237,22 @@ CREATE POLICY "Public certificates read" ON public.certificates FOR SELECT USING
 CREATE POLICY "Public social_links read" ON public.social_links FOR SELECT USING (true);
 CREATE POLICY "Public site_settings read" ON public.site_settings FOR SELECT USING (true);
 
--- Authenticated ADMIN write policies for portfolio content
-CREATE POLICY "Admin profiles manage" ON public.profiles FOR ALL TO authenticated USING (true) WITH CHECK (true);
-CREATE POLICY "Admin projects manage" ON public.projects FOR ALL TO authenticated USING (true) WITH CHECK (true);
-CREATE POLICY "Admin skills manage" ON public.skills FOR ALL TO authenticated USING (true) WITH CHECK (true);
-CREATE POLICY "Admin experience manage" ON public.experience FOR ALL TO authenticated USING (true) WITH CHECK (true);
-CREATE POLICY "Admin education manage" ON public.education FOR ALL TO authenticated USING (true) WITH CHECK (true);
-CREATE POLICY "Admin certificates manage" ON public.certificates FOR ALL TO authenticated USING (true) WITH CHECK (true);
-CREATE POLICY "Admin social_links manage" ON public.social_links FOR ALL TO authenticated USING (true) WITH CHECK (true);
-CREATE POLICY "Admin site_settings manage" ON public.site_settings FOR ALL TO authenticated USING (true) WITH CHECK (true);
-CREATE POLICY "Admin users manage" ON public.admin_users FOR ALL TO authenticated USING (true) WITH CHECK (true);
+-- Authenticated ADMIN write policies for portfolio content (strictly checking public.is_admin())
+CREATE POLICY "Admin profiles manage" ON public.profiles FOR ALL TO authenticated USING (public.is_admin()) WITH CHECK (public.is_admin());
+CREATE POLICY "Admin projects manage" ON public.projects FOR ALL TO authenticated USING (public.is_admin()) WITH CHECK (public.is_admin());
+CREATE POLICY "Admin skills manage" ON public.skills FOR ALL TO authenticated USING (public.is_admin()) WITH CHECK (public.is_admin());
+CREATE POLICY "Admin experience manage" ON public.experience FOR ALL TO authenticated USING (public.is_admin()) WITH CHECK (public.is_admin());
+CREATE POLICY "Admin education manage" ON public.education FOR ALL TO authenticated USING (public.is_admin()) WITH CHECK (public.is_admin());
+CREATE POLICY "Admin certificates manage" ON public.certificates FOR ALL TO authenticated USING (public.is_admin()) WITH CHECK (public.is_admin());
+CREATE POLICY "Admin social_links manage" ON public.social_links FOR ALL TO authenticated USING (public.is_admin()) WITH CHECK (public.is_admin());
+CREATE POLICY "Admin site_settings manage" ON public.site_settings FOR ALL TO authenticated USING (public.is_admin()) WITH CHECK (public.is_admin());
+CREATE POLICY "Admin users manage" ON public.admin_users FOR ALL TO authenticated USING (public.is_admin()) WITH CHECK (public.is_admin());
 
 -- Contact Messages: Anyone can INSERT, only Authenticated Admin can READ / UPDATE / DELETE
 CREATE POLICY "Public contact messages insert" ON public.contact_messages FOR INSERT WITH CHECK (true);
-CREATE POLICY "Admin contact messages select" ON public.contact_messages FOR SELECT TO authenticated USING (true);
-CREATE POLICY "Admin contact messages update" ON public.contact_messages FOR UPDATE TO authenticated USING (true);
-CREATE POLICY "Admin contact messages delete" ON public.contact_messages FOR DELETE TO authenticated USING (true);
+CREATE POLICY "Admin contact messages select" ON public.contact_messages FOR SELECT TO authenticated USING (public.is_admin());
+CREATE POLICY "Admin contact messages update" ON public.contact_messages FOR UPDATE TO authenticated USING (public.is_admin());
+CREATE POLICY "Admin contact messages delete" ON public.contact_messages FOR DELETE TO authenticated USING (public.is_admin());
 
 -- -----------------------------------------------------------------------------
 -- STORAGE BUCKETS SETUP
@@ -247,7 +267,7 @@ VALUES
 ON CONFLICT (id) DO UPDATE SET public = true;
 
 -- Storage RLS Policies
-CREATE POLICY "Public Storage Read" ON storage.objects FOR SELECT USING (true);
-CREATE POLICY "Admin Storage Insert" ON storage.objects FOR INSERT TO authenticated WITH CHECK (true);
-CREATE POLICY "Admin Storage Update" ON storage.objects FOR UPDATE TO authenticated USING (true);
-CREATE POLICY "Admin Storage Delete" ON storage.objects FOR DELETE TO authenticated USING (true);
+CREATE POLICY "Public Storage Read" ON storage.objects FOR SELECT USING (bucket_id IN ('profile-images', 'project-images', 'certificate-images', 'logos', 'resume-files'));
+CREATE POLICY "Admin Storage Insert" ON storage.objects FOR INSERT TO authenticated WITH CHECK (public.is_admin());
+CREATE POLICY "Admin Storage Update" ON storage.objects FOR UPDATE TO authenticated USING (public.is_admin());
+CREATE POLICY "Admin Storage Delete" ON storage.objects FOR DELETE TO authenticated USING (public.is_admin());

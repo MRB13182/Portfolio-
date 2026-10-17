@@ -26,6 +26,10 @@ import {
   Search,
   Sparkles,
   Shield,
+  Palette,
+  FileText,
+  Home,
+  MessageSquare,
 } from 'lucide-react';
 import { isSupabaseConfigured } from '../../lib/supabase';
 
@@ -62,17 +66,24 @@ export const AdminLayout: React.FC<AdminLayoutProps> = ({ children }) => {
   };
 
   const navItems = [
-    { label: 'Overview', path: '/admin', icon: LayoutDashboard },
-    { label: 'Profile & Bio', path: '/admin/profile', icon: User },
-    { label: 'Projects', path: '/admin/projects', icon: FolderGit2 },
-    { label: 'Skills Matrix', path: '/admin/skills', icon: Cpu },
-    { label: 'Experience', path: '/admin/experience', icon: Briefcase },
-    { label: 'Education', path: '/admin/education', icon: GraduationCap },
-    { label: 'Certificates', path: '/admin/certificates', icon: Award },
-    { label: 'Social Links', path: '/admin/socials', icon: Share2 },
+    { label: 'Dashboard', path: '/admin', icon: LayoutDashboard },
+    { label: 'Profile Manager', path: '/admin/profile', icon: User },
+    { label: 'Branding Manager', path: '/admin/branding', icon: Sparkles },
+    { label: 'Skills Manager', path: '/admin/skills', icon: Cpu },
+    { label: 'Projects Manager', path: '/admin/projects', icon: FolderGit2 },
+    { label: 'Certificates Manager', path: '/admin/certificates', icon: Award },
+    { label: 'Resume Manager', path: '/admin/resume', icon: FileText },
+    { label: 'Social Media Manager', path: '/admin/socials', icon: Share2 },
+    { label: 'Contact Manager', path: '/admin/contact', icon: Mail },
+    { label: 'Homepage Manager', path: '/admin/homepage', icon: Home },
+    { label: 'Theme Manager', path: '/admin/theme', icon: Palette },
+    { label: 'SEO Manager', path: '/admin/seo', icon: Search },
+    { label: 'Testimonial Manager', path: '/admin/testimonials', icon: MessageSquare },
+    { label: 'Security & Passcode', path: '/admin/security', icon: Shield },
+    { label: 'Storage & Database', path: '/admin/storage', icon: Database },
     { label: 'Messages Inbox', path: '/admin/messages', icon: Mail, badge: unreadCount },
-    { label: 'Footer CMS', path: '/admin/footer', icon: PanelBottom },
-    { label: 'Website Settings', path: '/admin/settings', icon: Settings },
+    { label: 'Footer Settings', path: '/admin/footer', icon: PanelBottom },
+    { label: 'Advanced Settings', path: '/admin/settings', icon: Settings },
   ];
 
   const filteredNavItems = navItems.filter((item) =>
