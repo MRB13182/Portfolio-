@@ -15,6 +15,7 @@ import { motion, AnimatePresence } from 'motion/react';
 
 interface SkillModalProps {
   skill: Skill | null;
+  isOpen?: boolean;
   onClose: () => void;
   onSelectProject?: (projectName: string) => void;
 }
@@ -45,8 +46,12 @@ export const SkillModal: React.FC<SkillModalProps> = ({ skill, onClose }) => {
 
   return (
     <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto" role="dialog" aria-modal="true" aria-label={skill.name}>
-        
+      <div 
+        className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 overflow-y-auto" 
+        role="dialog" 
+        aria-modal="true" 
+        aria-label={skill.name}
+      >
         {/* Backdrop */}
         <motion.div
           initial={{ opacity: 0 }}
@@ -60,28 +65,21 @@ export const SkillModal: React.FC<SkillModalProps> = ({ skill, onClose }) => {
 
         {/* Modal Window */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.92, y: 20 }}
+          initial={{ opacity: 0, scale: 0.95, y: 20 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.92, y: 20 }}
+          exit={{ opacity: 0, scale: 0.95, y: 20 }}
           transition={{ type: 'spring', damping: 26, stiffness: 320 }}
           id="skill-modal-content"
-          style={{
-            backdropFilter: 'blur(24px)',
-            WebkitBackdropFilter: 'blur(24px)',
-            borderRadius: '32px',
-          }}
-          className={`relative w-full max-w-xl p-6 sm:p-8 border shadow-2xl z-10 overflow-hidden ${
+          className={`relative w-full max-w-xl p-6 sm:p-8 rounded-2xl border backdrop-blur-2xl shadow-2xl z-10 overflow-hidden ${
             isDark
-              ? 'bg-[#0A0A0A] border-[rgba(212,175,55,0.35)] text-[#FFFFFF] shadow-[0_0_80px_rgba(123,44,255,0.35)]'
-              : 'bg-white/95 border-[rgba(18,214,160,0.3)] text-slate-800 shadow-[0_20px_60px_rgba(18,214,160,0.18)]'
+              ? 'bg-[#111722]/95 border-white/10 text-[#F8FAFC] shadow-[0_16px_50px_rgba(0,0,0,0.8)]'
+              : 'bg-white/95 border-slate-200 shadow-2xl text-slate-800'
           }`}
         >
-          {/* Ambient Glow in Modal */}
+          {/* Subtle Ambient Glow */}
           <div 
-            style={{
-              backgroundColor: skill.accentColor || (isDark ? '#7B2CFF' : '#12D6A0'),
-            }}
-            className="absolute -top-24 -right-24 w-52 h-52 rounded-full blur-3xl opacity-20 pointer-events-none" 
+            aria-hidden="true"
+            className="absolute -top-24 -right-24 w-52 h-52 rounded-full blur-3xl opacity-20 pointer-events-none bg-gradient-to-tr from-[#22D3EE] to-[#8B5CF6]" 
           />
 
           {/* Close Button */}
@@ -89,52 +87,46 @@ export const SkillModal: React.FC<SkillModalProps> = ({ skill, onClose }) => {
             onClick={onClose}
             id="skill-modal-close-btn"
             aria-label="Close skill details"
-            className={`absolute top-5 right-5 p-2 rounded-full border transition-all cursor-pointer hover:scale-105 ${
+            className={`absolute top-4 right-4 z-20 p-2 rounded-xl border transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-[#22D3EE] focus-visible:outline-none ${
               isDark
-                ? 'border-[rgba(212,175,55,0.3)] bg-[#0B0B0F] text-[#FFFFFF] hover:text-[#F5D06F] hover:border-[#D4AF37]'
-                : 'border-slate-200 bg-slate-100 text-slate-600 hover:text-slate-900 hover:border-[#12D6A0]'
+                ? 'border-white/10 bg-[#080B12]/80 text-[#A1AAB8] hover:text-white hover:border-[#22D3EE]/40'
+                : 'border-slate-200 bg-white/90 text-slate-600 hover:text-slate-900 hover:border-[#0891B2]/40'
             }`}
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4" />
           </button>
 
           {/* Header */}
           <div className="flex items-start gap-4 mb-6 pr-10">
             {/* Tech Logo Frame */}
             <div 
-              style={{
-                borderRadius: '24px',
-                borderColor: skill.accentColor 
-                  ? `${skill.accentColor}40` 
-                  : (isDark ? 'rgba(212,175,55,0.3)' : 'rgba(18,214,160,0.3)'),
-              }}
-              className={`w-16 h-16 rounded-[24px] flex items-center justify-center shrink-0 border shadow-lg ${
-                isDark ? 'bg-[#121218]' : 'bg-slate-50'
+              className={`w-14 h-14 rounded-xl flex items-center justify-center shrink-0 border shadow-xs ${
+                isDark ? 'bg-white/[0.04] border-white/10' : 'bg-slate-50 border-slate-200'
               }`}
             >
-              <TechLogo logo={skill.logo || skill.id} size={36} className="w-9 h-9" />
+              <TechLogo logo={skill.logo || skill.id} size={32} className="w-8 h-8" />
             </div>
 
             <div>
               <div className="flex flex-wrap items-center gap-2 mb-1.5">
-                <span className={`text-[11px] font-bold uppercase tracking-wider px-2.5 py-0.5 rounded-full border ${
+                <span className={`text-[10px] font-mono font-semibold uppercase tracking-wider px-2 py-0.5 rounded-md border ${
                   isDark
-                    ? 'bg-[#7B2CFF]/30 text-[#D4AF37] border-[#D4AF37]/30'
-                    : 'bg-emerald-50 text-[#12D6A0] border-emerald-200'
+                    ? 'bg-[#22D3EE]/10 text-[#22D3EE] border-[#22D3EE]/25'
+                    : 'bg-cyan-50 text-[#0891B2] border-cyan-200'
                 }`}>
                   {skill.category}
                 </span>
                 
-                <span className={`text-xs font-semibold flex items-center gap-1 ${
-                  isDark ? 'text-slate-300' : 'text-slate-500'
+                <span className={`text-xs font-mono flex items-center gap-1 ${
+                  isDark ? 'text-[#A1AAB8]' : 'text-slate-500'
                 }`}>
-                  <Clock className={`w-3.5 h-3.5 ${isDark ? 'text-[#D4AF37]' : 'text-[#12D6A0]'}`} />
-                  Experience: {experienceValue}
+                  <Clock className="w-3.5 h-3.5 text-[#22D3EE]" />
+                  <span>{experienceValue}</span>
                 </span>
               </div>
               
-              <h3 className={`text-2xl sm:text-3xl font-extrabold tracking-tight ${
-                isDark ? 'text-[#FFFFFF]' : 'text-slate-900'
+              <h3 className={`text-2xl font-black tracking-tight ${
+                isDark ? 'text-white' : 'text-slate-900'
               }`}>
                 {skill.name}
               </h3>
@@ -143,62 +135,48 @@ export const SkillModal: React.FC<SkillModalProps> = ({ skill, onClose }) => {
 
           {/* Proficiency Mastery Bar */}
           <div 
-            style={{
-              borderRadius: '24px',
-            }}
-            className={`mb-6 p-4 rounded-[24px] border ${
+            className={`mb-6 p-4 rounded-xl border ${
               isDark
-                ? 'bg-[#0B0B0F]/90 border-[rgba(212,175,55,0.25)]'
+                ? 'bg-white/[0.02] border-white/[0.07]'
                 : 'bg-slate-50 border-slate-200'
             }`}
           >
             <div className="flex justify-between items-center mb-2">
-              <span className={`text-xs font-bold uppercase tracking-wider flex items-center gap-1.5 ${
-                isDark ? 'text-[#F5D06F]' : 'text-slate-700'
+              <span className={`text-xs font-mono font-semibold uppercase tracking-wider flex items-center gap-1.5 ${
+                isDark ? 'text-[#22D3EE]' : 'text-[#0891B2]'
               }`}>
-                <BarChart3 className={`w-4 h-4 ${isDark ? 'text-[#D4AF37]' : 'text-[#12D6A0]'}`} />
-                Technical Mastery Level
+                <BarChart3 className="w-4 h-4" />
+                Technical Mastery
               </span>
-              <span className={`text-base font-black font-mono ${
-                isDark ? 'text-[#F5D06F]' : 'text-[#12D6A0]'
+              <span className={`text-sm font-mono font-bold tabular-nums ${
+                isDark ? 'text-white' : 'text-slate-900'
               }`}>
                 {skill.level}%
               </span>
             </div>
             
-            <div className={`w-full h-3.5 rounded-full overflow-hidden p-0.5 border ${
-              isDark
-                ? 'bg-[#050505] border-[rgba(212,175,55,0.2)]'
-                : 'bg-slate-200/70 border-slate-300'
+            <div className={`w-full h-2 rounded-full overflow-hidden border ${
+              isDark ? 'bg-[#080B12] border-white/10' : 'bg-slate-200 border-slate-300'
             }`}>
               <motion.div
                 initial={{ width: 0 }}
                 animate={{ width: `${skill.level}%` }}
                 transition={{ duration: 0.8, ease: 'easeOut' }}
-                style={{
-                  backgroundColor: skill.accentColor || undefined,
-                }}
-                className={`h-full rounded-full ${
-                  !skill.accentColor
-                    ? isDark
-                      ? 'bg-gradient-to-r from-[#7B2CFF] via-[#D4AF37] to-[#F5D06F]'
-                      : 'bg-gradient-to-r from-[#12D6A0] to-[#0EB385]'
-                    : ''
-                }`}
+                className="h-full rounded-full bg-gradient-to-r from-[#22D3EE] to-[#8B5CF6]"
               />
             </div>
           </div>
 
           {/* Detailed Description */}
           <div className="mb-6">
-            <h4 className={`text-xs font-bold uppercase tracking-wider mb-2 flex items-center gap-1.5 ${
-              isDark ? 'text-[#F5D06F]' : 'text-slate-700'
+            <h4 className={`text-xs font-mono font-semibold uppercase tracking-wider mb-2 flex items-center gap-1.5 ${
+              isDark ? 'text-[#22D3EE]' : 'text-[#0891B2]'
             }`}>
-              <Layers className={`w-3.5 h-3.5 ${isDark ? 'text-[#D4AF37]' : 'text-[#12D6A0]'}`} />
-              Architectural Overview &amp; Usage
+              <Layers className="w-3.5 h-3.5" />
+              Architectural Overview
             </h4>
-            <p className={`text-sm sm:text-base leading-relaxed ${
-              isDark ? 'text-[#A1A1AA]' : 'text-slate-600'
+            <p className={`text-xs sm:text-sm leading-relaxed ${
+              isDark ? 'text-[#A1AAB8]' : 'text-slate-600'
             }`}>
               {skill.description}
             </p>
@@ -207,8 +185,8 @@ export const SkillModal: React.FC<SkillModalProps> = ({ skill, onClose }) => {
           {/* Key Strengths / Highlights */}
           {highlights.length > 0 && (
             <div className="mb-6">
-              <h4 className={`text-xs font-bold uppercase tracking-wider mb-2 ${
-                isDark ? 'text-[#F5D06F]' : 'text-slate-700'
+              <h4 className={`text-xs font-mono font-semibold uppercase tracking-wider mb-2.5 ${
+                isDark ? 'text-[#22D3EE]' : 'text-[#0891B2]'
               }`}>
                 Core Strengths &amp; Implementations
               </h4>
@@ -216,15 +194,13 @@ export const SkillModal: React.FC<SkillModalProps> = ({ skill, onClose }) => {
                 {highlights.map((highlight, idx) => (
                   <div 
                     key={idx}
-                    className={`flex items-center gap-2 text-xs font-medium p-2.5 rounded-2xl border ${
+                    className={`flex items-center gap-2 text-xs p-2.5 rounded-lg border ${
                       isDark
-                        ? 'text-[#FFFFFF] bg-[#121218] border-[rgba(212,175,55,0.2)]'
+                        ? 'text-[#F8FAFC] bg-white/[0.02] border-white/[0.06]'
                         : 'text-slate-700 bg-slate-50 border-slate-200'
                     }`}
                   >
-                    <CheckCircle2 className={`w-3.5 h-3.5 shrink-0 ${
-                      isDark ? 'text-[#D4AF37]' : 'text-[#12D6A0]'
-                    }`} />
+                    <CheckCircle2 className="w-3.5 h-3.5 text-[#22D3EE] shrink-0" />
                     <span>{highlight}</span>
                   </div>
                 ))}
@@ -234,24 +210,23 @@ export const SkillModal: React.FC<SkillModalProps> = ({ skill, onClose }) => {
 
           {/* Projects Using This Skill */}
           {projectsList.length > 0 && (
-            <div>
-              <h4 className={`text-xs font-bold uppercase tracking-wider mb-2.5 flex items-center gap-1.5 ${
-                isDark ? 'text-[#F5D06F]' : 'text-slate-700'
+            <div className="mb-6">
+              <h4 className={`text-xs font-mono font-semibold uppercase tracking-wider mb-2.5 flex items-center gap-1.5 ${
+                isDark ? 'text-[#22D3EE]' : 'text-[#0891B2]'
               }`}>
-                <FolderGit2 className={`w-3.5 h-3.5 ${isDark ? 'text-[#D4AF37]' : 'text-[#12D6A0]'}`} />
-                Projects Powered by {skill.name}
+                <FolderGit2 className="w-3.5 h-3.5" />
+                Featured In Projects
               </h4>
-              <div className="flex flex-wrap gap-2">
+              <div className="flex flex-wrap gap-1.5">
                 {projectsList.map((proj, idx) => (
                   <span
                     key={idx}
-                    className={`inline-flex items-center gap-1 text-xs font-semibold px-3 py-1.5 rounded-xl border transition-all ${
+                    className={`inline-flex items-center gap-1 text-xs font-mono px-2.5 py-1 rounded-md border ${
                       isDark
-                        ? 'bg-[#121218] border-[rgba(212,175,55,0.3)] text-[#F5D06F] shadow-[0_0_10px_rgba(212,175,55,0.1)]'
-                        : 'bg-emerald-50 border-emerald-200 text-[#12D6A0] shadow-sm'
+                        ? 'bg-white/[0.04] border-white/10 text-white'
+                        : 'bg-slate-100 border-slate-200 text-slate-800'
                     }`}
                   >
-                    <Sparkles className={`w-3 h-3 ${isDark ? 'text-[#D4AF37]' : 'text-[#12D6A0]'}`} />
                     <span>{proj}</span>
                   </span>
                 ))}
@@ -260,17 +235,13 @@ export const SkillModal: React.FC<SkillModalProps> = ({ skill, onClose }) => {
           )}
 
           {/* Bottom Action */}
-          <div className={`mt-8 pt-4 border-t flex justify-end ${
-            isDark ? 'border-[rgba(212,175,55,0.2)]' : 'border-slate-200'
+          <div className={`pt-4 border-t flex justify-end ${
+            isDark ? 'border-white/[0.08]' : 'border-slate-200'
           }`}>
             <button
               onClick={onClose}
               id="skill-modal-done-btn"
-              className={`px-6 py-2.5 rounded-2xl text-xs font-bold transition-all cursor-pointer ${
-                isDark
-                  ? 'bg-gradient-to-r from-[#7B2CFF] to-[#D4AF37] text-white hover:shadow-[0_0_20px_rgba(212,175,55,0.4)]'
-                  : 'bg-gradient-to-r from-[#12D6A0] to-[#0EB385] text-slate-950 hover:shadow-[0_4px_20px_rgba(18,214,160,0.3)]'
-              }`}
+              className="px-5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer bg-gradient-to-r from-[#22D3EE] to-[#8B5CF6] text-black font-extrabold hover:opacity-95 shadow-xs focus-visible:ring-2 focus-visible:ring-[#22D3EE] focus-visible:outline-none"
             >
               Done
             </button>

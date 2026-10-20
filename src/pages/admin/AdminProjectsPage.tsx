@@ -215,7 +215,7 @@ export const AdminProjectsPage: React.FC = () => {
         <div>
           <div className="flex items-center gap-2 mb-1">
             <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-mono uppercase tracking-widest border ${
-              isDark ? 'bg-[#D4AF37]/10 text-[#F5D76E] border-[#D4AF37]/30' : 'bg-emerald-100/50 text-[#00A896] border-[#00E5FF]/30'
+              isDark ? 'bg-[#22D3EE]/10 text-[#22D3EE] border-[#22D3EE]/30' : 'bg-cyan-50 text-[#0891B2] border-cyan-200'
             }`}>
               Engineering Showcase
             </span>
@@ -228,11 +228,7 @@ export const AdminProjectsPage: React.FC = () => {
 
         <button
           onClick={handleStartCreate}
-          className={`px-4 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer shadow-lg self-start sm:self-auto ${
-            isDark
-              ? 'bg-gradient-to-r from-[#D4AF37] to-[#F5D06F] text-black hover:opacity-90 shadow-[0_0_20px_rgba(212,175,55,0.25)]'
-              : 'bg-gradient-to-r from-[#00E5FF] to-[#00C8A8] text-slate-950 hover:opacity-90 shadow-[0_4px_15px_rgba(0,229,255,0.3)]'
-          }`}
+          className="px-4 py-2.5 rounded-xl text-xs font-bold transition-all flex items-center gap-2 cursor-pointer shadow-lg self-start sm:self-auto bg-gradient-to-r from-[#22D3EE] to-[#8B5CF6] text-black hover:opacity-90"
         >
           <Plus className="w-4 h-4" />
           <span>Add New Project</span>
@@ -244,7 +240,7 @@ export const AdminProjectsPage: React.FC = () => {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           <form onSubmit={handleSave} className="lg:col-span-7 space-y-6">
             <div className={`p-6 rounded-3xl border space-y-5 ${
-              isDark ? 'bg-[#0A0A0C] border-[#D4AF37]/30' : 'bg-white border-[#00C8A8]/30 shadow-md'
+              isDark ? 'bg-[#111722] border-white/10' : 'bg-white border-slate-200 shadow-md'
             }`}>
               <div className="flex items-center justify-between pb-3 border-b border-white/10">
                 <h3 className="font-bold text-sm tracking-wide">
@@ -269,7 +265,7 @@ export const AdminProjectsPage: React.FC = () => {
                     onChange={(e) => setEditingProject({ ...editingProject, title: e.target.value })}
                     placeholder="e.g., Nexus AI Architecture"
                     className={`w-full px-3.5 py-2.5 rounded-xl text-xs border bg-transparent ${
-                      isDark ? 'border-white/10 focus:border-[#D4AF37]' : 'border-slate-300 focus:border-[#00C8A8]'
+                      isDark ? 'border-white/10 focus:border-[#22D3EE]' : 'border-slate-300 focus:border-[#0891B2]'
                     }`}
                   />
                 </div>
@@ -282,7 +278,7 @@ export const AdminProjectsPage: React.FC = () => {
                     onChange={(e) => setEditingProject({ ...editingProject, category: e.target.value })}
                     placeholder="e.g., Full Stack, AI Platform, Cloud Infrastructure"
                     className={`w-full px-3.5 py-2.5 rounded-xl text-xs border bg-transparent ${
-                      isDark ? 'border-white/10 focus:border-[#D4AF37]' : 'border-slate-300 focus:border-[#00C8A8]'
+                      isDark ? 'border-white/10 focus:border-[#22D3EE]' : 'border-slate-300 focus:border-[#0891B2]'
                     }`}
                   />
                 </div>
@@ -297,7 +293,7 @@ export const AdminProjectsPage: React.FC = () => {
                   onChange={(e) => setEditingProject({ ...editingProject, tagline: e.target.value })}
                   placeholder="e.g., Enterprise Distributed Neural Orchestration Platform"
                   className={`w-full px-3.5 py-2.5 rounded-xl text-xs border bg-transparent ${
-                    isDark ? 'border-white/10 focus:border-[#D4AF37]' : 'border-slate-300 focus:border-[#00C8A8]'
+                    isDark ? 'border-white/10 focus:border-[#22D3EE]' : 'border-slate-300 focus:border-[#0891B2]'
                   }`}
                 />
               </div>
@@ -311,7 +307,7 @@ export const AdminProjectsPage: React.FC = () => {
                   onChange={(e) => setEditingProject({ ...editingProject, description: e.target.value })}
                   placeholder="In-depth overview of the engineering challenges solved..."
                   className={`w-full px-3.5 py-2.5 rounded-xl text-xs border bg-transparent resize-y ${
-                    isDark ? 'border-white/10 focus:border-[#D4AF37]' : 'border-slate-300 focus:border-[#00C8A8]'
+                    isDark ? 'border-white/10 focus:border-[#22D3EE]' : 'border-slate-300 focus:border-[#0891B2]'
                   }`}
                 />
               </div>
@@ -325,7 +321,7 @@ export const AdminProjectsPage: React.FC = () => {
                   onDrop={handleDrop}
                   className={`p-4 rounded-2xl border-2 border-dashed text-center transition-all ${
                     isDragging
-                      ? isDark ? 'border-[#D4AF37] bg-[#D4AF37]/10' : 'border-[#00C8A8] bg-emerald-50'
+                      ? isDark ? 'border-[#22D3EE] bg-[#22D3EE]/10' : 'border-[#0891B2] bg-cyan-50'
                       : isDark ? 'border-white/15 bg-black/30' : 'border-slate-300 bg-slate-50'
                   }`}
                 >
@@ -347,7 +343,7 @@ export const AdminProjectsPage: React.FC = () => {
                     onChange={(e) => setEditingProject({ ...editingProject, image: e.target.value })}
                     placeholder="https://... or /projects/project-1.webp"
                     className={`mt-3 w-full px-3 py-1.5 rounded-lg text-[11px] border bg-transparent ${
-                      isDark ? 'border-white/10 focus:border-[#D4AF37]' : 'border-slate-300 focus:border-[#00C8A8]'
+                      isDark ? 'border-white/10 focus:border-[#22D3EE]' : 'border-slate-300 focus:border-[#0891B2]'
                     }`}
                   />
                 </div>
@@ -362,7 +358,7 @@ export const AdminProjectsPage: React.FC = () => {
                   onChange={(e) => setTechStackInput(e.target.value)}
                   placeholder="React, TypeScript, Tailwind CSS, PostgreSQL, Supabase, Docker"
                   className={`w-full px-3.5 py-2.5 rounded-xl text-xs border bg-transparent ${
-                    isDark ? 'border-white/10 focus:border-[#D4AF37]' : 'border-slate-300 focus:border-[#00C8A8]'
+                    isDark ? 'border-white/10 focus:border-[#22D3EE]' : 'border-slate-300 focus:border-[#0891B2]'
                   }`}
                 />
               </div>
@@ -376,7 +372,7 @@ export const AdminProjectsPage: React.FC = () => {
                   onChange={(e) => setFeaturesInput(e.target.value)}
                   placeholder="Real-time multi-tenant sync&#10;Sub-millisecond token streaming&#10;Cryptographic RBAC security"
                   className={`w-full px-3.5 py-2.5 rounded-xl text-xs border bg-transparent font-mono ${
-                    isDark ? 'border-white/10 focus:border-[#D4AF37]' : 'border-slate-300 focus:border-[#00C8A8]'
+                    isDark ? 'border-white/10 focus:border-[#22D3EE]' : 'border-slate-300 focus:border-[#0891B2]'
                   }`}
                 />
               </div>
@@ -391,7 +387,7 @@ export const AdminProjectsPage: React.FC = () => {
                     onChange={(e) => setArchitectureInput(e.target.value)}
                     placeholder="Microservices&#10;Edge Caching&#10;CQRS Event Bus"
                     className={`w-full px-3.5 py-2.5 rounded-xl text-xs border bg-transparent font-mono ${
-                      isDark ? 'border-white/10 focus:border-[#D4AF37]' : 'border-slate-300 focus:border-[#00C8A8]'
+                      isDark ? 'border-white/10 focus:border-[#22D3EE]' : 'border-slate-300 focus:border-[#0891B2]'
                     }`}
                   />
                 </div>
@@ -404,7 +400,7 @@ export const AdminProjectsPage: React.FC = () => {
                     onChange={(e) => setGalleryImagesInput(e.target.value)}
                     placeholder="https://.../screenshot1.jpg&#10;https://.../screenshot2.jpg"
                     className={`w-full px-3.5 py-2.5 rounded-xl text-xs border bg-transparent font-mono ${
-                      isDark ? 'border-white/10 focus:border-[#D4AF37]' : 'border-slate-300 focus:border-[#00C8A8]'
+                      isDark ? 'border-white/10 focus:border-[#22D3EE]' : 'border-slate-300 focus:border-[#0891B2]'
                     }`}
                   />
                 </div>
@@ -420,7 +416,7 @@ export const AdminProjectsPage: React.FC = () => {
                     onChange={(e) => setEditingProject({ ...editingProject, github_url: e.target.value })}
                     placeholder="https://github.com/..."
                     className={`w-full px-3.5 py-2.5 rounded-xl text-xs border bg-transparent ${
-                      isDark ? 'border-white/10 focus:border-[#D4AF37]' : 'border-slate-300 focus:border-[#00C8A8]'
+                      isDark ? 'border-white/10 focus:border-[#22D3EE]' : 'border-slate-300 focus:border-[#0891B2]'
                     }`}
                   />
                 </div>
@@ -433,7 +429,7 @@ export const AdminProjectsPage: React.FC = () => {
                     onChange={(e) => setEditingProject({ ...editingProject, live_url: e.target.value })}
                     placeholder="https://..."
                     className={`w-full px-3.5 py-2.5 rounded-xl text-xs border bg-transparent ${
-                      isDark ? 'border-white/10 focus:border-[#D4AF37]' : 'border-slate-300 focus:border-[#00C8A8]'
+                      isDark ? 'border-white/10 focus:border-[#22D3EE]' : 'border-slate-300 focus:border-[#0891B2]'
                     }`}
                   />
                 </div>
@@ -479,9 +475,7 @@ export const AdminProjectsPage: React.FC = () => {
                 <button
                   type="submit"
                   disabled={isSaving}
-                  className={`px-5 py-2 rounded-xl text-xs font-bold cursor-pointer shadow-md ${
-                    isDark ? 'bg-gradient-to-r from-[#D4AF37] to-[#F5D06F] text-black' : 'bg-gradient-to-r from-[#00E5FF] to-[#00C8A8] text-slate-950'
-                  }`}
+                  className="px-5 py-2 rounded-xl text-xs font-bold cursor-pointer shadow-md bg-gradient-to-r from-[#22D3EE] to-[#8B5CF6] text-black"
                 >
                   {isSaving ? 'Saving Project...' : 'Save & Publish Project'}
                 </button>
@@ -500,7 +494,7 @@ export const AdminProjectsPage: React.FC = () => {
             </div>
 
             <div className={`rounded-3xl border overflow-hidden shadow-xl ${
-              isDark ? 'bg-[#08080A] border-[rgba(212,175,55,0.25)] text-white' : 'bg-white border-slate-200 text-slate-900'
+              isDark ? 'bg-[#111722] border-white/10 text-white' : 'bg-white border-slate-200 text-slate-900'
             }`}>
               <div className="h-44 relative bg-black/40 overflow-hidden">
                 <img
@@ -509,7 +503,7 @@ export const AdminProjectsPage: React.FC = () => {
                   className="w-full h-full object-cover"
                 />
                 {editingProject.featured && (
-                  <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#D4AF37] text-black flex items-center gap-1 shadow-lg">
+                  <div className="absolute top-3 left-3 px-2.5 py-1 rounded-full text-[10px] font-bold bg-[#22D3EE] text-black flex items-center gap-1 shadow-lg">
                     <Star className="w-3 h-3 fill-black" />
                     <span>Featured</span>
                   </div>

@@ -111,8 +111,8 @@ function AppContent() {
   return (
     <div className={`min-h-screen relative font-sans transition-colors duration-300 flex flex-col justify-between ${
       isDark 
-        ? 'bg-[#050505] text-[#F8FAFC] selection:bg-[#7C3AED]/40' 
-        : 'bg-[#F8FAFC] text-[#0F172A] selection:bg-[#00E5FF]/30'
+        ? 'bg-[#080B12] text-[#F8FAFC] selection:bg-[#8B5CF6]/30' 
+        : 'bg-[#F8FAFC] text-[#0F172A] selection:bg-[#22D3EE]/25'
     }`}>
       {/* Ambient Animated Glows */}
       <LuxuryBackground />

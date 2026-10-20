@@ -86,54 +86,54 @@ export const ContactSection: React.FC = () => {
         
         {/* Section Header */}
         <ScrollReveal direction="up" distance={18} duration={0.55}>
-          <div className="flex flex-col items-center text-center mb-14">
-            <div className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-3 ${
+          <div className="flex flex-col items-center text-center mb-12 sm:mb-14">
+            <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-lg text-xs font-mono mb-3 border ${
               isDark
-                ? 'bg-[#8B5CF6]/20 text-[#00E5FF] border border-[#00E5FF]/30 shadow-[0_0_20px_rgba(0,229,255,0.15)]'
-                : 'bg-cyan-500/10 text-[#0097A7] border border-[#00E5FF]/30 shadow-[0_2px_12px_rgba(0,229,255,0.12)]'
+                ? 'bg-white/[0.04] text-[#22D3EE] border-white/10'
+                : 'bg-slate-100 text-[#0891B2] border-slate-200'
             }`}>
               <Mail className="w-3.5 h-3.5" />
               <span>Connect &amp; Collaborate</span>
             </div>
 
-            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight mb-4">
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black tracking-tight mb-4 text-balance">
               Get In{' '}
               <span className={`text-transparent bg-clip-text ${
                 isDark
-                  ? 'bg-gradient-to-r from-white via-[#00E5FF] to-[#8B5CF6]'
-                  : 'bg-gradient-to-r from-slate-900 via-[#00E5FF] to-[#8B5CF6]'
+                  ? 'bg-gradient-to-r from-white via-[#22D3EE] to-[#8B5CF6]'
+                  : 'bg-gradient-to-r from-slate-900 via-[#0891B2] to-[#7C3AED]'
               }`}>
                 Touch With Me
               </span>
             </h2>
             
-            <p className={`max-w-2xl text-base sm:text-lg leading-relaxed ${
-              isDark ? 'text-[#94A3B8]' : 'text-slate-600'
+            <p className={`max-w-2xl text-sm sm:text-base leading-relaxed ${
+              isDark ? 'text-[#A1AAB8]' : 'text-slate-600'
             }`}>
               Have an exciting product idea, full-stack architectural opportunity, or consulting inquiry? Let's connect.
             </p>
           </div>
         </ScrollReveal>
 
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-7 sm:gap-8 items-start">
           
           {/* Left Column: Glass Contact Channels & Socials */}
           <ScrollReveal direction="right" distance={25} duration={0.6} className="lg:col-span-5 space-y-4">
             
             {/* 1. Email Card */}
-            <div className={`p-6 rounded-[28px] backdrop-blur-2xl border transition-all duration-300 shadow-lg ${
+            <div className={`p-5 sm:p-6 rounded-2xl backdrop-blur-xl border transition-all duration-300 ${
               isDark
-                ? 'bg-[#121217]/75 border-white/12 text-white'
-                : 'bg-white/85 border-white/60 text-slate-900 shadow-sm'
+                ? 'bg-[#111722]/80 border-white/10 text-white shadow-[0_16px_40px_-12px_rgba(0,0,0,0.6)]'
+                : 'bg-white/85 border-slate-200/90 text-slate-900 shadow-[0_12px_30px_-10px_rgba(15,23,42,0.06)]'
             }`}>
               <div className="flex items-center justify-between gap-3">
                 <div className="flex items-center gap-3.5">
-                  <div className="w-11 h-11 rounded-2xl flex items-center justify-center bg-[#00E5FF]/15 text-[#00E5FF] border border-[#00E5FF]/30">
-                    <Mail className="w-5 h-5" />
+                  <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-[#22D3EE]/10 text-[#22D3EE] border border-[#22D3EE]/25">
+                    <Mail className="w-4 h-4" />
                   </div>
                   <div>
-                    <span className={`text-[11px] font-mono uppercase tracking-wider ${
-                      isDark ? 'text-slate-400' : 'text-slate-500'
+                    <span className={`text-[11px] font-mono uppercase tracking-wider block ${
+                      isDark ? 'text-[#A1AAB8]' : 'text-slate-500'
                     }`}>
                       Direct Email
                     </span>
@@ -141,26 +141,26 @@ export const ContactSection: React.FC = () => {
                   </div>
                 </div>
 
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-1.5">
                   <button
                     onClick={handleCopyEmail}
                     aria-label="Copy email"
                     id="contact-copy-email-btn"
-                    className={`p-2.5 rounded-xl border transition-colors cursor-pointer ${
-                      isDark ? 'bg-white/5 border-white/10 hover:border-[#00E5FF]' : 'bg-slate-100 border-slate-200 hover:border-[#00E5FF]'
+                    className={`p-2 rounded-xl border transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-[#22D3EE] focus-visible:outline-none ${
+                      isDark ? 'bg-white/[0.04] border-white/10 text-slate-300 hover:text-white hover:border-[#22D3EE]/40' : 'bg-slate-100 border-slate-200 text-slate-700 hover:border-[#0891B2]/40'
                     }`}
                   >
                     {copiedEmail ? (
                       <Check className="w-4 h-4 text-emerald-400" />
                     ) : (
-                      <Copy className="w-4 h-4 text-[#00E5FF]" />
+                      <Copy className="w-4 h-4 text-[#22D3EE]" />
                     )}
                   </button>
                   <a
                     href={`mailto:${email}`}
                     aria-label="Mailto link"
                     id="contact-mailto-btn"
-                    className="p-2.5 rounded-xl bg-gradient-to-r from-[#00E5FF] to-[#8B5CF6] text-black font-bold cursor-pointer hover:opacity-90"
+                    className="p-2 rounded-xl bg-gradient-to-r from-[#22D3EE] to-[#8B5CF6] text-black font-bold cursor-pointer hover:opacity-95 shadow-xs focus-visible:ring-2 focus-visible:ring-[#22D3EE] focus-visible:outline-none"
                   >
                     <ExternalLink className="w-4 h-4" />
                   </a>
@@ -170,31 +170,32 @@ export const ContactSection: React.FC = () => {
 
             {/* 2. Phone Card */}
             {phone && (
-              <div className={`p-6 rounded-[28px] backdrop-blur-2xl border transition-all duration-300 shadow-lg ${
+              <div className={`p-5 sm:p-6 rounded-2xl backdrop-blur-xl border transition-all duration-300 ${
                 isDark
-                  ? 'bg-[#121217]/75 border-white/12 text-white'
-                  : 'bg-white/85 border-white/60 text-slate-900 shadow-sm'
+                  ? 'bg-[#111722]/80 border-white/10 text-white shadow-[0_16px_40px_-12px_rgba(0,0,0,0.6)]'
+                  : 'bg-white/85 border-slate-200/90 text-slate-900 shadow-[0_12px_30px_-10px_rgba(15,23,42,0.06)]'
               }`}>
                 <div className="flex items-center justify-between gap-3">
                   <div className="flex items-center gap-3.5">
-                    <div className="w-11 h-11 rounded-2xl flex items-center justify-center bg-[#8B5CF6]/15 text-[#8B5CF6] border border-[#8B5CF6]/30">
-                      <Phone className="w-5 h-5" />
+                    <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-[#8B5CF6]/10 text-[#8B5CF6] border border-[#8B5CF6]/25">
+                      <Phone className="w-4 h-4" />
                     </div>
                     <div>
-                      <span className={`text-[11px] font-mono uppercase tracking-wider ${
-                        isDark ? 'text-slate-400' : 'text-slate-500'
+                      <span className={`text-[11px] font-mono uppercase tracking-wider block ${
+                        isDark ? 'text-[#A1AAB8]' : 'text-slate-500'
                       }`}>
                         Direct Phone / WhatsApp
                       </span>
-                      <h4 className="text-sm font-bold">{phone}</h4>
+                      <h4 className="text-sm font-bold font-mono">{phone}</h4>
                     </div>
                   </div>
 
                   <a
                     href={`tel:${phone.replace(/[^0-9+]/g, '')}`}
                     id="contact-phone-call-btn"
-                    className={`p-2.5 rounded-xl border transition-colors cursor-pointer ${
-                      isDark ? 'bg-white/5 border-white/10 text-[#8B5CF6] hover:border-[#8B5CF6]' : 'bg-slate-100 border-slate-200 text-[#8B5CF6]'
+                    aria-label="Call phone"
+                    className={`p-2 rounded-xl border transition-colors cursor-pointer focus-visible:ring-2 focus-visible:ring-[#22D3EE] focus-visible:outline-none ${
+                      isDark ? 'bg-white/[0.04] border-white/10 text-[#8B5CF6] hover:border-[#8B5CF6]/50' : 'bg-slate-100 border-slate-200 text-[#7C3AED]'
                     }`}
                   >
                     <Phone className="w-4 h-4" />
@@ -204,42 +205,42 @@ export const ContactSection: React.FC = () => {
             )}
 
             {/* 3. Location Card */}
-            <div className={`p-6 rounded-[28px] backdrop-blur-2xl border transition-all duration-300 shadow-lg ${
+            <div className={`p-5 sm:p-6 rounded-2xl backdrop-blur-xl border transition-all duration-300 ${
               isDark
-                ? 'bg-[#121217]/75 border-white/12 text-white'
-                : 'bg-white/85 border-white/60 text-slate-900 shadow-sm'
+                ? 'bg-[#111722]/80 border-white/10 text-white shadow-[0_16px_40px_-12px_rgba(0,0,0,0.6)]'
+                : 'bg-white/85 border-slate-200/90 text-slate-900 shadow-[0_12px_30px_-10px_rgba(15,23,42,0.06)]'
             }`}>
               <div className="flex items-center gap-3.5">
-                <div className="w-11 h-11 rounded-2xl flex items-center justify-center bg-[#00E5FF]/15 text-[#00E5FF] border border-[#00E5FF]/30">
-                  <MapPin className="w-5 h-5" />
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-[#22D3EE]/10 text-[#22D3EE] border border-[#22D3EE]/25">
+                  <MapPin className="w-4 h-4" />
                 </div>
                 <div>
-                  <span className={`text-[11px] font-mono uppercase tracking-wider ${
-                    isDark ? 'text-slate-400' : 'text-slate-500'
+                  <span className={`text-[11px] font-mono uppercase tracking-wider block ${
+                    isDark ? 'text-[#A1AAB8]' : 'text-slate-500'
                   }`}>
                     Location &amp; Timezone
                   </span>
                   <h4 className="text-sm font-bold">{location}</h4>
-                  <p className={`text-[11px] font-mono ${isDark ? 'text-[#94A3B8]' : 'text-slate-500'}`}>
-                    Available for Remote &amp; Global Contracts
+                  <p className={`text-xs mt-0.5 ${isDark ? 'text-[#A1AAB8]' : 'text-slate-500'}`}>
+                    Available for Remote &amp; Global Engineering
                   </p>
                 </div>
               </div>
             </div>
 
             {/* 4. Social Media Channels Card */}
-            <div className={`p-6 rounded-[28px] backdrop-blur-2xl border transition-all duration-300 shadow-lg ${
+            <div className={`p-5 sm:p-6 rounded-2xl backdrop-blur-xl border transition-all duration-300 ${
               isDark
-                ? 'bg-[#121217]/75 border-white/12 text-white'
-                : 'bg-white/85 border-white/60 text-slate-900 shadow-sm'
+                ? 'bg-[#111722]/80 border-white/10 text-white shadow-[0_16px_40px_-12px_rgba(0,0,0,0.6)]'
+                : 'bg-white/85 border-slate-200/90 text-slate-900 shadow-[0_12px_30px_-10px_rgba(15,23,42,0.06)]'
             }`}>
               <span className={`text-[11px] font-mono uppercase tracking-wider block mb-3 ${
-                isDark ? 'text-slate-400' : 'text-slate-500'
+                isDark ? 'text-[#A1AAB8]' : 'text-slate-500'
               }`}>
-                Social Media Profiles
+                Social &amp; Developer Profiles
               </span>
 
-              <div className="flex flex-wrap gap-2.5">
+              <div className="flex flex-wrap gap-2">
                 {socialLinks.map((s: any, idx: number) => (
                   <a
                     key={`${s.platform || s.url || 'social'}-${idx}`}
@@ -247,10 +248,10 @@ export const ContactSection: React.FC = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     id={`contact-social-${(s.platform || 'link').toLowerCase().replace(/[^a-z0-9]/g, '-')}`}
-                    className={`px-4 py-2 rounded-2xl text-xs font-semibold flex items-center gap-2 border transition-all cursor-pointer ${
+                    className={`px-3.5 py-1.5 rounded-xl text-xs font-semibold flex items-center gap-1.5 border transition-all cursor-pointer focus-visible:ring-2 focus-visible:ring-[#22D3EE] focus-visible:outline-none ${
                       isDark
-                        ? 'bg-white/5 border-white/10 text-white hover:border-[#00E5FF] hover:bg-white/10'
-                        : 'bg-slate-50 border-slate-200 text-slate-800 hover:border-[#00E5FF] hover:bg-slate-100'
+                        ? 'bg-white/[0.04] border-white/10 text-white hover:border-[#22D3EE]/40 hover:bg-white/[0.08]'
+                        : 'bg-slate-50 border-slate-200 text-slate-800 hover:border-[#0891B2]/40 hover:bg-slate-100'
                     }`}
                   >
                     <span>{s.platform}</span>
@@ -264,35 +265,37 @@ export const ContactSection: React.FC = () => {
 
           {/* Right Column: Glass Message Form */}
           <ScrollReveal direction="left" distance={25} duration={0.6} delay={0.15} className="lg:col-span-7">
-            <div className={`p-8 sm:p-10 rounded-[32px] backdrop-blur-2xl border shadow-xl ${
+            <div className={`p-6 sm:p-8 rounded-2xl backdrop-blur-xl border ${
               isDark
-                ? 'bg-[#121217]/80 border-white/12 shadow-[0_12px_40px_rgba(0,0,0,0.6)] text-white'
-                : 'bg-white/90 border-white/60 shadow-[0_12px_35px_rgba(0,229,255,0.08)] text-slate-900'
+                ? 'bg-[#111722]/80 border-white/10 shadow-[0_16px_40px_-12px_rgba(0,0,0,0.6)] text-white'
+                : 'bg-white/85 border-slate-200/90 shadow-[0_12px_30px_-10px_rgba(15,23,42,0.06)] text-slate-900'
             }`}>
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 rounded-2xl flex items-center justify-center bg-[#00E5FF]/15 text-[#00E5FF] border border-[#00E5FF]/30">
-                  <MessageSquare className="w-5 h-5" />
+                <div className="w-10 h-10 rounded-xl flex items-center justify-center bg-[#22D3EE]/10 text-[#22D3EE] border border-[#22D3EE]/25">
+                  <MessageSquare className="w-4 h-4" />
                 </div>
                 <div>
-                  <h3 className="text-xl font-bold">Send Direct Message</h3>
-                  <p className={`text-xs ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>
+                  <h3 className={`text-lg sm:text-xl font-bold ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                    Send Direct Message
+                  </h3>
+                  <p className={`text-xs ${isDark ? 'text-[#A1AAB8]' : 'text-slate-500'}`}>
                     Typically responds within 12-24 hours.
                   </p>
                 </div>
               </div>
 
               {submitted ? (
-                <div className={`p-8 rounded-2xl border text-center my-6 ${
+                <div className={`p-6 sm:p-8 rounded-xl border text-center my-6 ${
                   isDark ? 'bg-emerald-500/10 border-emerald-500/30' : 'bg-emerald-50 border-emerald-200'
                 }`}>
-                  <Check className="w-10 h-10 text-emerald-400 mx-auto mb-3" />
-                  <h4 className="text-lg font-bold mb-1">Message Received!</h4>
+                  <Check className="w-9 h-9 text-emerald-400 mx-auto mb-3" />
+                  <h4 className="text-base font-bold mb-1">Message Received!</h4>
                   <p className={`text-xs max-w-sm mx-auto mb-4 ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
                     Thank you for reaching out. I have received your message and will review your inquiry shortly.
                   </p>
                   <button
                     onClick={() => setSubmitted(false)}
-                    className="px-5 py-2 rounded-xl text-xs font-bold bg-[#00E5FF] text-black cursor-pointer"
+                    className="px-5 py-2 rounded-xl text-xs font-bold bg-[#22D3EE] text-black cursor-pointer hover:opacity-95"
                   >
                     Send Another Message
                   </button>
@@ -312,10 +315,10 @@ export const ContactSection: React.FC = () => {
                         placeholder="John Doe"
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                        className={`w-full px-4 py-2.5 rounded-2xl text-xs sm:text-sm border backdrop-blur-xl outline-none transition-all ${
+                        className={`w-full px-4 py-2.5 rounded-xl text-xs sm:text-sm border outline-none transition-all focus-visible:ring-2 focus-visible:ring-[#22D3EE] ${
                           isDark
-                            ? 'bg-[#121217] border-white/10 text-white focus:border-[#00E5FF]'
-                            : 'bg-white border-slate-200 text-slate-900 focus:border-[#00E5FF]'
+                            ? 'bg-white/[0.03] border-white/10 text-white placeholder-slate-500 focus:border-[#22D3EE]'
+                            : 'bg-slate-50 border-slate-200 text-slate-900 placeholder-slate-400 focus:border-[#0891B2]'
                         }`}
                       />
                     </div>
@@ -332,10 +335,10 @@ export const ContactSection: React.FC = () => {
                         placeholder="john@example.com"
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                        className={`w-full px-4 py-2.5 rounded-2xl text-xs sm:text-sm border backdrop-blur-xl outline-none transition-all ${
+                        className={`w-full px-4 py-2.5 rounded-xl text-xs sm:text-sm border outline-none transition-all focus-visible:ring-2 focus-visible:ring-[#22D3EE] ${
                           isDark
-                            ? 'bg-[#121217] border-white/10 text-white focus:border-[#00E5FF]'
-                            : 'bg-white border-slate-200 text-slate-900 focus:border-[#00E5FF]'
+                            ? 'bg-white/[0.03] border-white/10 text-white placeholder-slate-500 focus:border-[#22D3EE]'
+                            : 'bg-slate-50 border-slate-200 text-slate-900 placeholder-slate-400 focus:border-[#0891B2]'
                         }`}
                       />
                     </div>
@@ -352,10 +355,10 @@ export const ContactSection: React.FC = () => {
                       placeholder="Project Opportunity / Consulting Inquiry"
                       value={formData.subject}
                       onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
-                      className={`w-full px-4 py-2.5 rounded-2xl text-xs sm:text-sm border backdrop-blur-xl outline-none transition-all ${
+                      className={`w-full px-4 py-2.5 rounded-xl text-xs sm:text-sm border outline-none transition-all focus-visible:ring-2 focus-visible:ring-[#22D3EE] ${
                         isDark
-                          ? 'bg-[#121217] border-white/10 text-white focus:border-[#00E5FF]'
-                          : 'bg-white border-slate-200 text-slate-900 focus:border-[#00E5FF]'
+                          ? 'bg-white/[0.03] border-white/10 text-white placeholder-slate-500 focus:border-[#22D3EE]'
+                          : 'bg-slate-50 border-slate-200 text-slate-900 placeholder-slate-400 focus:border-[#0891B2]'
                       }`}
                     />
                   </div>
@@ -372,10 +375,10 @@ export const ContactSection: React.FC = () => {
                       placeholder="Tell me about your project scope, timeline, and goals..."
                       value={formData.message}
                       onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                      className={`w-full px-4 py-3 rounded-2xl text-xs sm:text-sm border backdrop-blur-xl outline-none transition-all resize-none ${
+                      className={`w-full px-4 py-3 rounded-xl text-xs sm:text-sm border outline-none transition-all resize-none focus-visible:ring-2 focus-visible:ring-[#22D3EE] ${
                         isDark
-                          ? 'bg-[#121217] border-white/10 text-white focus:border-[#00E5FF]'
-                          : 'bg-white border-slate-200 text-slate-900 focus:border-[#00E5FF]'
+                          ? 'bg-white/[0.03] border-white/10 text-white placeholder-slate-500 focus:border-[#22D3EE]'
+                          : 'bg-slate-50 border-slate-200 text-slate-900 placeholder-slate-400 focus:border-[#0891B2]'
                       }`}
                     />
                   </div>
@@ -384,7 +387,7 @@ export const ContactSection: React.FC = () => {
                     type="submit"
                     disabled={isSubmitting}
                     id="contact-form-submit-btn"
-                    className="w-full py-3.5 px-6 rounded-2xl text-xs sm:text-sm font-bold flex items-center justify-center gap-2 cursor-pointer transition-all bg-gradient-to-r from-[#00E5FF] to-[#8B5CF6] text-black font-extrabold shadow-[0_0_25px_rgba(0,229,255,0.35)] hover:opacity-95 active:scale-95 disabled:opacity-50"
+                    className="w-full min-h-[44px] py-3 px-6 rounded-xl text-xs sm:text-sm font-bold flex items-center justify-center gap-2 cursor-pointer transition-all bg-gradient-to-r from-[#22D3EE] to-[#8B5CF6] text-black font-extrabold hover:opacity-95 active:scale-95 disabled:opacity-50 shadow-md shadow-cyan-500/10 focus-visible:ring-2 focus-visible:ring-[#22D3EE] focus-visible:outline-none"
                   >
                     {isSubmitting ? (
                       <>

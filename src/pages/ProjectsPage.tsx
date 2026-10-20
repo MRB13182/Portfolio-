@@ -9,7 +9,6 @@ import {
   Layers, 
   ExternalLink, 
   Github, 
-  ArrowUpRight, 
   Search,
   X,
   Eye
@@ -34,33 +33,33 @@ export const ProjectsPage: React.FC = () => {
   });
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
       
       {/* Page Header */}
-      <ScrollReveal direction="up" distance={18} duration={0.55}>
-        <div className="flex flex-col items-center text-center mb-12">
-          <div className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-4 ${
+      <ScrollReveal direction="up" distance={16} duration={0.5}>
+        <div className="flex flex-col items-center text-center mb-10 sm:mb-12">
+          <div className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold mb-3 border ${
             isDark
-              ? 'bg-[#8B5CF6]/20 text-[#00E5FF] border border-[#00E5FF]/30 shadow-[0_0_20px_rgba(0,229,255,0.15)]'
-              : 'bg-cyan-500/10 text-[#0097A7] border border-[#00E5FF]/30 shadow-[0_2px_12px_rgba(0,229,255,0.12)]'
+              ? 'bg-white/[0.04] text-[#22D3EE] border-white/10'
+              : 'bg-slate-100 text-[#0891B2] border-slate-200'
           }`}>
-            <Layers className="w-4 h-4" />
+            <Layers className="w-3.5 h-3.5" />
             <span>Case Studies &amp; Architectures</span>
           </div>
 
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight mb-4">
+          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight mb-4 text-balance">
             Featured{' '}
             <span className={`text-transparent bg-clip-text ${
               isDark
-                ? 'bg-gradient-to-r from-white via-[#00E5FF] to-[#8B5CF6]'
-                : 'bg-gradient-to-r from-slate-900 via-[#00E5FF] to-[#8B5CF6]'
+                ? 'bg-gradient-to-r from-white via-[#22D3EE] to-[#8B5CF6]'
+                : 'bg-gradient-to-r from-slate-900 via-[#0891B2] to-[#7C3AED]'
             }`}>
               Projects
             </span>
           </h1>
           
-          <p className={`max-w-2xl text-base sm:text-lg leading-relaxed ${
-            isDark ? 'text-[#94A3B8]' : 'text-slate-600'
+          <p className={`max-w-2xl text-sm sm:text-base leading-relaxed ${
+            isDark ? 'text-[#A1AAB8]' : 'text-slate-600'
           }`}>
             Explore complete production platforms, enterprise SaaS suites, and full-stack solutions built with high performance and clean design.
           </p>
@@ -68,13 +67,13 @@ export const ProjectsPage: React.FC = () => {
       </ScrollReveal>
 
       {/* Search & Category Filter Controls */}
-      <ScrollReveal direction="up" distance={15} duration={0.5} delay={0.1}>
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-12">
+      <ScrollReveal direction="up" distance={14} duration={0.45} delay={0.1}>
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4 mb-10">
           
           {/* Search Input */}
           <div className="relative w-full md:w-80">
             <Search className={`absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 ${
-              isDark ? 'text-slate-400' : 'text-slate-500'
+              isDark ? 'text-[#A1AAB8]' : 'text-slate-400'
             }`} />
             <input
               type="text"
@@ -82,15 +81,17 @@ export const ProjectsPage: React.FC = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               id="projects-search-input"
-              className={`w-full pl-10 pr-10 py-2.5 rounded-2xl text-xs sm:text-sm border transition-all outline-none backdrop-blur-2xl ${
+              className={`w-full min-h-[44px] pl-10 pr-10 py-2 rounded-xl text-xs sm:text-sm border transition-all outline-none backdrop-blur-md focus-visible:ring-2 focus-visible:ring-[#22D3EE] ${
                 isDark
-                  ? 'bg-[#121217]/80 border-white/10 text-white placeholder-white/50 focus:border-[#00E5FF]'
-                  : 'bg-white/90 border-slate-200 text-slate-900 placeholder-slate-400 focus:border-[#00E5FF]'
+                  ? 'bg-[#111722]/80 border-white/10 text-white placeholder-slate-500 focus:border-[#22D3EE]'
+                  : 'bg-white border-slate-200 text-slate-900 placeholder-slate-400 focus:border-[#0891B2]'
               }`}
             />
             {searchQuery && (
               <button
+                type="button"
                 onClick={() => setSearchQuery('')}
+                aria-label="Clear search query"
                 className="absolute right-3 top-1/2 -translate-y-1/2 cursor-pointer text-slate-400 hover:text-white"
               >
                 <X className="w-4 h-4" />
@@ -98,27 +99,28 @@ export const ProjectsPage: React.FC = () => {
             )}
           </div>
 
-          {/* Category Pills */}
-          <div className={`inline-flex items-center gap-1.5 p-1.5 rounded-2xl border backdrop-blur-2xl overflow-x-auto max-w-full ${
+          {/* Category Tabs */}
+          <div className={`inline-flex items-center gap-1 p-1 rounded-xl border backdrop-blur-md overflow-x-auto max-w-full ${
             isDark 
-              ? 'bg-[#121217]/70 border-white/10' 
-              : 'bg-white/85 border-slate-200'
+              ? 'bg-[#111722]/70 border-white/[0.08]' 
+              : 'bg-white border-slate-200 shadow-xs'
           }`}>
             {categories.map((cat) => {
               const isActive = selectedCategory === cat;
               return (
                 <button
                   key={cat}
+                  type="button"
                   onClick={() => setSelectedCategory(cat)}
                   id={`projects-category-filter-${cat.toLowerCase().replace(/[^a-z0-9]/g, '-')}`}
-                  className={`px-3.5 sm:px-4 py-2 rounded-xl text-xs font-bold transition-all duration-200 whitespace-nowrap cursor-pointer ${
+                  className={`min-h-[36px] px-3.5 sm:px-4 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 whitespace-nowrap cursor-pointer focus-visible:ring-2 focus-visible:ring-[#22D3EE] focus-visible:outline-none ${
                     isActive
                       ? isDark
-                        ? 'bg-gradient-to-r from-[#00E5FF] to-[#8B5CF6] text-black shadow-[0_0_15px_rgba(0,229,255,0.3)]'
-                        : 'bg-gradient-to-r from-[#00E5FF] to-[#8B5CF6] text-white shadow-[0_2px_10px_rgba(0,229,255,0.2)]'
+                        ? 'bg-gradient-to-r from-[#22D3EE] to-[#8B5CF6] text-black font-bold shadow-xs'
+                        : 'bg-gradient-to-r from-[#0891B2] to-[#7C3AED] text-white font-bold shadow-xs'
                       : isDark
-                        ? 'text-[#94A3B8] hover:text-white hover:bg-white/5'
-                        : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100'
+                        ? 'text-[#A1AAB8] hover:text-white hover:bg-white/[0.04]'
+                        : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
                   }`}
                 >
                   {cat}
@@ -133,95 +135,96 @@ export const ProjectsPage: React.FC = () => {
       {/* Projects Grid */}
       {filteredProjects.length === 0 ? (
         <ScrollReveal direction="up" distance={15}>
-          <div className={`text-center py-20 p-8 rounded-[32px] border border-dashed ${
-            isDark ? 'border-white/15' : 'border-slate-300'
+          <div className={`text-center py-16 p-8 rounded-2xl border border-dashed ${
+            isDark ? 'border-white/10' : 'border-slate-300'
           }`}>
-            <Layers className="w-12 h-12 mx-auto mb-3 text-[#00E5FF]" />
+            <Layers className="w-10 h-10 mx-auto mb-3 text-[#22D3EE]" />
             <h3 className="text-base font-bold mb-1">No projects matched your criteria</h3>
-            <p className={`text-xs mb-4 ${isDark ? 'text-[#94A3B8]' : 'text-slate-500'}`}>
+            <p className={`text-xs mb-4 ${isDark ? 'text-[#A1AAB8]' : 'text-slate-500'}`}>
               Try adjusting your search query "{searchQuery}" or select another category filter.
             </p>
             <button
+              type="button"
               onClick={() => { setSelectedCategory('All'); setSearchQuery(''); }}
-              className="text-xs font-bold hover:underline cursor-pointer text-[#00E5FF]"
+              className="text-xs font-bold hover:underline cursor-pointer text-[#22D3EE] focus-visible:ring-2 focus-visible:ring-[#22D3EE] rounded-md px-2 py-1"
             >
               Reset Filters
             </button>
           </div>
         </ScrollReveal>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-7">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-7">
           {filteredProjects.map((project, index) => (
             <motion.div
               key={project.id}
-              initial={{ opacity: 0, y: 22 }}
+              initial={{ opacity: 0, y: 18 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '0px 0px -40px 0px', amount: 0.15 }}
+              viewport={{ once: true, margin: '0px 0px -40px 0px' }}
               transition={{ 
-                duration: 0.55, 
-                delay: Math.min(index * 0.08, 0.35),
+                duration: 0.45, 
+                delay: Math.min(index * 0.08, 0.3),
                 ease: [0.21, 0.47, 0.32, 0.98] 
               }}
-              whileHover={{ y: -6 }}
+              whileHover={{ y: -4 }}
               id={`project-card-${project.id}`}
-              className={`rounded-[30px] backdrop-blur-2xl border transition-all duration-300 flex flex-col justify-between overflow-hidden group shadow-xl ${
+              className={`rounded-2xl border transition-all duration-300 flex flex-col justify-between overflow-hidden group ${
                 isDark
-                  ? 'bg-[#121217]/70 border-white/12 hover:border-[#00E5FF]/60 hover:shadow-[0_12px_40px_rgba(0,229,255,0.2)]'
-                  : 'bg-white/85 border-white/60 hover:border-[#00E5FF] hover:shadow-[0_12px_35px_rgba(0,229,255,0.12)]'
+                  ? 'bg-[#111722]/70 border-white/[0.08] hover:border-[#22D3EE]/35 shadow-[0_8px_24px_-8px_rgba(0,0,0,0.5)]'
+                  : 'bg-white/85 border-slate-200/90 hover:border-[#0891B2]/40 shadow-[0_6px_20px_-6px_rgba(15,23,42,0.05)]'
               }`}
             >
               <div>
-                {/* Project Image Thumbnail */}
+                {/* 1. Project Image Thumbnail */}
                 <div 
-                  className="relative aspect-[16/10] overflow-hidden cursor-pointer bg-black/40"
+                  className="relative aspect-[16/10] overflow-hidden cursor-pointer bg-slate-950/40"
                   onClick={() => setActiveProjectModal(project)}
                 >
                   <SafeImage
                     src={project.image}
                     alt={project.title}
                     fallbackType="project"
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-103"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-60 transition-opacity" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/25 to-transparent opacity-75 group-hover:opacity-50 transition-opacity" />
 
-                  <div className="absolute top-3.5 left-3.5 z-10">
-                    <span className="px-3 py-1 rounded-full text-[10px] font-mono font-bold uppercase tracking-wider backdrop-blur-md bg-black/60 text-[#00E5FF] border border-[#00E5FF]/30">
+                  <div className="absolute top-3 left-3 z-10">
+                    <span className="px-2.5 py-0.5 rounded-md text-[10px] font-mono font-semibold uppercase tracking-wider backdrop-blur-md bg-black/60 text-[#22D3EE] border border-white/10">
                       {project.category}
                     </span>
                   </div>
 
                   <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                    <span className="px-4 py-2 rounded-2xl bg-black/75 backdrop-blur-md text-white text-xs font-bold flex items-center gap-2 border border-white/20 shadow-lg">
-                      <Eye className="w-3.5 h-3.5 text-[#00E5FF]" /> View Case Study
+                    <span className="px-3.5 py-1.5 rounded-xl bg-black/80 backdrop-blur-md text-white text-xs font-semibold flex items-center gap-2 border border-white/15 shadow-md">
+                      <Eye className="w-3.5 h-3.5 text-[#22D3EE]" /> Case Study
                     </span>
                   </div>
                 </div>
 
-                {/* Card Body */}
-                <div className="p-6">
+                {/* 2. Project Title & 3. Description */}
+                <div className="p-5 sm:p-6">
                   <h3 
                     onClick={() => setActiveProjectModal(project)}
-                    className={`font-black text-xl tracking-tight mb-2 cursor-pointer transition-colors ${
-                      isDark ? 'text-white group-hover:text-[#00E5FF]' : 'text-slate-900 group-hover:text-[#0097A7]'
+                    className={`font-black text-lg sm:text-xl tracking-tight mb-2 cursor-pointer transition-colors ${
+                      isDark ? 'text-white group-hover:text-[#22D3EE]' : 'text-slate-900 group-hover:text-[#0891B2]'
                     }`}
                   >
                     {project.title}
                   </h3>
                   <p className={`text-xs sm:text-sm line-clamp-2 leading-relaxed mb-4 ${
-                    isDark ? 'text-[#94A3B8]' : 'text-slate-600'
+                    isDark ? 'text-[#A1AAB8]' : 'text-slate-600'
                   }`}>
                     {project.description}
                   </p>
 
-                  {/* Tech Stack Chips */}
+                  {/* 4. Tech Stack Tags */}
                   <div className="flex flex-wrap gap-1.5 mb-2">
                     {project.techStack.map((tech, idx) => (
                       <span
                         key={idx}
                         className={`text-[10px] font-mono px-2 py-0.5 rounded-md border ${
                           isDark
-                            ? 'bg-white/5 border-white/10 text-slate-300'
-                            : 'bg-slate-100 border-slate-200 text-slate-700'
+                            ? 'bg-white/[0.04] border-white/[0.07] text-slate-300'
+                            : 'bg-slate-100/90 border-slate-200 text-slate-700'
                         }`}
                       >
                         {tech}
@@ -231,9 +234,9 @@ export const ProjectsPage: React.FC = () => {
                 </div>
               </div>
 
-              {/* Bottom Card Actions (Live Demo + GitHub) */}
-              <div className={`p-6 pt-0 flex items-center gap-3 border-t ${
-                isDark ? 'border-white/10 pt-4' : 'border-slate-200/80 pt-4'
+              {/* 5. Live Demo and GitHub Action Buttons */}
+              <div className={`p-5 sm:p-6 pt-0 flex items-center gap-3 border-t ${
+                isDark ? 'border-white/[0.06] pt-4' : 'border-slate-200/80 pt-4'
               }`}>
                 {project.liveUrl && (
                   <a
@@ -241,7 +244,7 @@ export const ProjectsPage: React.FC = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     id={`projects-page-live-btn-${project.id}`}
-                    className="flex-1 py-2.5 px-3.5 rounded-xl text-xs font-bold text-center flex items-center justify-center gap-2 transition-all bg-gradient-to-r from-[#00E5FF] to-[#8B5CF6] text-black font-extrabold shadow-[0_0_15px_rgba(0,229,255,0.25)] hover:opacity-95 active:scale-95"
+                    className="flex-1 min-h-[40px] py-2 px-3.5 rounded-xl text-xs font-bold text-center flex items-center justify-center gap-1.5 transition-all bg-gradient-to-r from-[#22D3EE] to-[#8B5CF6] text-black hover:opacity-95 active:scale-95 shadow-xs focus-visible:ring-2 focus-visible:ring-[#22D3EE] focus-visible:outline-none"
                   >
                     <span>Live Demo</span>
                     <ExternalLink className="w-3.5 h-3.5" />
@@ -254,10 +257,10 @@ export const ProjectsPage: React.FC = () => {
                     target="_blank"
                     rel="noopener noreferrer"
                     id={`projects-page-github-btn-${project.id}`}
-                    className={`py-2.5 px-4 rounded-xl text-xs font-bold flex items-center justify-center gap-2 border transition-all cursor-pointer ${
+                    className={`min-h-[40px] py-2 px-4 rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 border transition-all cursor-pointer focus-visible:ring-2 focus-visible:ring-[#22D3EE] focus-visible:outline-none ${
                       isDark
-                        ? 'bg-[#121217] border-white/15 text-white hover:border-[#00E5FF]'
-                        : 'bg-white border-slate-200 text-slate-800 hover:border-[#00E5FF]'
+                        ? 'bg-white/[0.04] border-white/10 text-white hover:bg-white/[0.08] hover:border-white/20'
+                        : 'bg-white border-slate-200 text-slate-800 hover:bg-slate-50 hover:border-slate-300'
                     }`}
                   >
                     <Github className="w-4 h-4 text-[#8B5CF6]" />

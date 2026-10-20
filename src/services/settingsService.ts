@@ -4,7 +4,7 @@ import { storageHelper } from './storageHelper';
 
 const DEFAULT_SETTINGS: SiteSettingsRow = {
   id: 'default',
-  site_title: 'MD. Moshiur Rahman | Luxury Portfolio',
+  site_title: 'MD. Moshiur Rahman | Senior Full-Stack Architect',
   website_name: 'MD. Moshiur Rahman',
   website_logo: '/logo.svg',
   dark_logo: '/logo-dark.svg',
@@ -12,16 +12,16 @@ const DEFAULT_SETTINGS: SiteSettingsRow = {
   favicon: '/favicon.ico',
   hero_banner: '/hero-banner.webp',
   meta_title: 'MD. Moshiur Rahman | Lead Full-Stack & Cloud Engineer',
-  meta_description: 'Premium dual-theme developer portfolio for MD. Moshiur Rahman featuring Apple Emerald Light and Black Mamba Luxury Gold themes.',
+  meta_description: 'Professional portfolio for MD. Moshiur Rahman — Senior Full-Stack Architect & Cloud Engineer specializing in modern web architecture, distributed systems, and elegant digital products.',
   seo_keywords: 'Full Stack Developer, React, TypeScript, Cloud Architecture, PostgreSQL, Moshiur Rahman',
   og_image: '/og-image.png',
   contact_email: 'borshonsweb@gmail.com',
   active_theme: 'dual',
   show_stats: true,
   maintenance_mode: false,
-  primary_color: '#00E5FF',
-  secondary_color: '#00C8A8',
-  accent_color: '#D4AF37',
+  primary_color: '#22D3EE',
+  secondary_color: '#8B5CF6',
+  accent_color: '#22D3EE',
 };
 
 export const settingsService = {

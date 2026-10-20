@@ -6,12 +6,9 @@ import { SkillModal } from '../components/modals/SkillModal';
 import { TechLogo } from '../components/common/TechLogo';
 import { ScrollReveal } from '../components/common/ScrollReveal';
 import { 
-  Sparkles, 
   Search, 
   Cpu, 
-  X,
-  Layers,
-  ArrowRight
+  X
 } from 'lucide-react';
 import { motion } from 'motion/react';
 
@@ -64,35 +61,35 @@ export const SkillsPage: React.FC = () => {
   }, [selectedCategory, searchQuery]);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14">
       
       {/* Page Header */}
-      <ScrollReveal direction="up" distance={18} duration={0.55}>
-        <div className="flex flex-col items-center text-center mb-10 sm:mb-14">
+      <ScrollReveal direction="up" distance={16} duration={0.5}>
+        <div className="flex flex-col items-center text-center mb-10 sm:mb-12">
           <div 
-            className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-4 ${
+            className={`inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold mb-3 border ${
               isDark
-                ? 'bg-[#8B5CF6]/20 text-[#00E5FF] border border-[#00E5FF]/30 shadow-[0_0_20px_rgba(0,229,255,0.15)]'
-                : 'bg-cyan-500/10 text-[#0097A7] border border-[#00E5FF]/30 shadow-[0_2px_12px_rgba(0,229,255,0.12)]'
+                ? 'bg-white/[0.04] text-[#22D3EE] border-white/10'
+                : 'bg-slate-100 text-[#0891B2] border-slate-200'
             }`}
           >
-            <Sparkles className="w-3.5 h-3.5" />
+            <Cpu className="w-3.5 h-3.5" />
             <span>Professional Competency Index</span>
           </div>
 
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tight mb-4">
+          <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight mb-4 text-balance">
             Technical Skills &amp;{' '}
             <span className={`text-transparent bg-clip-text ${
               isDark
-                ? 'bg-gradient-to-r from-white via-[#00E5FF] to-[#8B5CF6]'
-                : 'bg-gradient-to-r from-slate-900 via-[#00E5FF] to-[#8B5CF6]'
+                ? 'bg-gradient-to-r from-white via-[#22D3EE] to-[#8B5CF6]'
+                : 'bg-gradient-to-r from-slate-900 via-[#0891B2] to-[#7C3AED]'
             }`}>
               Architecture Stack
             </span>
           </h1>
           
-          <p className={`max-w-2xl text-base sm:text-lg leading-relaxed ${
-            isDark ? 'text-[#94A3B8]' : 'text-slate-600'
+          <p className={`max-w-2xl text-sm sm:text-base leading-relaxed ${
+            isDark ? 'text-[#A1AAB8]' : 'text-slate-600'
           }`}
           >
             Over 44+ production-tested technologies, frameworks, databases, DevOps pipelines, and UI/UX design tools with verified mastery metrics.
@@ -101,13 +98,13 @@ export const SkillsPage: React.FC = () => {
       </ScrollReveal>
 
       {/* Search & Category Filter Controls */}
-      <ScrollReveal direction="up" distance={15} duration={0.5} delay={0.1}>
-        <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4 mb-10 sm:mb-12">
+      <ScrollReveal direction="up" distance={14} duration={0.45} delay={0.1}>
+        <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-4 mb-10">
           
           {/* Search Input */}
-          <div className="relative w-full lg:w-84">
+          <div className="relative w-full lg:w-80">
             <Search className={`absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 ${
-              isDark ? 'text-slate-400' : 'text-slate-500'
+              isDark ? 'text-[#A1AAB8]' : 'text-slate-400'
             }`} />
             <input
               type="text"
@@ -115,15 +112,17 @@ export const SkillsPage: React.FC = () => {
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               id="skills-search-input"
-              className={`w-full pl-10 pr-10 py-2.5 rounded-2xl text-xs sm:text-sm border transition-all outline-none backdrop-blur-2xl ${
+              className={`w-full min-h-[44px] pl-10 pr-10 py-2.5 rounded-xl text-xs sm:text-sm border transition-all outline-none backdrop-blur-md focus-visible:ring-2 focus-visible:ring-[#22D3EE] ${
                 isDark
-                  ? 'bg-[#121217]/80 border-white/10 text-white placeholder-white/40 focus:border-[#00E5FF]'
-                  : 'bg-white/90 border-slate-200 text-slate-900 placeholder-slate-400 focus:border-[#00E5FF]'
+                  ? 'bg-[#111722]/80 border-white/10 text-white placeholder-slate-500 focus:border-[#22D3EE]'
+                  : 'bg-white border-slate-200 text-slate-900 placeholder-slate-400 focus:border-[#0891B2]'
               }`}
             />
             {searchQuery && (
               <button
+                type="button"
                 onClick={() => setSearchQuery('')}
+                aria-label="Clear skill search"
                 className="absolute right-3 top-1/2 -translate-y-1/2 p-1 cursor-pointer text-slate-400 hover:text-white"
               >
                 <X className="w-4 h-4" />
@@ -131,27 +130,28 @@ export const SkillsPage: React.FC = () => {
             )}
           </div>
 
-          {/* Category Pills */}
-          <div className={`flex items-center gap-1.5 p-1.5 rounded-2xl border backdrop-blur-2xl overflow-x-auto scrollbar-none max-w-full ${
+          {/* Category Tabs */}
+          <div className={`flex items-center gap-1 p-1 rounded-xl border backdrop-blur-md overflow-x-auto max-w-full ${
             isDark 
-              ? 'bg-[#121217]/70 border-white/10' 
-              : 'bg-white/85 border-slate-200'
+              ? 'bg-[#111722]/70 border-white/[0.08]' 
+              : 'bg-white border-slate-200 shadow-xs'
           }`}>
             {categories.map((cat) => {
               const isActive = selectedCategory === cat.id;
               return (
                 <button
                   key={cat.id}
+                  type="button"
                   onClick={() => setSelectedCategory(cat.id)}
                   id={`skills-category-filter-${cat.id.toLowerCase().replace(/[^a-z0-9]/g, '-')}`}
-                  className={`px-3.5 py-1.5 rounded-xl text-xs font-bold transition-all duration-200 whitespace-nowrap cursor-pointer ${
+                  className={`min-h-[36px] px-3.5 py-1.5 rounded-lg text-xs font-semibold transition-all duration-200 whitespace-nowrap cursor-pointer focus-visible:ring-2 focus-visible:ring-[#22D3EE] focus-visible:outline-none ${
                     isActive
                       ? isDark
-                        ? 'bg-gradient-to-r from-[#00E5FF] to-[#8B5CF6] text-black shadow-[0_0_15px_rgba(0,229,255,0.3)]'
-                        : 'bg-gradient-to-r from-[#00E5FF] to-[#8B5CF6] text-white shadow-[0_2px_10px_rgba(0,229,255,0.2)]'
+                        ? 'bg-gradient-to-r from-[#22D3EE] to-[#8B5CF6] text-black font-bold shadow-xs'
+                        : 'bg-gradient-to-r from-[#0891B2] to-[#7C3AED] text-white font-bold shadow-xs'
                       : isDark
-                        ? 'text-[#94A3B8] hover:text-white hover:bg-white/5'
-                        : 'text-slate-700 hover:text-slate-900 hover:bg-slate-100'
+                        ? 'text-[#A1AAB8] hover:text-white hover:bg-white/[0.04]'
+                        : 'text-slate-600 hover:text-slate-900 hover:bg-slate-100'
                   }`}
                 >
                   {cat.label}
@@ -163,51 +163,52 @@ export const SkillsPage: React.FC = () => {
         </div>
       </ScrollReveal>
 
-      {/* Skills Grid Rendering */}
+      {/* Skills Grid */}
       {filteredSkills.length === 0 ? (
-        <div className={`text-center py-20 p-8 rounded-[32px] border border-dashed ${
-          isDark ? 'border-white/15' : 'border-slate-300'
+        <div className={`text-center py-16 p-8 rounded-2xl border border-dashed ${
+          isDark ? 'border-white/10' : 'border-slate-300'
         }`}>
-          <Cpu className="w-12 h-12 mx-auto mb-3 text-[#00E5FF]" />
+          <Cpu className="w-10 h-10 mx-auto mb-3 text-[#22D3EE]" />
           <h3 className="text-base font-bold mb-1">No technical skills matching your search</h3>
-          <p className={`text-xs mb-4 ${isDark ? 'text-[#94A3B8]' : 'text-slate-500'}`}>
+          <p className={`text-xs mb-4 ${isDark ? 'text-[#A1AAB8]' : 'text-slate-500'}`}>
             Try adjusting your search query "{searchQuery}" or choose another category filter.
           </p>
           <button
+            type="button"
             onClick={() => { setSelectedCategory('All'); setSearchQuery(''); }}
-            className="text-xs font-bold hover:underline cursor-pointer text-[#00E5FF]"
+            className="text-xs font-bold hover:underline cursor-pointer text-[#22D3EE] focus-visible:ring-2 focus-visible:ring-[#22D3EE] rounded-md px-2 py-1"
           >
             Reset Filters
           </button>
         </div>
       ) : selectedCategory === 'All' && !searchQuery ? (
-        /* Section-Wise Categorized Layout */
-        <div className="space-y-12 sm:space-y-16">
+        /* Categorized Layout */
+        <div className="space-y-12 sm:space-y-14">
           {categoryOrder.map((group) => {
             const groupSkills = allSkills.filter(s => s.category === group);
             if (groupSkills.length === 0) return null;
 
             return (
-              <ScrollReveal key={group} direction="up" distance={15} duration={0.5}>
-                <div className="space-y-5">
+              <ScrollReveal key={group} direction="up" distance={14} duration={0.45}>
+                <div className="space-y-4">
                   {/* Category Section Heading */}
-                  <div className={`flex items-center justify-between border-b pb-3 ${
-                    isDark ? 'border-white/10' : 'border-slate-200'
+                  <div className={`flex items-center justify-between border-b pb-2.5 ${
+                    isDark ? 'border-white/[0.08]' : 'border-slate-200'
                   }`}>
-                    <div className="flex items-center gap-3">
-                      <h2 className={`text-xl sm:text-2xl font-black tracking-tight ${
+                    <div className="flex items-center gap-2.5">
+                      <h2 className={`text-lg sm:text-xl font-black tracking-tight ${
                         isDark ? 'text-white' : 'text-slate-900'
                       }`}>
                         {group}
                       </h2>
-                      <span className="text-[11px] font-bold font-mono px-2.5 py-0.5 rounded-full bg-[#00E5FF]/15 text-[#00E5FF] border border-[#00E5FF]/30">
+                      <span className="text-[11px] font-mono px-2 py-0.5 rounded-md bg-[#22D3EE]/10 text-[#22D3EE] border border-[#22D3EE]/20 tabular-nums">
                         {groupSkills.length} Skills
                       </span>
                     </div>
                   </div>
 
-                  {/* Minimal Glass Prism Skill Cards Grid */}
-                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3.5 sm:gap-5">
+                  {/* Skills Grid */}
+                  <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3.5 sm:gap-4">
                     {groupSkills.map((skill, index) => (
                       <SkillCard
                         key={skill.id}
@@ -229,7 +230,7 @@ export const SkillsPage: React.FC = () => {
           <div className={`mb-4 text-xs font-semibold ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
             Showing {filteredSkills.length} {filteredSkills.length === 1 ? 'skill' : 'skills'}
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3.5 sm:gap-5">
+          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-3.5 sm:gap-4">
             {filteredSkills.map((skill, index) => (
               <SkillCard
                 key={skill.id}
@@ -267,53 +268,53 @@ const SkillCard: React.FC<SkillCardProps> = ({ skill, index, isDark, onClick }) 
   return (
     <motion.button
       type="button"
-      initial={{ opacity: 0, y: 16 }}
+      initial={{ opacity: 0, y: 14 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '0px 0px -25px 0px', amount: 0.1 }}
+      viewport={{ once: true, margin: '0px 0px -25px 0px' }}
       transition={{ 
-        duration: 0.45, 
-        delay: Math.min(index * 0.025, 0.25),
+        duration: 0.35, 
+        delay: Math.min(index * 0.02, 0.2),
         ease: [0.21, 0.47, 0.32, 0.98] 
       }}
-      whileHover={{ y: -5, scale: 1.02 }}
+      whileHover={{ y: -3 }}
       whileTap={{ scale: 0.98 }}
       onClick={onClick}
       id={`skill-card-${skill.id}`}
       aria-label={`Open details for ${skill.name}`}
-      className={`group relative p-4 sm:p-5 rounded-[26px] border backdrop-blur-2xl transition-all duration-300 cursor-pointer overflow-hidden flex flex-col items-center justify-center text-center shadow-lg ${
+      className={`group relative p-4 rounded-xl border backdrop-blur-md transition-all duration-200 cursor-pointer overflow-hidden flex flex-col items-center justify-center text-center focus-visible:ring-2 focus-visible:ring-[#22D3EE] focus-visible:outline-none ${
         isDark
-          ? 'bg-[#121217]/75 border-white/10 hover:border-[#00E5FF]/60 hover:shadow-[0_8px_30px_rgba(0,229,255,0.2)] text-white'
-          : 'bg-white/85 border-white/60 hover:border-[#00E5FF] hover:shadow-[0_8px_25px_rgba(0,229,255,0.12)] text-slate-800 shadow-sm'
+          ? 'bg-[#111722]/70 border-white/[0.08] hover:border-[#22D3EE]/35 shadow-[0_8px_20px_-8px_rgba(0,0,0,0.5)] text-white'
+          : 'bg-white/85 border-slate-200/90 hover:border-[#0891B2]/40 shadow-[0_4px_16px_-4px_rgba(15,23,42,0.05)] text-slate-800'
       }`}
     >
       {/* Official Technology Logo */}
       <div 
-        className={`w-12 h-12 sm:w-14 sm:h-14 rounded-2xl flex items-center justify-center mb-3 transition-transform duration-300 group-hover:scale-110 shadow-sm ${
+        className={`w-11 h-11 rounded-xl flex items-center justify-center mb-2.5 transition-transform duration-200 group-hover:scale-105 ${
           isDark
-            ? 'bg-[#15151E] border border-white/15 group-hover:border-[#00E5FF]/50'
-            : 'bg-cyan-50/80 border border-[#00E5FF]/20 group-hover:border-[#00E5FF]'
+            ? 'bg-white/[0.04] border border-white/10 group-hover:border-[#22D3EE]/40'
+            : 'bg-slate-50 border border-slate-200 group-hover:border-[#0891B2]/40'
         }`}
       >
         <TechLogo 
           logo={skill.logo || skill.id} 
-          size={30} 
-          className="w-7 h-7 sm:w-8 sm:h-8" 
+          size={26} 
+          className="w-6 h-6" 
         />
       </div>
 
       {/* Skill Name */}
-      <h3 className={`font-extrabold text-xs sm:text-sm leading-tight mb-2 truncate max-w-full transition-colors ${
-        isDark ? 'group-hover:text-[#00E5FF]' : 'group-hover:text-[#0097A7]'
+      <h3 className={`font-bold text-xs sm:text-sm leading-tight mb-1.5 truncate max-w-full transition-colors ${
+        isDark ? 'group-hover:text-[#22D3EE]' : 'group-hover:text-[#0891B2]'
       }`}>
         {skill.name}
       </h3>
 
-      {/* Percentage Badge */}
+      {/* Proficiency Level */}
       <div 
-        className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[11px] sm:text-xs font-black font-mono tracking-tight transition-all duration-300 ${
+        className={`inline-flex items-center px-2 py-0.5 rounded-md text-[10px] font-mono tracking-tight tabular-nums border ${
           isDark
-            ? 'bg-[#00E5FF]/15 text-[#00E5FF] border border-[#00E5FF]/30 group-hover:bg-[#00E5FF] group-hover:text-black'
-            : 'bg-cyan-50 text-[#0097A7] border border-[#00E5FF]/30 group-hover:bg-[#00E5FF] group-hover:text-black'
+            ? 'bg-white/[0.04] text-[#22D3EE] border-white/10'
+            : 'bg-slate-100 text-[#0891B2] border-slate-200'
         }`}
       >
         <span>{skill.level}%</span>

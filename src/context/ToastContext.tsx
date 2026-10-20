@@ -61,19 +61,19 @@ export const ToastProvider: React.FC<{ children: React.ReactNode }> = ({ childre
               transition={{ duration: 0.25 }}
               className={`pointer-events-auto p-4 rounded-2xl border shadow-xl flex items-start gap-3 backdrop-blur-xl transition-colors ${
                 isDark
-                  ? 'bg-[#0B0B0F]/95 text-white border-[rgba(212,175,55,0.25)] shadow-[0_10px_30px_rgba(0,0,0,0.8)]'
+                  ? 'bg-[#111722]/95 text-white border-white/10 shadow-[0_10px_30px_rgba(0,0,0,0.8)]'
                   : 'bg-white/95 text-slate-900 border-slate-200 shadow-[0_10px_30px_rgba(0,0,0,0.1)]'
               }`}
             >
               <div className="shrink-0 mt-0.5">
                 {toast.type === 'success' && (
-                  <CheckCircle2 className={`w-5 h-5 ${isDark ? 'text-[#D4AF37]' : 'text-[#00C8A8]'}`} />
+                  <CheckCircle2 className="w-5 h-5 text-emerald-400" />
                 )}
                 {toast.type === 'error' && (
                   <AlertCircle className="w-5 h-5 text-rose-500" />
                 )}
                 {toast.type === 'info' && (
-                  <Info className={`w-5 h-5 ${isDark ? 'text-[#F5D76E]' : 'text-[#00E5FF]'}`} />
+                  <Info className="w-5 h-5 text-[#22D3EE]" />
                 )}
               </div>
 

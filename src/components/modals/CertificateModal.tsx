@@ -262,38 +262,38 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
 
         {/* Modal Window Container */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.92, y: 15 }}
+          initial={{ opacity: 0, scale: 0.95, y: 15 }}
           animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.92, y: 15 }}
+          exit={{ opacity: 0, scale: 0.95, y: 15 }}
           transition={{ type: 'spring', damping: 26, stiffness: 320 }}
-          className={`relative z-10 w-full max-w-5xl max-h-[94vh] flex flex-col rounded-[32px] overflow-hidden shadow-2xl border backdrop-blur-3xl ${
+          className={`relative z-10 w-full max-w-5xl max-h-[94vh] flex flex-col rounded-2xl overflow-hidden shadow-2xl border backdrop-blur-2xl ${
             isDark
-              ? 'bg-[#0A0A0A] border-[rgba(212,175,55,0.3)] text-[#FFFFFF] shadow-[0_0_80px_rgba(123,44,255,0.35)]'
-              : 'bg-white/95 border-[rgba(18,214,160,0.3)] text-slate-800 shadow-[0_20px_60px_rgba(18,214,160,0.18)]'
+              ? 'bg-[#111722]/95 border-white/10 text-[#F8FAFC] shadow-[0_16px_50px_rgba(0,0,0,0.8)]'
+              : 'bg-white/95 border-slate-200 shadow-2xl text-slate-800'
           }`}
           onClick={(e) => e.stopPropagation()}
         >
           {/* Top Bar Header */}
           <div className={`flex items-center justify-between px-4 sm:px-6 py-3.5 border-b backdrop-blur-md z-20 ${
-            isDark ? 'border-zinc-800 bg-[#0A0A0A]/95' : 'border-slate-200 bg-white/90'
+            isDark ? 'border-white/10 bg-[#111722]/95' : 'border-slate-200 bg-white/90'
           }`}>
             <div className="flex items-center gap-3 min-w-0 pr-4">
-              <div className={`p-1.5 rounded-2xl border flex items-center justify-center flex-shrink-0 ${
-                isDark ? 'bg-white/5 border-white/10' : 'bg-emerald-50 border-emerald-100'
+              <div className={`p-1.5 rounded-xl border flex items-center justify-center flex-shrink-0 ${
+                isDark ? 'bg-white/[0.04] border-white/10' : 'bg-slate-100 border-slate-200'
               }`}>
                 <IssuerLogo issuer={certificate.issuer} size={20} className="w-5 h-5" />
               </div>
               <div className="min-w-0">
                 <div className="flex items-center gap-2">
-                  <span className={`text-xs font-bold uppercase tracking-wider ${
-                    isDark ? 'text-[#F5D06F]' : 'text-[#12D6A0]'
+                  <span className={`text-xs font-mono font-semibold uppercase tracking-wider ${
+                    isDark ? 'text-[#22D3EE]' : 'text-[#0891B2]'
                   }`}>
                     {certificate.issuer}
                   </span>
                   <span className={`inline-flex items-center gap-1 text-[10px] font-mono ${
-                    isDark ? 'text-[#D4AF37]' : 'text-[#0EB385]'
+                    isDark ? 'text-[#A1AAB8]' : 'text-slate-500'
                   }`}>
-                    <ShieldCheck className="w-3 h-3" />
+                    <ShieldCheck className="w-3 h-3 text-[#22D3EE]" />
                     Verified
                   </span>
                 </div>
@@ -345,7 +345,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
                     title="Reset Zoom (0)"
                     aria-label="Reset Zoom"
                     className={`p-1.5 rounded-xl transition-colors cursor-pointer ${
-                      isDark ? 'text-[#F5D06F] hover:bg-zinc-800' : 'text-[#12D6A0] hover:bg-slate-200'
+                      isDark ? 'text-[#22D3EE] hover:bg-zinc-800' : 'text-[#0891B2] hover:bg-slate-200'
                     }`}
                   >
                     <RotateCcw className="w-3.5 h-3.5" />
@@ -360,9 +360,9 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
                 rel="noreferrer"
                 title="Open Original Image in New Tab"
                 aria-label="Open Original Image"
-                className={`p-2 rounded-2xl border transition-colors flex items-center justify-center ${
+                className={`p-2 rounded-xl border transition-colors flex items-center justify-center cursor-pointer focus-visible:ring-2 focus-visible:ring-[#22D3EE] focus-visible:outline-none ${
                   isDark
-                    ? 'bg-zinc-900/90 border-zinc-700/60 text-zinc-300 hover:text-white hover:bg-zinc-800'
+                    ? 'bg-white/[0.04] border-white/10 text-slate-300 hover:text-white hover:border-[#22D3EE]/40'
                     : 'bg-slate-100 border-slate-200 text-slate-700 hover:text-slate-900 hover:bg-slate-200'
                 }`}
               >
@@ -376,13 +376,13 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
                 id="certificate-modal-close-btn"
                 title="Close (Esc)"
                 aria-label="Close Certificate Modal"
-                className={`p-2 rounded-2xl border transition-all cursor-pointer ${
+                className={`p-2 rounded-xl border transition-all cursor-pointer focus-visible:ring-2 focus-visible:ring-[#22D3EE] focus-visible:outline-none ${
                   isDark
-                    ? 'bg-zinc-800 border-zinc-700 hover:bg-red-500/80 text-zinc-300 hover:text-white'
-                    : 'bg-slate-100 border-slate-200 hover:bg-red-500 hover:text-white text-slate-700'
+                    ? 'border-white/10 bg-[#080B12]/80 text-[#A1AAB8] hover:text-white hover:border-[#22D3EE]/40'
+                    : 'border-slate-200 bg-white text-slate-600 hover:text-slate-900 hover:border-[#0891B2]/40'
                 }`}
               >
-                <X className="w-5 h-5" />
+                <X className="w-4 h-4" />
               </button>
             </div>
           </div>
@@ -399,7 +399,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
           >
             {/* Ambient Backlight */}
             <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-              <div className="w-3/4 h-3/4 bg-[#D4AF37]/10 blur-3xl rounded-full" />
+              <div className="w-3/4 h-3/4 bg-[#22D3EE]/10 blur-3xl rounded-full" />
             </div>
 
             {/* Navigation Left Arrow */}
@@ -412,9 +412,9 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
                 }}
                 title="Previous (Left Arrow)"
                 aria-label="Previous Certificate"
-                className="absolute left-3 sm:left-5 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-2xl bg-black/70 hover:bg-[#D4AF37] hover:text-black border border-white/20 text-white flex items-center justify-center transition-all shadow-xl backdrop-blur-md active:scale-95"
+                className="absolute left-3 sm:left-5 top-1/2 -translate-y-1/2 z-30 w-10 h-10 rounded-xl bg-black/70 hover:bg-[#22D3EE] hover:text-black border border-white/20 text-white flex items-center justify-center transition-all shadow-xl backdrop-blur-md active:scale-95"
               >
-                <ChevronLeft className="w-6 h-6" />
+                <ChevronLeft className="w-5 h-5" />
               </button>
             )}
 
@@ -428,9 +428,9 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
                 }}
                 title="Next (Right Arrow)"
                 aria-label="Next Certificate"
-                className="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 z-30 w-11 h-11 rounded-2xl bg-black/70 hover:bg-[#D4AF37] hover:text-black border border-white/20 text-white flex items-center justify-center transition-all shadow-xl backdrop-blur-md active:scale-95"
+                className="absolute right-3 sm:right-5 top-1/2 -translate-y-1/2 z-30 w-10 h-10 rounded-xl bg-black/70 hover:bg-[#22D3EE] hover:text-black border border-white/20 text-white flex items-center justify-center transition-all shadow-xl backdrop-blur-md active:scale-95"
               >
-                <ChevronRight className="w-6 h-6" />
+                <ChevronRight className="w-5 h-5" />
               </button>
             )}
 
@@ -462,11 +462,11 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
 
           {/* Modal Footer with metadata details */}
           <div className={`px-4 sm:px-6 py-4 border-t flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs ${
-            isDark ? 'border-zinc-800/80 bg-[#0A0A0A]' : 'border-slate-200 bg-white'
+            isDark ? 'border-white/[0.08] bg-[#0E1420]/80' : 'border-slate-200 bg-white'
           }`}>
             <div className="flex flex-wrap items-center gap-2">
               <span className={`font-mono px-2 py-0.5 rounded-lg border ${
-                isDark ? 'bg-zinc-900 text-[#F5D06F] border-zinc-700' : 'bg-emerald-50 text-[#12D6A0] border-emerald-200 font-bold'
+                isDark ? 'bg-white/[0.04] text-[#22D3EE] border-white/10' : 'bg-cyan-50 text-[#0891B2] border-cyan-200 font-bold'
               }`}>
                 {certificate.credentialId || 'AUTHENTIC-ID'}
               </span>

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { useTheme } from '../../context/ThemeContext';
 import { usePortfolioData } from '../../context/DataContext';
 import { portfolioConfig, assets } from '../../config/portfolio';
@@ -7,18 +7,12 @@ import {
   Menu, 
   X, 
   Sun, 
-  Moon,
-  Sparkles
+  Moon
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
-interface NavbarProps {
-  onTriggerAdmin?: () => void;
-}
-
-export const Navbar: React.FC<NavbarProps> = () => {
+export const Navbar: React.FC = () => {
   const location = useLocation();
-  const navigate = useNavigate();
   const { isDark, toggleTheme } = useTheme();
   const { profile, settings } = usePortfolioData();
   const [scrolled, setScrolled] = useState(false);
@@ -34,7 +28,6 @@ export const Navbar: React.FC<NavbarProps> = () => {
     { name: 'Contact', path: '/contact' },
   ];
 
-  // Helper to check if route is active
   const isItemActive = (path: string) => {
     if (path === '/home') {
       return location.pathname === '/' || location.pathname === '/home';
@@ -50,10 +43,20 @@ export const Navbar: React.FC<NavbarProps> = () => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  // Close mobile menu on route change
+  // Close mobile menu on route change or Escape key
   useEffect(() => {
     setMobileMenuOpen(false);
   }, [location.pathname]);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && mobileMenuOpen) {
+        setMobileMenuOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, [mobileMenuOpen]);
 
   const currentLogo = isDark 
     ? (settings?.dark_logo || profile?.logo_dark || assets.logo.dark)
@@ -72,45 +75,45 @@ export const Navbar: React.FC<NavbarProps> = () => {
           className={`pointer-events-auto transition-all duration-300 ${
             scrolled
               ? isDark
-                ? 'w-[94%] max-w-4xl mt-3 py-2.5 px-5 sm:px-7 rounded-[24px] bg-[#0A0A0A]/85 backdrop-blur-2xl border border-white/12 shadow-[0_12px_40px_rgba(0,0,0,0.6),0_0_20px_rgba(0,229,255,0.12)] text-[#F8FAFC]'
-                : 'w-[94%] max-w-4xl mt-3 py-2.5 px-5 sm:px-7 rounded-[24px] bg-white/85 backdrop-blur-2xl border border-white/60 shadow-[0_12px_35px_rgba(0,229,255,0.12),0_4px_16px_rgba(0,0,0,0.04)] text-slate-900'
+                ? 'w-[94%] max-w-4xl mt-3 py-2 px-5 sm:px-7 rounded-2xl bg-[#111722]/85 backdrop-blur-xl border border-white/10 shadow-[0_16px_40px_-12px_rgba(0,0,0,0.6)] text-[#F8FAFC]'
+                : 'w-[94%] max-w-4xl mt-3 py-2 px-5 sm:px-7 rounded-2xl bg-white/85 backdrop-blur-xl border border-slate-200/80 shadow-[0_12px_30px_-10px_rgba(15,23,42,0.06)] text-slate-900'
               : isDark
                 ? 'w-full max-w-6xl mt-2 py-4 px-6 sm:px-8 bg-transparent text-[#F8FAFC]'
                 : 'w-full max-w-6xl mt-2 py-4 px-6 sm:px-8 bg-transparent text-slate-900'
           }`}
         >
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between gap-4">
             
-            {/* Left: Brand Identity */}
-            <div className="flex items-center">
+            {/* Zone 1: Brand Wordmark (Single Text Element) */}
+            <div className="flex items-center shrink-0">
               <Link
                 to="/"
                 id="navbar-brand-logo"
-                className="flex items-center gap-2.5 group cursor-pointer"
+                className="flex items-center gap-2.5 group cursor-pointer focus-visible:ring-2 focus-visible:ring-[#22D3EE] focus-visible:outline-none rounded-xl"
               >
                 {!logoImageError && currentLogo ? (
                   <img
                     src={currentLogo}
                     alt={websiteName}
                     onError={() => setLogoImageError(true)}
-                    className="h-8 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+                    className="h-7 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
                   />
                 ) : (
-                  <div className="w-8 h-8 rounded-xl flex items-center justify-center font-black text-xs tracking-wider bg-gradient-to-r from-[#00E5FF] to-[#8B5CF6] text-black">
+                  <div className="w-7 h-7 rounded-lg flex items-center justify-center font-black text-xs tracking-wider bg-gradient-to-r from-[#22D3EE] to-[#8B5CF6] text-black">
                     MR
                   </div>
                 )}
                 <span className="font-bold text-sm tracking-tight hidden sm:inline-block">
                   {profile?.first_name || portfolioConfig.personal.firstName}{' '}
-                  <span className="text-[#00E5FF]">
+                  <span className="text-[#22D3EE]">
                     {profile?.last_name || portfolioConfig.personal.lastName}
                   </span>
                 </span>
               </Link>
             </div>
 
-            {/* Center: Center-Aligned Clean Navigation Links */}
-            <nav className="hidden md:flex items-center justify-center space-x-7 lg:space-x-8">
+            {/* Zone 2: Navigation Links (Clean Single-Line, No Pills) */}
+            <nav className="hidden md:flex items-center justify-center space-x-6 lg:space-x-7 shrink-0">
               {navItems.map((item) => {
                 const active = isItemActive(item.path);
                 return (
@@ -118,24 +121,24 @@ export const Navbar: React.FC<NavbarProps> = () => {
                     key={item.name}
                     to={item.path}
                     id={`nav-link-${item.name.toLowerCase()}`}
-                    className={`relative py-1 text-xs font-semibold tracking-wide transition-colors duration-200 cursor-pointer ${
+                    className={`relative py-1 text-xs font-semibold tracking-wide transition-colors duration-200 cursor-pointer whitespace-nowrap focus-visible:ring-2 focus-visible:ring-[#22D3EE] focus-visible:outline-none rounded-md px-1.5 ${
                       active
                         ? isDark
                           ? 'text-white font-bold'
                           : 'text-slate-950 font-bold'
                         : isDark
-                          ? 'text-slate-400 hover:text-white'
+                          ? 'text-[#A1AAB8] hover:text-white'
                           : 'text-slate-600 hover:text-slate-900'
                     }`}
                   >
                     <span>{item.name}</span>
 
-                    {/* Thin animated underline below active item */}
+                    {/* Subtle animated hairline indicator */}
                     {active && (
                       <motion.div
                         layoutId="activeNavUnderline"
                         transition={{ type: 'spring', stiffness: 380, damping: 30 }}
-                        className="absolute -bottom-1 left-0 right-0 h-[2px] rounded-full bg-gradient-to-r from-[#00E5FF] to-[#8B5CF6] shadow-[0_0_8px_rgba(0,229,255,0.7)]"
+                        className="absolute -bottom-1 left-1.5 right-1.5 h-[2px] rounded-full bg-gradient-to-r from-[#22D3EE] to-[#8B5CF6]"
                       />
                     )}
                   </Link>
@@ -143,20 +146,20 @@ export const Navbar: React.FC<NavbarProps> = () => {
               })}
             </nav>
 
-            {/* Right: Theme Toggle & Mobile Menu Trigger */}
-            <div className="flex items-center space-x-2.5">
+            {/* Zone 3: Theme Toggle & Mobile Menu Trigger */}
+            <div className="flex items-center space-x-2 shrink-0">
               <button
                 type="button"
                 onClick={toggleTheme}
                 id="navbar-theme-toggle-btn"
                 aria-label={`Switch to ${isDark ? 'light' : 'dark'} mode`}
-                className={`p-2 rounded-xl transition-colors cursor-pointer border ${
+                className={`min-h-[40px] min-w-[40px] p-2 rounded-xl transition-all duration-200 cursor-pointer border flex items-center justify-center focus-visible:ring-2 focus-visible:ring-[#22D3EE] focus-visible:outline-none ${
                   isDark
-                    ? 'bg-white/5 border-white/10 text-slate-300 hover:text-[#00E5FF] hover:border-[#00E5FF]/40'
-                    : 'bg-slate-100/80 border-slate-200 text-slate-700 hover:text-[#0097A7] hover:border-[#00E5FF]/40'
+                    ? 'bg-white/[0.04] border-white/10 text-slate-300 hover:text-[#22D3EE] hover:border-[#22D3EE]/40'
+                    : 'bg-slate-100/80 border-slate-200 text-slate-700 hover:text-[#0891B2] hover:border-[#0891B2]/40'
                 }`}
               >
-                {isDark ? <Sun className="w-4 h-4 text-[#00E5FF]" /> : <Moon className="w-4 h-4 text-violet-600" />}
+                {isDark ? <Sun className="w-4 h-4 text-[#22D3EE]" /> : <Moon className="w-4 h-4 text-[#7C3AED]" />}
               </button>
 
               {/* Mobile Menu Hamburger */}
@@ -164,10 +167,11 @@ export const Navbar: React.FC<NavbarProps> = () => {
                 type="button"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                 id="navbar-mobile-menu-btn"
-                aria-label="Toggle navigation drawer"
-                className={`md:hidden p-2 rounded-xl border transition-colors cursor-pointer ${
+                aria-label={mobileMenuOpen ? 'Close navigation drawer' : 'Open navigation drawer'}
+                aria-expanded={mobileMenuOpen}
+                className={`md:hidden min-h-[40px] min-w-[40px] p-2 rounded-xl border transition-all duration-200 cursor-pointer flex items-center justify-center focus-visible:ring-2 focus-visible:ring-[#22D3EE] focus-visible:outline-none ${
                   isDark
-                    ? 'bg-white/5 border-white/10 text-slate-300 hover:text-white'
+                    ? 'bg-white/[0.04] border-white/10 text-slate-300 hover:text-white'
                     : 'bg-slate-100 border-slate-200 text-slate-700 hover:text-slate-900'
                 }`}
               >
@@ -179,21 +183,35 @@ export const Navbar: React.FC<NavbarProps> = () => {
         </div>
       </header>
 
+      {/* Backdrop for Mobile Navigation */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={() => setMobileMenuOpen(false)}
+            aria-hidden="true"
+            className="fixed inset-0 z-30 bg-black/60 backdrop-blur-sm md:hidden"
+          />
+        )}
+      </AnimatePresence>
+
       {/* Mobile Glass Navigation Drawer */}
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.2 }}
-            className={`fixed inset-x-4 top-20 z-40 md:hidden p-6 rounded-[28px] border shadow-2xl backdrop-blur-2xl ${
+            initial={{ opacity: 0, y: -16, scale: 0.98 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -16, scale: 0.98 }}
+            transition={{ duration: 0.2, ease: 'easeOut' }}
+            className={`fixed inset-x-4 top-20 z-40 md:hidden p-5 rounded-2xl border shadow-2xl backdrop-blur-2xl ${
               isDark
-                ? 'bg-[#0A0A0A]/95 border-white/12 text-white shadow-[0_16px_50px_rgba(0,0,0,0.8)]'
-                : 'bg-white/95 border-white/60 text-slate-900 shadow-[0_16px_40px_rgba(0,229,255,0.15)]'
+                ? 'bg-[#111722]/95 border-white/10 text-white shadow-[0_16px_50px_rgba(0,0,0,0.8)]'
+                : 'bg-white/95 border-slate-200 text-slate-900 shadow-[0_16px_40px_rgba(15,23,42,0.12)]'
             }`}
           >
-            <div className="flex flex-col items-center space-y-4 py-2">
+            <div className="flex flex-col space-y-1 py-1">
               {navItems.map((item) => {
                 const active = isItemActive(item.path);
                 return (
@@ -201,19 +219,19 @@ export const Navbar: React.FC<NavbarProps> = () => {
                     key={item.name}
                     to={item.path}
                     id={`mobile-nav-link-${item.name.toLowerCase()}`}
-                    className={`relative py-2 text-sm font-semibold tracking-wide transition-colors cursor-pointer ${
+                    className={`min-h-[44px] px-4 rounded-xl text-sm font-semibold tracking-wide transition-all duration-200 cursor-pointer flex items-center justify-between focus-visible:ring-2 focus-visible:ring-[#22D3EE] focus-visible:outline-none ${
                       active
                         ? isDark
-                          ? 'text-[#00E5FF] font-bold'
-                          : 'text-[#0097A7] font-bold'
+                          ? 'bg-white/[0.06] text-[#22D3EE] font-bold border border-[#22D3EE]/30'
+                          : 'bg-slate-100 text-[#0891B2] font-bold border border-cyan-200'
                         : isDark
-                          ? 'text-slate-400 hover:text-white'
-                          : 'text-slate-600 hover:text-slate-900'
+                          ? 'text-[#A1AAB8] hover:text-white hover:bg-white/[0.03]'
+                          : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
                     }`}
                   >
                     <span>{item.name}</span>
                     {active && (
-                      <div className="mx-auto mt-1 h-[2px] w-8 rounded-full bg-gradient-to-r from-[#00E5FF] to-[#8B5CF6]" />
+                      <span className="w-1.5 h-1.5 rounded-full bg-[#22D3EE]" />
                     )}
                   </Link>
                 );

@@ -15,16 +15,16 @@ export const CertificatesPdfTemplate: React.FC<CertificatesPdfTemplateProps> = (
   const { personal, certificates } = portfolioConfig;
 
   const paperBg = '#FFFFFF';
-  const headerBg = isDark ? '#050505' : '#F0FDF4';
+  const headerBg = isDark ? '#080B12' : '#F8FAFC';
   const headerText = isDark ? '#FFFFFF' : '#0F172A';
   const headerSubText = isDark ? '#CBD5E1' : '#475569';
-  const headerTitleColor = isDark ? '#D4AF37' : '#00A57A';
-  const headerDivider = isDark ? '#D4AF37' : '#00C896';
+  const headerTitleColor = isDark ? '#22D3EE' : '#0891B2';
+  const headerDivider = isDark ? '#22D3EE' : '#0891B2';
   
   const bodyText = '#0F172A';
   const bodySubtle = '#64748B';
   const cardBg = '#F8FAFC';
-  const cardBorder = isDark ? 'rgba(212, 175, 55, 0.35)' : 'rgba(0, 200, 150, 0.25)';
+  const cardBorder = isDark ? 'rgba(34, 211, 238, 0.35)' : 'rgba(8, 145, 178, 0.25)';
   const borderLight = '#E2E8F0';
 
   return (
@@ -60,9 +60,9 @@ export const CertificatesPdfTemplate: React.FC<CertificatesPdfTemplateProps> = (
             <div className="flex items-center gap-2 mb-1">
               <div 
                 style={{ 
-                  backgroundColor: isDark ? 'rgba(124, 58, 237, 0.3)' : 'rgba(0, 200, 150, 0.15)',
-                  color: isDark ? '#D4AF37' : '#00A57A',
-                  borderColor: isDark ? 'rgba(212, 175, 55, 0.5)' : 'rgba(0, 200, 150, 0.4)'
+                  backgroundColor: isDark ? 'rgba(124, 58, 237, 0.2)' : 'rgba(8, 145, 178, 0.1)',
+                  color: isDark ? '#22D3EE' : '#0891B2',
+                  borderColor: isDark ? 'rgba(34, 211, 238, 0.4)' : 'rgba(8, 145, 178, 0.3)'
                 }}
                 className="text-[9.5px] font-extrabold uppercase tracking-widest px-2.5 py-0.5 rounded-full border flex items-center gap-1.5"
               >
@@ -98,9 +98,9 @@ export const CertificatesPdfTemplate: React.FC<CertificatesPdfTemplateProps> = (
 
           <div 
             style={{ 
-              backgroundColor: isDark ? '#121212' : '#FFFFFF',
+              backgroundColor: isDark ? '#111722' : '#FFFFFF',
               borderColor: headerDivider,
-              boxShadow: isDark ? '0 0 15px rgba(212,175,55,0.3)' : '0 4px 15px rgba(0,200,150,0.15)'
+              boxShadow: isDark ? '0 0 15px rgba(34,211,238,0.25)' : '0 4px 15px rgba(8,145,178,0.15)'
             }}
             className="px-4 py-2 rounded-2xl border-2 flex items-center gap-2.5"
           >
@@ -108,7 +108,7 @@ export const CertificatesPdfTemplate: React.FC<CertificatesPdfTemplateProps> = (
             <div>
               <div style={{ color: isDark ? '#94A3B8' : '#64748B' }} className="text-[8px] font-bold uppercase">Authenticity</div>
               <div 
-                style={{ color: isDark ? '#D4AF37' : '#00A57A' }}
+                style={{ color: isDark ? '#22D3EE' : '#0891B2' }}
                 className="text-[10px] font-black tracking-wider"
               >
                 VERIFIED ASSETS

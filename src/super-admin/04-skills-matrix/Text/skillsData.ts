@@ -851,7 +851,7 @@ export const skillsData: Skill[] = [
     logo: 'visualdesign',
     experience: '5 Years',
     experienceDuration: '5 Years',
-    accentColor: '#D4AF37',
+    accentColor: '#8B5CF6',
     description: 'High-end visual aesthetics: brand identity guidelines, custom iconography, balanced color harmonies, gradient atmospheres, and luxury digital presentation.',
     projects: ['Apex AI Workspace', 'Luxe Commerce Suite', 'Portfolio Platform'],
     proficiencyHighlights: [

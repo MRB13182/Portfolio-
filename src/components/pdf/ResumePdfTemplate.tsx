@@ -37,20 +37,20 @@ export const ResumePdfTemplate: React.FC<ResumePdfTemplateProps> = ({
   // Exact sRGB hex colors ensuring 100% standard PDF rasterization
   // Paper is ALWAYS white (#FFFFFF) for professional crisp printing
   const paperBg = '#FFFFFF';
-  const headerBg = isDark ? '#050505' : '#F0FDF4';
+  const headerBg = isDark ? '#080B12' : '#F8FAFC';
   const headerText = isDark ? '#FFFFFF' : '#0F172A';
-  const headerSubText = isDark ? '#CBD5E1' : '#475569';
-  const headerTitleColor = isDark ? '#D4AF37' : '#00A57A';
-  const headerDivider = isDark ? '#D4AF37' : '#00C896';
+  const headerSubText = isDark ? '#94A3B8' : '#475569';
+  const headerTitleColor = isDark ? '#22D3EE' : '#0891B2';
+  const headerDivider = isDark ? '#22D3EE' : '#0891B2';
   
   // Body Content Area (White background with crisp high-contrast dark typography)
   const bodyText = '#0F172A';
   const bodyMuted = '#334155';
   const bodySubtle = '#64748B';
-  const sectionTitleColor = isDark ? '#7C3AED' : '#00A57A';
-  const accentColor = isDark ? '#D4AF37' : '#00C896';
+  const sectionTitleColor = isDark ? '#7C3AED' : '#0891B2';
+  const accentColor = isDark ? '#22D3EE' : '#0891B2';
   const cardBg = '#F8FAFC';
-  const cardBorder = isDark ? 'rgba(212, 175, 55, 0.35)' : 'rgba(0, 200, 150, 0.25)';
+  const cardBorder = isDark ? 'rgba(34, 211, 238, 0.35)' : 'rgba(8, 145, 178, 0.25)';
   const borderLight = '#E2E8F0';
 
   return (
@@ -65,8 +65,6 @@ export const ResumePdfTemplate: React.FC<ResumePdfTemplateProps> = ({
       className="relative overflow-hidden font-sans box-border select-none leading-tight flex flex-col justify-between"
     >
       {/* ===================== TOP HEADER BLOCK ===================== */}
-      {/* In Dark mode: Black Mamba #050505 with Royal Purple glow & Gold divider */}
-      {/* In Light mode: Apple Emerald #F0FDF4 with Mint accent */}
       <div 
         style={{ 
           backgroundColor: headerBg,
@@ -90,9 +88,9 @@ export const ResumePdfTemplate: React.FC<ResumePdfTemplateProps> = ({
             <div className="flex items-center gap-2 mb-1">
               <div 
                 style={{ 
-                  backgroundColor: isDark ? 'rgba(124, 58, 237, 0.3)' : 'rgba(0, 200, 150, 0.15)',
-                  color: isDark ? '#D4AF37' : '#00A57A',
-                  borderColor: isDark ? 'rgba(212, 175, 55, 0.5)' : 'rgba(0, 200, 150, 0.4)'
+                  backgroundColor: isDark ? 'rgba(124, 58, 237, 0.2)' : 'rgba(8, 145, 178, 0.1)',
+                  color: isDark ? '#22D3EE' : '#0891B2',
+                  borderColor: isDark ? 'rgba(34, 211, 238, 0.4)' : 'rgba(8, 145, 178, 0.3)'
                 }}
                 className="text-[9.5px] font-extrabold uppercase tracking-widest px-2.5 py-0.5 rounded-full border flex items-center gap-1.5"
               >
@@ -138,7 +136,7 @@ export const ResumePdfTemplate: React.FC<ResumePdfTemplateProps> = ({
               style={{ 
                 backgroundColor: '#FFFFFF',
                 borderColor: headerDivider,
-                boxShadow: isDark ? '0 0 15px rgba(212,175,55,0.4)' : '0 4px 15px rgba(0,200,150,0.25)'
+                boxShadow: isDark ? '0 0 15px rgba(34, 211, 238, 0.3)' : '0 4px 15px rgba(8, 145, 178, 0.2)'
               }}
               className="w-22 h-22 rounded-2xl overflow-hidden p-1 border-2 relative"
             >
@@ -171,7 +169,7 @@ export const ResumePdfTemplate: React.FC<ResumePdfTemplateProps> = ({
         {/* Contact Strip */}
         <div 
           style={{ 
-            borderColor: isDark ? 'rgba(212, 175, 55, 0.2)' : 'rgba(0, 200, 150, 0.2)',
+            borderColor: isDark ? 'rgba(34, 211, 238, 0.2)' : 'rgba(8, 145, 178, 0.2)',
             color: headerSubText
           }}
           className="mt-3 pt-2.5 border-t grid grid-cols-4 gap-2 text-[9.5px] font-medium"
@@ -209,7 +207,7 @@ export const ResumePdfTemplate: React.FC<ResumePdfTemplateProps> = ({
               <div className="flex items-center gap-1.5 mb-2.5 pb-1 border-b border-slate-200">
                 <Briefcase style={{ color: sectionTitleColor }} className="w-3.5 h-3.5" />
                 <h2 
-                  style={{ color: isDark ? '#7C3AED' : '#00A57A' }}
+                  style={{ color: isDark ? '#7C3AED' : '#0891B2' }}
                   className="text-xs font-black uppercase tracking-wider"
                 >
                   Professional Work Experience
@@ -220,7 +218,7 @@ export const ResumePdfTemplate: React.FC<ResumePdfTemplateProps> = ({
                 {experience.map((item) => (
                   <div 
                     key={item.id} 
-                    style={{ borderColor: isDark ? '#D4AF37' : '#00C896' }}
+                    style={{ borderColor: isDark ? '#7C3AED' : '#0891B2' }}
                     className="relative pl-3 border-l-2"
                   >
                     <div className="flex items-center justify-between text-[10px] mb-0.5">
@@ -228,7 +226,7 @@ export const ResumePdfTemplate: React.FC<ResumePdfTemplateProps> = ({
                       <span style={{ color: bodySubtle }} className="font-mono text-[8.5px]">{item.duration}</span>
                     </div>
                     <div 
-                      style={{ color: isDark ? '#7C3AED' : '#00A57A' }}
+                      style={{ color: isDark ? '#7C3AED' : '#0891B2' }}
                       className="text-[9px] font-semibold mb-1"
                     >
                       {item.company} • <span style={{ color: bodySubtle }} className="font-normal">{item.location}</span>
@@ -261,7 +259,7 @@ export const ResumePdfTemplate: React.FC<ResumePdfTemplateProps> = ({
               <div className="flex items-center gap-1.5 mb-2 pb-1 border-b border-slate-200">
                 <Code2 style={{ color: sectionTitleColor }} className="w-3.5 h-3.5" />
                 <h2 
-                  style={{ color: isDark ? '#7C3AED' : '#00A57A' }}
+                  style={{ color: isDark ? '#7C3AED' : '#0891B2' }}
                   className="text-xs font-black uppercase tracking-wider"
                 >
                   High-Impact Production Projects
@@ -282,8 +280,8 @@ export const ResumePdfTemplate: React.FC<ResumePdfTemplateProps> = ({
                       <span style={{ color: bodyText }} className="font-bold text-[9.5px] truncate">{proj.title}</span>
                       <span 
                         style={{ 
-                          backgroundColor: isDark ? 'rgba(124, 58, 237, 0.12)' : 'rgba(0, 200, 150, 0.12)',
-                          color: isDark ? '#7C3AED' : '#00A57A'
+                          backgroundColor: isDark ? 'rgba(124, 58, 237, 0.12)' : 'rgba(8, 145, 178, 0.12)',
+                          color: isDark ? '#7C3AED' : '#0891B2'
                         }}
                         className="text-[7.5px] font-bold uppercase px-1.5 py-0.2 rounded"
                       >
@@ -329,7 +327,7 @@ export const ResumePdfTemplate: React.FC<ResumePdfTemplateProps> = ({
               <div className="flex items-center gap-1.5 mb-2 pb-1 border-b border-slate-200">
                 <Sparkles style={{ color: sectionTitleColor }} className="w-3.5 h-3.5" />
                 <h2 
-                  style={{ color: isDark ? '#7C3AED' : '#00A57A' }}
+                  style={{ color: isDark ? '#7C3AED' : '#0891B2' }}
                   className="text-xs font-black uppercase tracking-wider"
                 >
                   Core Competencies
@@ -339,7 +337,7 @@ export const ResumePdfTemplate: React.FC<ResumePdfTemplateProps> = ({
               <div className="space-y-2">
                 {/* Category 1: Frontend */}
                 <div>
-                  <div style={{ color: isDark ? '#7C3AED' : '#00A57A' }} className="text-[8.5px] font-bold uppercase mb-1">
+                  <div style={{ color: isDark ? '#7C3AED' : '#0891B2' }} className="text-[8.5px] font-bold uppercase mb-1">
                     Frontend Architecture
                   </div>
                   <div className="flex flex-wrap gap-1">
@@ -361,7 +359,7 @@ export const ResumePdfTemplate: React.FC<ResumePdfTemplateProps> = ({
 
                 {/* Category 2: Backend */}
                 <div>
-                  <div style={{ color: isDark ? '#7C3AED' : '#00A57A' }} className="text-[8.5px] font-bold uppercase mb-1">
+                  <div style={{ color: isDark ? '#7C3AED' : '#0891B2' }} className="text-[8.5px] font-bold uppercase mb-1">
                     Backend &amp; Databases
                   </div>
                   <div className="flex flex-wrap gap-1">
@@ -383,7 +381,7 @@ export const ResumePdfTemplate: React.FC<ResumePdfTemplateProps> = ({
 
                 {/* Category 3: Cloud & Design */}
                 <div>
-                  <div style={{ color: isDark ? '#7C3AED' : '#00A57A' }} className="text-[8.5px] font-bold uppercase mb-1">
+                  <div style={{ color: isDark ? '#7C3AED' : '#0891B2' }} className="text-[8.5px] font-bold uppercase mb-1">
                     Cloud &amp; UI/UX Design
                   </div>
                   <div className="flex flex-wrap gap-1">
@@ -410,7 +408,7 @@ export const ResumePdfTemplate: React.FC<ResumePdfTemplateProps> = ({
               <div className="flex items-center gap-1.5 mb-1.5 pb-1 border-b border-slate-200">
                 <GraduationCap style={{ color: sectionTitleColor }} className="w-3.5 h-3.5" />
                 <h2 
-                  style={{ color: isDark ? '#7C3AED' : '#00A57A' }}
+                  style={{ color: isDark ? '#7C3AED' : '#0891B2' }}
                   className="text-xs font-black uppercase tracking-wider"
                 >
                   Academic Education
@@ -420,7 +418,7 @@ export const ResumePdfTemplate: React.FC<ResumePdfTemplateProps> = ({
               {education.map((edu) => (
                 <div key={edu.id} className="text-[9px]">
                   <div style={{ color: bodyText }} className="font-bold leading-tight">{edu.degree}</div>
-                  <div style={{ color: isDark ? '#7C3AED' : '#00A57A' }} className="font-semibold text-[8.5px]">
+                  <div style={{ color: isDark ? '#7C3AED' : '#0891B2' }} className="font-semibold text-[8.5px]">
                     {edu.institution}
                   </div>
                   <div 
@@ -429,7 +427,7 @@ export const ResumePdfTemplate: React.FC<ResumePdfTemplateProps> = ({
                   >
                     <span>{edu.duration}</span>
                     <span 
-                      style={{ color: isDark ? '#D4AF37' : '#00A57A' }}
+                      style={{ color: isDark ? '#22D3EE' : '#0891B2' }}
                       className="font-mono font-bold"
                     >
                       {edu.grade}
@@ -444,7 +442,7 @@ export const ResumePdfTemplate: React.FC<ResumePdfTemplateProps> = ({
               <div className="flex items-center gap-1.5 mb-1.5 pb-1 border-b border-slate-200">
                 <Award style={{ color: sectionTitleColor }} className="w-3.5 h-3.5" />
                 <h2 
-                  style={{ color: isDark ? '#7C3AED' : '#00A57A' }}
+                  style={{ color: isDark ? '#7C3AED' : '#0891B2' }}
                   className="text-xs font-black uppercase tracking-wider"
                 >
                   Official Credentials
@@ -482,7 +480,7 @@ export const ResumePdfTemplate: React.FC<ResumePdfTemplateProps> = ({
             Official Verified Profile • {personal.name}
           </div>
           <div>
-            {isDark ? 'Black Mamba Luxury Edition' : 'Apple Titanium Emerald Edition'} • {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}
+            {isDark ? 'Dark Glassmorphism Edition' : 'Editorial Minimalist Edition'} • {new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long' })}
           </div>
         </div>
 
